@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import { Request, Response } from "express";
 import { QueryResult } from "pg";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 import cors from "cors";
 
 import { query } from "./db/index.db";
@@ -29,6 +30,13 @@ app.use(
 );
 
 app.use(cookieParser());
+app.use(
+    session({
+        secret: "I_LOVE_TTMH", // Chuỗi bí mật để mã hóa cookie
+        resave: false,
+        saveUninitialized: true,
+    })
+);
 
 app.get("/", (req: Request, res: Response) => {
     res.json({

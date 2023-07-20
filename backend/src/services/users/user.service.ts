@@ -10,6 +10,7 @@ import { ResponseType } from "../../types/response.type";
 import { UserProfileType } from "../../types/users/user.type";
 import { ILoginUser } from "../../types/users/user.type";
 import { IRegisterUser } from "../../types/users/user.type";
+import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 
 const configService = new ConfigService();
 
@@ -142,6 +143,96 @@ class UserService {
                 EXPIRES_ACCESS_TOKEN: configService.getExpiresInAccessToken(),
             },
         };
+    }
+
+    async loginWithGoogle(profile: {
+        google_id: string;
+        email: string;
+        fullname: string;
+    }): Promise<ResponseType<ITokenUser | any>> {
+        try {
+            const { google_id, email, fullname } = profile;
+
+            const result = await query(
+                `SELECT customer_id, auth_method FROM customers WHERE email = $1`,
+                [email]
+            );
+
+            let customer_id: string = result.rows[0]?.customer_id;
+
+            // check email này chưa tồn tại trong hệ thống
+            // nếu chưa => tạo customer
+            if (!customer_id) {
+                await query("BEGIN");
+                const account = await query(
+                    `INSERT INTO customers(email, fullname, auth_method) VALUES($1, $2, 'google') RETURNING customer_id`,
+                    [email, fullname]
+                );
+
+                await query(
+                    `INSERT INTO google_account(customer_id, google_id) VALUES($1, $2)`,
+                    [account.rows[0].customer_id, google_id]
+                );
+
+                await query("COMMIT");
+
+                customer_id = account.rows[0].customer_id;
+            }
+
+            // check email này đã đăng nhập dưới 1 hình thức khác google
+            if (result.rows[0] && result.rows[0]?.auth_method !== "google") {
+                return {
+                    statusCode: HttpStatusCode.NOT_FOUND,
+                    message:
+                        "Email này đã được đăng nhập bằng 1 hình thức khác google",
+                };
+            }
+
+            // gooogle account này đã tồn tại trên hệ thống => trả về token cho customer đó
+            const access_token_user = createToken<{
+                customer_id: string;
+            }>(
+                {
+                    customer_id,
+                },
+                configService.getSecretKeyAccessToken(),
+                {
+                    expiresIn: configService.getExpiresInAccessToken(),
+                }
+            );
+
+            const refresh_token_user = createToken<{
+                customer_id: string;
+            }>(
+                {
+                    customer_id,
+                },
+                configService.getSecretKeyRefreshToken(),
+                {
+                    expiresIn: configService.getExpiresInRefreshToken(),
+                }
+            );
+
+            return {
+                statusCode: 200,
+                message: "Login successfull",
+                data: {
+                    access_token_user,
+                    refresh_token_user,
+                    EXPIRES_ACCESS_TOKEN:
+                        configService.getExpiresInAccessToken(),
+                    EXPIRES_REFRESH_TOKEN:
+                        configService.getExpiresInRefreshToken(),
+                },
+            };
+        } catch (err) {
+            await query("ROLLBACK");
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Have error by user",
+                data: err,
+            };
+        }
     }
 
     async getProfile(

@@ -103,7 +103,7 @@ Quyền lợi của khách hàng
 
 ## II. Công nghệ sử dụng
 
-### 1. BACKEND
+### 1. Backend
 
 -   Database: Postgresql
 -   Language: Typescript
@@ -113,7 +113,7 @@ Quyền lợi của khách hàng
     -   DB conncection: PG: ở đây sử dụng pg node module chỉ để kết nối với database, truy vấn thuần túy, tăng hiệu xuất truy vấn, gần gũi với SQL.
     -   Nodemailer
     -   JWT
-    -   PassportJT: OAUTH2
+    -   PassportJT: google oauth2, facebook
     -   Bcrypt
     -   Websocket: gửi thông báo khi có đơn đặt hàng
     -   Messenger chat box
@@ -124,6 +124,7 @@ Quyền lợi của khách hàng
     -   Multer
     -   Morgan | Wiston: ghi log
     -   Swagger
+    -   Stripe: hỗ trợ thanh toán online
 
 ### 2. Frontend
 

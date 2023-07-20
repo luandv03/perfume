@@ -43,4 +43,12 @@ export class ConfigService {
     public getExpiresInRefreshToken(): number {
         return this.EXPIRES_REFRESH_TOKEN;
     }
+
+    public getGoogleClientId(): string {
+        return this.env.GOOGLE_CLIENT_ID as string;
+    }
+
+    public getGoogleClientSecret(): string {
+        return this.env.GOOGLE_CLIENT_SECRET as string;
+    }
 }

@@ -38,10 +38,20 @@ class OrderService {
                 );
             }
 
-            await query(
+            const results_2 = await query(
                 `INSERT INTO orderlines(order_id, product_id, quantity, net_price)
             VALUES  ${query_insert.substring(0, query_insert.length - 1)}`
             );
+
+            if (results_2.rowCount < orderList.length) {
+                await query("ROLLBACK");
+
+                return {
+                    statusCode: HttpStatusCode.NOT_ACCEPTABLE,
+                    message:
+                        "Tạo đơn hàng không thành công do có sản phẩm vượt quá số lượng trong kho ",
+                };
+            }
 
             await query("COMMIT");
 
