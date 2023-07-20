@@ -103,6 +103,8 @@ Quyền lợi của khách hàng
 
 ### 3. Sơ đồ quan hệ
 
+![Sơ đồ quan hệ](https://res.cloudinary.com/dlbpgaw8k/image/upload/v1689872815/perfume/charm_g7ylci.png)
+
 ## II. Công nghệ sử dụng
 
 ### 1. Backend
