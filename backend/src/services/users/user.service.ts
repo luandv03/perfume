@@ -20,14 +20,14 @@ class UserService {
             const { email, password }: ILoginUser = account;
 
             const result: QueryResult<any> = await query(
-                `SELECT * FROM customers WHERE email = $1`,
+                `SELECT * FROM system_account WHERE email = $1`,
                 [email]
             );
 
             // rowCount: số lượng bản ghi trả về từ câu truy vấn
             if (!result.rowCount) {
                 return {
-                    statusCode: 404,
+                    statusCode: HttpStatusCode.NOT_FOUND,
                     message: "Not found",
                 };
             }
@@ -39,8 +39,8 @@ class UserService {
 
             if (!isMatch) {
                 return {
-                    statusCode: 404,
-                    message: "Username or Password not matches",
+                    statusCode: HttpStatusCode.NOT_FOUND,
+                    message: "Username or Password incorrect",
                 };
             }
 
@@ -67,7 +67,7 @@ class UserService {
             );
 
             return {
-                statusCode: 200,
+                statusCode: HttpStatusCode.OK,
                 message: "Login successfull",
                 data: {
                     access_token_user,
@@ -87,26 +87,27 @@ class UserService {
         const { email, password, phone_number, dob, fullname, address } =
             account;
 
-        const results = await query(`SELECT * FROM users WHERE email = $1`, [
-            email,
-        ]);
+        const results = await query(
+            `SELECT * FROM customers WHERE email = $1`,
+            [email]
+        );
 
         if (results.rows.length) {
             return {
                 statusCode: 406,
-                message: "eMail already exist",
+                message: "Email already exist",
             };
         }
 
         const hashPassword: string = await bcrypt.hash(password, 10);
 
         await query(
-            `INSERT INTO users( email, username, password, phone_number, birth_year, address) VALUES ($1, $2, $3, $4, $5, $6)`,
+            `INSERT INTO customers( email, username, password, phone_number, birth_year, address, auth_method) VALUES ($1, $2, $3, $4, $5, $6, 'system')`,
             [email, fullname, hashPassword, phone_number, dob, address]
         );
 
         return {
-            statusCode: 201,
+            statusCode: HttpStatusCode.OK,
             message: "You have registed successfully",
         };
     }
@@ -189,6 +190,96 @@ class UserService {
             }
 
             // gooogle account này đã tồn tại trên hệ thống => trả về token cho customer đó
+            const access_token_user = createToken<{
+                customer_id: string;
+            }>(
+                {
+                    customer_id,
+                },
+                configService.getSecretKeyAccessToken(),
+                {
+                    expiresIn: configService.getExpiresInAccessToken(),
+                }
+            );
+
+            const refresh_token_user = createToken<{
+                customer_id: string;
+            }>(
+                {
+                    customer_id,
+                },
+                configService.getSecretKeyRefreshToken(),
+                {
+                    expiresIn: configService.getExpiresInRefreshToken(),
+                }
+            );
+
+            return {
+                statusCode: 200,
+                message: "Login successfull",
+                data: {
+                    access_token_user,
+                    refresh_token_user,
+                    EXPIRES_ACCESS_TOKEN:
+                        configService.getExpiresInAccessToken(),
+                    EXPIRES_REFRESH_TOKEN:
+                        configService.getExpiresInRefreshToken(),
+                },
+            };
+        } catch (err) {
+            await query("ROLLBACK");
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Have error by user",
+                data: err,
+            };
+        }
+    }
+
+    async loginWithFacebook(profile: {
+        facebook_id: string;
+        email: string;
+        fullname: string;
+    }): Promise<ResponseType<ITokenUser | any>> {
+        try {
+            const { facebook_id, email, fullname } = profile;
+
+            const result = await query(
+                `SELECT customer_id, auth_method FROM customers WHERE email = $1`,
+                [email]
+            );
+
+            let customer_id: string = result.rows[0]?.customer_id;
+
+            // check email này chưa tồn tại trong hệ thống
+            // nếu chưa => tạo customer
+            if (!customer_id) {
+                await query("BEGIN");
+                const account = await query(
+                    `INSERT INTO customers(email, fullname, auth_method) VALUES($1, $2, 'facebook') RETURNING customer_id`,
+                    [email, fullname]
+                );
+
+                await query(
+                    `INSERT INTO facebook_account(customer_id, facebook_id) VALUES($1, $2)`,
+                    [account.rows[0].customer_id, facebook_id]
+                );
+
+                await query("COMMIT");
+
+                customer_id = account.rows[0].customer_id;
+            }
+
+            // check email này đã đăng nhập dưới 1 hình thức khác facebook
+            if (result.rows[0] && result.rows[0]?.auth_method !== "facebook") {
+                return {
+                    statusCode: HttpStatusCode.NOT_FOUND,
+                    message:
+                        "Email này đã được đăng nhập bằng 1 hình thức khác facebook",
+                };
+            }
+
+            // facebook account này đã tồn tại trên hệ thống => trả về token cho customer đó
             const access_token_user = createToken<{
                 customer_id: string;
             }>(

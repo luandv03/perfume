@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as FacebookStrategy } from "passport-facebook";
 
 import { UserController } from "../../../controllers/users/user.controller";
 import { userAuthMiddleware } from "../../../middlewares/user-auth.middleware";
@@ -48,6 +49,26 @@ passport.use(
     )
 );
 
+//facebook login
+passport.use(
+    new FacebookStrategy(
+        {
+            clientID: configService.getFacebookClientId(),
+            clientSecret: configService.getFacebookClientSecret(),
+            callbackURL: "http://localhost:4000/api/v1/auth/facebook/callback",
+            profileFields: ["id", "emails", "displayName"],
+        },
+        function (accessToken, refreshToken, profile, done) {
+            // profile trong done chính là thông tin sẽ được lưu lại trong hàm serializeUser
+            // kiểm tra email này đã tồn tại trong hệ thống chưa, nếu rồi thì lấy ra customer_id theo google của nó
+            const { id, displayName } = profile;
+            const email = profile.emails && profile.emails[0].value;
+
+            return done(null, { id, displayName, email });
+        }
+    )
+);
+
 passport.serializeUser(function (user, done) {
     //user lấy từ cái profile ở trên
     done(null, user);
@@ -69,8 +90,19 @@ userRoutes.get(
     passport.authenticate("google", {
         failureRedirect: "/google/login-failure",
     }),
-
     userController.loginWithGoolge
+);
+
+// facebok login route
+userRoutes.get("/auth/facebook/login", passport.authenticate("facebook"));
+
+// Sau khi login facebook success
+userRoutes.get(
+    "/auth/facebook/callback",
+    passport.authenticate("facebook", {
+        failureRedirect: "/facebook/login-failure",
+    }),
+    userController.loginWithFacebook
 );
 
 export default userRoutes;

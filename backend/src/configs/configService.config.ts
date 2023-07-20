@@ -51,4 +51,12 @@ export class ConfigService {
     public getGoogleClientSecret(): string {
         return this.env.GOOGLE_CLIENT_SECRET as string;
     }
+
+    public getFacebookClientId(): string {
+        return this.env.FACEBOOK_CLIENT_ID as string;
+    }
+
+    public getFacebookClientSecret(): string {
+        return this.env.FACEBOOK_CLIENT_SECRET as string;
+    }
 }

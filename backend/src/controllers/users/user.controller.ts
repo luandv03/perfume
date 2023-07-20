@@ -148,6 +148,39 @@ export class UserController {
         }
     }
 
+    async loginWithFacebook(req: Request, res: Response): Promise<any> {
+        try {
+            const { id, email, displayName } = req.user as {
+                id: string;
+                email: string;
+                displayName: string;
+            };
+
+            const data = await userService.loginWithFacebook({
+                facebook_id: id,
+                email,
+                fullname: displayName,
+            });
+
+            data.statusCode === 200 &&
+                res.cookie("access_token_user", data.data.access_token_user, {
+                    httpOnly: true,
+                    maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
+                }) &&
+                res.cookie("refresh_token_user", data.data.refresh_token_user, {
+                    httpOnly: true,
+                    maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
+                });
+
+            res.status(data.statusCode).json(data);
+        } catch (err) {
+            return res.status(500).json({
+                statusCode: 500,
+                message: err,
+            });
+        }
+    }
+
     logout(req: Request, res: Response) {
         try {
             res.clearCookie("access_token_user");
