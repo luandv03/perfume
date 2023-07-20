@@ -2,7 +2,6 @@ import { createStyles, Navbar, getStylesRef, rem } from "@mantine/core";
 import {
     IconBellRinging,
     IconFingerprint,
-    IconKey,
     IconSettings,
     Icon2fa,
     IconDatabaseImport,
@@ -97,7 +96,6 @@ const data = [
     { link: "/category", label: "Category", icon: IconBellRinging },
     { link: "/product", label: "Product", icon: IconReceipt2 },
     { link: "/order", label: "Orders", icon: IconFingerprint },
-    { link: "/post", label: "Posts", icon: IconKey },
     { link: "/feedback", label: "Feedbacks", icon: IconDatabaseImport },
     { link: "/customer", label: "Customers", icon: IconUsers },
     { link: "/admin", label: "Admins", icon: Icon2fa },
@@ -108,8 +106,6 @@ export function NavbarApp() {
     const { classes, cx } = useStyles();
 
     const location = useLocation();
-
-    console.log(location);
 
     const links = data.map((item) => (
         <Link to={item.link} style={{ textDecoration: "none" }}>

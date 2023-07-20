@@ -138,4 +138,18 @@ export class AdminController {
             });
         }
     }
+
+    async getProfile(req: Request, res: Response): Promise<any> {
+        try {
+            const { admin_id } = res.locals.data;
+            const data = await adminService.getProfile(admin_id);
+
+            return res.status(data.statusCode).json(data);
+        } catch (err) {
+            res.status(500).json({
+                statusCode: 500,
+                message: err,
+            });
+        }
+    }
 }

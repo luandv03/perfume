@@ -61,7 +61,7 @@ export function Home() {
                     </Link>
                 </Center>
 
-                <SimpleGrid cols={4} sx={{ width: "100%" }}>
+                {/* <SimpleGrid cols={4} sx={{ width: "100%" }}>
                     {[1, 2, 3, 4].map(() => (
                         <Card
                             shadow="sm"
@@ -96,7 +96,7 @@ export function Home() {
                             </Group>
                         </Card>
                     ))}
-                </SimpleGrid>
+                </SimpleGrid> */}
             </Stack>
         </Stack>
     );

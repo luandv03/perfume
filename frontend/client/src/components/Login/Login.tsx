@@ -21,16 +21,16 @@ import {
     IconLock,
     IconChevronLeft,
 } from "@tabler/icons-react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
-// import { authService } from "../../services/auth.service";
-// import { AuthContext } from "../../contexts/AuthContext";
+import { authService } from "../../services/auth.service";
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 
 export function LoginAuth() {
     const [loading, setLoading] = useState(false);
 
-    // const { setUser } = useContext(AuthContext);
+    const { setProfile } = useContext(AuthContext);
 
     const form = useForm({
         initialValues: {
@@ -49,7 +49,7 @@ export function LoginAuth() {
         },
     });
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleError = (errors: typeof form.errors): void => {
         if (errors.password) {
@@ -72,7 +72,7 @@ export function LoginAuth() {
     const handleValidate = async (values: typeof form.values) => {
         try {
             setLoading(true);
-            // await authService.login(values);
+            await authService.login(values);
             setLoading(false);
             showNotification({
                 message: "You login successfully!",
@@ -80,9 +80,9 @@ export function LoginAuth() {
                 icon: <IconCheck />,
                 autoClose: 3000,
             });
-            // const response = await authService.getProfile();
-            // setUser(response.data);
-            // navigate("/chat");
+            const response = await authService.getProfile();
+            setProfile(response.data);
+            navigate("/");
             form.reset();
         } catch (error: any) {
             showNotification({

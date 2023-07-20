@@ -156,6 +156,26 @@ class AdminService {
             },
         };
     }
+
+    async getProfile(admin_id: number): Promise<ResponseType<any>> {
+        const results = await query(
+            `SELECT admin_id, username FROM admins WHERE admin_id = $1`,
+            [admin_id]
+        );
+
+        if (!results.rows.length) {
+            return {
+                statusCode: 404,
+                message: "User not exist",
+            };
+        }
+
+        return {
+            statusCode: 200,
+            message: "Get Profile Successfull",
+            data: results.rows[0],
+        };
+    }
 }
 
 export const adminService = new AdminService();

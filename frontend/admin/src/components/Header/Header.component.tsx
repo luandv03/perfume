@@ -13,6 +13,9 @@ import {
     // ActionIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -89,6 +92,7 @@ export function HeaderApp() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
         useDisclosure(false);
     const { classes, theme } = useStyles();
+    const { profile } = useContext(AuthContext);
 
     return (
         <Box>
@@ -100,11 +104,26 @@ export function HeaderApp() {
                     <Text size={24} fw={700} c="blue">
                         Dashboard
                     </Text>
-
-                    <Group className={classes.hiddenMobile}>
-                        <Button variant="default">Log in</Button>
-                        <Button>Sign up</Button>
-                    </Group>
+                    {profile.admin_id ? (
+                        <Group className={classes.hiddenMobile}>
+                            <Button variant="default">
+                                {profile.username}
+                            </Button>
+                            <Button>Logout</Button>
+                        </Group>
+                    ) : (
+                        <Group className={classes.hiddenMobile}>
+                            <Button variant="default">
+                                <Link
+                                    to="/login"
+                                    style={{ textDecoration: "none" }}
+                                >
+                                    Log in
+                                </Link>
+                            </Button>
+                            <Button>Sign up</Button>
+                        </Group>
+                    )}
 
                     <Burger
                         opened={drawerOpened}

@@ -1,11 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 // import { TableSelection } from "./components/Table";
-import Order from "./components/Order/Order.component";
+import { OrderList } from "./components/Order/Order.component";
 import Dashboard from "./components/Dashboard/Dashboard.component";
 import LayoutApp from "./pages/layout.page";
 import { ProductDetail } from "./components/Product/ProductDetail.component";
 import { ProductList } from "./components/Product/ProductList.component";
-import Post from "./components/Post/Post.component";
 import Product from "./components/Product/Product.component";
 import { ProductFeedback } from "./components/Product/ProductFeedback.component";
 import { ProductCreate } from "./components/Product/ProductCreate.component";
@@ -17,6 +16,7 @@ import { CustomerList } from "./components/Customer/CustomerList.component";
 import { CategoryList } from "./components/Category/CategoryList.component";
 import { CategoryCreate } from "./components/Category/CategoryCreate.component";
 import Category from "./components/Category/Category.component";
+import { Login } from "./components/Login/Login.tsx";
 
 function App() {
     const data = [
@@ -165,8 +165,7 @@ function App() {
                             element={<ProductCreate />}
                         />
                     </Route>
-                    <Route path="order" element={<Order />} />
-                    <Route path="post" element={<Post />}></Route>
+                    <Route path="/order" element={<OrderList />} />
                     <Route path="/customer" element={<Customer />}>
                         <Route
                             path="/customer"
@@ -174,6 +173,7 @@ function App() {
                         ></Route>
                     </Route>
                 </Route>
+                <Route path="login" element={<Login />} />
             </Routes>
         </>
     );

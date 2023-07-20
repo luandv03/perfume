@@ -17,18 +17,19 @@ import {
     Badge,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     IconChevronDown,
     IconShoppingCart,
     IconSearch,
 } from "@tabler/icons-react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, KeyboardEvent } from "react";
 import { CategoryType } from "../../types/category.type";
-
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { categoryService } from "../../services/category.service";
 import { productService } from "../../services/product.service";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
+import { authService } from "../../services/auth.service";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -112,6 +113,7 @@ export function HeaderApp() {
         useDisclosure(false);
     const { classes, theme } = useStyles();
     const { cart } = useContext(CartContext);
+    const { profile, setProfile } = useContext(AuthContext);
 
     const [categories, setCategories] = useState<CategoryType[]>([
         {
@@ -121,6 +123,8 @@ export function HeaderApp() {
     ]);
 
     const [brands, setBrands] = useState<[{ brand: string }]>([{ brand: "" }]);
+    const [searchValue, setSearchValue] = useState("");
+    const navigate = useNavigate();
 
     const handleGetAllCategories = async () => {
         const [resCategories, resBrands] = await Promise.all([
@@ -132,15 +136,30 @@ export function HeaderApp() {
         setBrands(resBrands.data);
     };
 
-    const handleCalQuantity = () => {
-        const quantity = cart.reduce((acc, curr) => acc + curr.quantity, 0);
+    const handleLogout = async () => {
+        const res = await authService.logout();
+        if (res) {
+            alert(res.message);
+            setProfile({
+                customer_id: 0,
+                email: "",
+                fullname: "",
+                address: "",
+                phone_number: "",
+                dob: "",
+            });
+        }
+    };
 
-        console.log(quantity);
+    const handleSearch = async (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key == "Enter") {
+            navigate("/search?title=" + searchValue);
+            setSearchValue("");
+        }
     };
 
     useEffect(() => {
         handleGetAllCategories();
-        handleCalQuantity();
     }, []);
 
     return (
@@ -149,6 +168,9 @@ export function HeaderApp() {
                 <Group position="apart" sx={{ height: "100%" }}>
                     <TextInput
                         placeholder="Tên sản phẩm...."
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        onKeyDown={handleSearch}
                         rightSection={<IconSearch size="18px" color="gray" />}
                     />
 
@@ -160,26 +182,50 @@ export function HeaderApp() {
 
                     <Group className={classes.hiddenMobile} spacing={15}>
                         <Stack sx={{ height: "100%" }} spacing={0}>
-                            <Text color="white">Xin chào, Quý khách</Text>
-                            <Group>
-                                <Link
-                                    to="/login"
-                                    style={{ textDecoration: "none" }}
-                                >
-                                    <Text color="white" fw={500}>
-                                        Đăng nhập
-                                    </Text>
-                                </Link>
-                                <span style={{ color: "white" }}>|</span>
-                                <Link
-                                    to="/register"
-                                    style={{ textDecoration: "none" }}
-                                >
-                                    <Text color="white" fw={500}>
-                                        Đăng ký
-                                    </Text>
-                                </Link>
-                            </Group>
+                            <Text color="white">
+                                Xin chào,{" "}
+                                {profile.customer_id
+                                    ? profile.fullname
+                                    : "Quý khách"}
+                            </Text>
+                            {profile.customer_id ? (
+                                <Group>
+                                    <Link
+                                        to="/customer"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <Text color="white" fw={500}>
+                                            Tài khoản
+                                        </Text>
+                                    </Link>
+                                    <span style={{ color: "white" }}>|</span>
+                                    <Button onClick={() => handleLogout()}>
+                                        <Text color="white" fw={500}>
+                                            Đăng xuất
+                                        </Text>
+                                    </Button>
+                                </Group>
+                            ) : (
+                                <Group>
+                                    <Link
+                                        to="/login"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <Text color="white" fw={500}>
+                                            Đăng nhập
+                                        </Text>
+                                    </Link>
+                                    <span style={{ color: "white" }}>|</span>
+                                    <Link
+                                        to="/register"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <Text color="white" fw={500}>
+                                            Đăng ký
+                                        </Text>
+                                    </Link>
+                                </Group>
+                            )}
                         </Stack>
                         <Divider orientation="vertical" size="sm" />
                         <Link to="/cart" style={{ position: "relative" }}>
@@ -286,11 +332,11 @@ export function HeaderApp() {
                             </SimpleGrid>
                         </HoverCard.Dropdown>
                     </HoverCard>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    {/* <Link to="/" style={{ textDecoration: "none" }}>
                         <Text size="20px" fw={500} color="black">
                             Blog
                         </Text>
-                    </Link>
+                    </Link> */}
                 </Group>
             </Header>
 

@@ -9,6 +9,7 @@ import { OrderCustomer } from "./components/OrderCustomer/OrderCustomer";
 import { Profile } from "./components/Profile/Proifle";
 import { Checkout } from "./components/Checkout/Checkout";
 import { LoginAuth } from "./components/Login/Login";
+import { SearchResult } from "./components/SearchResult/SearchResult";
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                         />
                     </Route>
                     <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/search" element={<SearchResult />} />
                 </Route>
 
                 <Route path="/login" element={<LoginAuth />} />

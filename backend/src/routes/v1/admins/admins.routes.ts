@@ -22,6 +22,13 @@ adminRoutes.post(
     adminController.register
 );
 
+// get profile
+adminRoutes.get(
+    "/admin/account/get_profile",
+    authMiddleware,
+    adminController.getProfile
+);
+
 //login account
 adminRoutes.post("/admin/account/login", adminController.login);
 

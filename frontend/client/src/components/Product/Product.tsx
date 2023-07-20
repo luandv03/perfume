@@ -27,23 +27,23 @@ const useStyles = createStyles(() => ({
 export function Product() {
     const { addToCart } = useContext(CartContext);
 
-    // const handleAddToCart = (product: ProductType) => {
-    //     const { product_id, title, price, discount, brand, volume } = product;
-    //     const cartItem = {
-    //         product_id,
-    //         title,
-    //         price,
-    //         discount,
-    //         brand,
-    //         volume,
-    //         number_add_item: 1,
-    //     };
-    //     addToCart(cartItem);
-    //     notifications.show({
-    //         title: "Thành công",
-    //         message: "Bạn đã thêm thành công sản phẩm :>",
-    //     });
-    // };
+    const handleAddToCart = (product: ProductType) => {
+        const { product_id, title, price, discount, brand, volume } = product;
+        const cartItem = {
+            product_id,
+            title,
+            price,
+            discount,
+            brand,
+            volume,
+            number_add_item: 1,
+        };
+        addToCart(cartItem);
+        notifications.show({
+            title: "Thành công",
+            message: "Bạn đã thêm thành công sản phẩm :>",
+        });
+    };
 
     const { classes } = useStyles();
     return (
@@ -80,10 +80,7 @@ export function Product() {
                 </Group>
 
                 <Group spacing={4}>
-                    <Button
-                        size="16px"
-                        // onClick={() => handleAddToCart()}
-                    >
+                    <Button size="16px" onClick={() => handleAddToCart()}>
                         <IconShoppingCartPlus />
                     </Button>
 

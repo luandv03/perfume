@@ -7,85 +7,70 @@ import {
     ActionIcon,
 } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
+import { useContext, useState, useEffect } from "react";
 
-interface CustomerType {
-    customer_id: number;
-    fullname: string;
-    phone_number: string;
-    address: string;
-    email: string;
-    dob: string;
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
+import { orderService } from "../../services/order.service";
+
+interface OrderType {
+    order_id: number;
+    tax: number;
+    delivery_cost: number;
+    tong_giam_gia: number;
+    order_date: string;
+    tong_hoa_don: number;
 }
 
-const data: CustomerType[] = [
-    {
-        customer_id: 1,
-        fullname: "Dinh Van Luan",
-        phone_number: "0867801606",
-        address: "Ha Nam",
-        email: "luan@gmail.com",
-        dob: "28/08/2003",
-    },
-    {
-        customer_id: 1,
-        fullname: "Dinh Van Luan",
-        phone_number: "0867801606",
-        address: "Ha Nam",
-        email: "luan@gmail.com",
-        dob: "28/08/2003",
-    },
-    {
-        customer_id: 1,
-        fullname: "Dinh Van Luan",
-        phone_number: "0867801606",
-        address: "Ha Nam",
-        email: "luan@gmail.com",
-        dob: "28/08/2003",
-    },
-    {
-        customer_id: 1,
-        fullname: "Dinh Van Luan",
-        phone_number: "0867801606",
-        address: "Ha Nam",
-        email: "luan@gmail.com",
-        dob: "28/08/2003",
-    },
-    {
-        customer_id: 1,
-        fullname: "Dinh Van Luan",
-        phone_number: "0867801606",
-        address: "Ha Nam",
-        email: "luan@gmail.com",
-        dob: "28/08/2003",
-    },
-    {
-        customer_id: 1,
-        fullname: "Dinh Van Luan",
-        phone_number: "0867801606",
-        address: "Ha Nam",
-        email: "luan@gmail.com",
-        dob: "28/08/2003",
-    },
-];
-
 export function OrderCustomer() {
-    const rows = data.map((item: CustomerType) => {
-        return (
-            <tr key={item.customer_id}>
-                <td>{item.customer_id}</td>
-                <td>{item.fullname}</td>
-                <td>{item.email}</td>
-                <td>{item.address}</td>
-                <td>{item.phone_number}</td>
-                <td>{item.dob}</td>
-                <td>
-                    <ActionIcon>
-                        <IconEye />
-                    </ActionIcon>
-                </td>
-            </tr>
+    const [orders, setOrders] = useState<OrderType[]>([
+        {
+            order_id: 0,
+            tax: 0,
+            delivery_cost: 0,
+            tong_giam_gia: 0,
+            order_date: "",
+            tong_hoa_don: 0,
+        },
+    ]);
+    const { profile } = useContext(AuthContext);
+
+    const handleGetOrderByCustomerId = async () => {
+        const resOrder = await orderService.getOrderByCustomerId(
+            profile.customer_id
         );
-    });
+        console.log(resOrder);
+        setOrders(resOrder.data);
+    };
+
+    useEffect(() => {
+        handleGetOrderByCustomerId();
+    }, []);
+
+    const rows =
+        orders.length > 0 &&
+        orders.map((item: OrderType) => {
+            return (
+                <tr key={item.order_id}>
+                    <td>{item.order_id}</td>
+                    <td>{item.tax}</td>
+                    <td>{item.tong_giam_gia}</td>
+                    <td>{item.delivery_cost}</td>
+                    <td>
+                        {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                            maximumFractionDigits: 9,
+                        }).format(item.tong_hoa_don)}
+                    </td>
+                    <td>{item.order_date}</td>
+                    <td>
+                        <ActionIcon>
+                            <IconEye />
+                        </ActionIcon>
+                    </td>
+                </tr>
+            );
+        });
 
     return (
         <Stack>

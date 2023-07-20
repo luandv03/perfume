@@ -4,7 +4,7 @@ import jwtInterceptor from "../interceptors/jwt.interceptor";
 
 const http = axios.create({
     baseURL: BASE_URL_API,
-    // withCredentials: true,
+    withCredentials: true,
 });
 
 export class BaseService {

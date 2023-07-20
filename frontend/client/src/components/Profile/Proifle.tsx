@@ -1,6 +1,11 @@
 import { Text, Group, Stack } from "@mantine/core";
 
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
+import { useContext } from "react";
+
 export function Profile() {
+    const { profile } = useContext(AuthContext);
+
     return (
         <Stack>
             <Text>Thông tin tài khoản</Text>
@@ -9,7 +14,7 @@ export function Profile() {
                     Họ và Tên:
                 </Text>
                 <Text fw={500} color="gray">
-                    Đinh Văn Luận
+                    {profile.fullname}
                 </Text>
             </Group>
             <Group>
@@ -17,7 +22,7 @@ export function Profile() {
                     Email:
                 </Text>
                 <Text fw={500} color="gray">
-                    dinhvanluan2k3@gmail.com
+                    {profile.email}
                 </Text>
             </Group>
             <Group>
@@ -25,7 +30,7 @@ export function Profile() {
                     Số điện thoại:
                 </Text>
                 <Text fw={500} color="gray">
-                    0867801606
+                    {profile.phone_number}
                 </Text>
             </Group>
             <Group>
@@ -33,7 +38,7 @@ export function Profile() {
                     Địa chỉ:
                 </Text>
                 <Text fw={500} color="gray">
-                    66 Nguyễn Sỹ Sách, Phường 15, Tân Bình
+                    {profile.address}
                 </Text>
             </Group>
         </Stack>

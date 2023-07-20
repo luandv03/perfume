@@ -10,7 +10,12 @@ import router from "./routes/index.routes";
 const app: Application = express();
 const PORT: number = 4000;
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(
+    cors({
+        credentials: true,
+        origin: ["http://localhost:5173", "http://localhost:3000"],
+    })
+);
 
 // xử lý dữ liệu gửi lên từ Client
 app.use(express.json()); // xử lý dữ liệu gửi từ frontend -> backend dưới định dạng json:

@@ -1,11 +1,85 @@
-import { Stack, Text, Divider, Group, TextInput, Button } from "@mantine/core";
+import {
+    Stack,
+    Text,
+    Divider,
+    Group,
+    TextInput,
+    Button,
+    LoadingOverlay,
+} from "@mantine/core";
 import { Link } from "react-router-dom";
 import { IconChevronLeft } from "@tabler/icons-react";
-import { useContext } from "react";
+import { showNotification } from "@mantine/notifications";
+import { useContext, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
+import { orderService } from "../../services/order.service";
+
+type OrderItem = {
+    product_id: number;
+    quantity: number;
+    net_price: number;
+};
+
+type OrderCreate = {
+    customer_id: number;
+    delivery_cost: number;
+    tax: number;
+    orderList: OrderItem[];
+};
+
+type Product = {
+    product_id: number;
+    quantity: number;
+    price: number;
+    discount: number;
+};
 
 export function Checkout() {
+    const [loading, setLoading] = useState(false);
     const { cart } = useContext(CartContext);
+    const { profile } = useContext(AuthContext);
+
+    const handleCheckout = async () => {
+        setLoading(true);
+        const orderList: OrderItem[] = cart.map((item: Product) => {
+            return {
+                product_id: item.product_id,
+                quantity: item.quantity,
+                net_price: item.price * (1 - item.discount / 100),
+            };
+        });
+
+        const payload: OrderCreate = {
+            customer_id: profile.customer_id,
+            tax: 0,
+            delivery_cost: 0,
+            orderList,
+        };
+
+        try {
+            const resData = await orderService.createOrder(payload);
+
+            if (resData.statusCode == 200) {
+                showNotification({
+                    title: "Thanh cong",
+                    message: resData.message,
+                });
+                return setLoading(false);
+            }
+            showNotification({
+                title: "Khong thanh cong",
+                message: resData.message,
+            });
+            setLoading(false);
+        } catch (error: any) {
+            showNotification({
+                title: "that bai",
+                message: error.message,
+            });
+            setLoading(false);
+        }
+    };
 
     return (
         <Stack w={700} spacing={6}>
@@ -107,8 +181,17 @@ export function Checkout() {
                         <Text color="gray">Quay về giỏ hàng</Text>
                     </Group>
                 </Link>
-                <Button size="lg">Hoàn tất đặt hàng</Button>
+                <Button size="lg" onClick={() => handleCheckout()}>
+                    Hoàn tất đặt hàng
+                </Button>
             </Group>
+            <LoadingOverlay
+                sx={{ height: "120vh" }}
+                loaderProps={{ size: "sm", color: "pink", variant: "bars" }}
+                overlayOpacity={0.3}
+                overlayColor="#c5c5c5"
+                visible={loading}
+            />
         </Stack>
     );
 }

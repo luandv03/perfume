@@ -1,0 +1,128 @@
+import { Request, Response } from "express";
+import { productService } from "../../services/products/products.service";
+import { HttpStatusCode } from "../../configs/httpStatusCode.config";
+
+export class ProductController {
+    async getProductByCateId(req: Request, res: Response): Promise<any> {
+        try {
+            const category_id = req.params.category_id;
+            const { offset, limit } = req.query;
+            const data = await productService.getProductByCateId(
+                Number(category_id),
+                offset as string,
+                limit as string
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+            });
+        }
+    }
+
+    async getAllBrand(req: Request, res: Response): Promise<any> {
+        try {
+            const data = await productService.getAllBrand();
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+            });
+        }
+    }
+
+    async getProductPhotoById(req: Request, res: Response): Promise<any> {
+        try {
+            const product_id = req.params.product_id;
+            const { offset, limit } = req.query;
+            const data = await productService.getProductPhotoById(
+                Number(product_id),
+                Number(offset),
+                Number(limit)
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+            });
+        }
+    }
+
+    async getProductById(req: Request, res: Response): Promise<any> {
+        try {
+            const { product_id } = req.params;
+            const data = await productService.getProductById(
+                Number(product_id)
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+            });
+        }
+    }
+
+    async getProductByTitle(req: Request, res: Response): Promise<any> {
+        try {
+            const { title, offset, limit } = req.query;
+            const data = await productService.getProductByTitle(
+                title as string,
+                offset as string,
+                limit as string
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+                error,
+            });
+        }
+    }
+
+    async getProductByNewTime(req: Request, res: Response): Promise<any> {
+        try {
+            const { offset, limit } = req.query;
+            const data = await productService.getProductByNewTime(
+                offset as string,
+                limit as string
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+            });
+        }
+    }
+
+    async getProductByFilter(req: Request, res: Response): Promise<any> {
+        try {
+            const { brand, price, page } = req.query;
+
+            const data = await productService.getProductByFilter(
+                JSON.parse(brand as string) as string[],
+                JSON.parse(price as string) as number[],
+                JSON.parse(page as string) as number
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+                error,
+            });
+        }
+    }
+}
