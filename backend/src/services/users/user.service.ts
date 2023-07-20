@@ -84,32 +84,46 @@ class UserService {
     }
 
     async registerAccount(account: IRegisterUser): Promise<ResponseType<any>> {
-        const { email, password, phone_number, dob, fullname, address } =
-            account;
+        try {
+            const { email, password, phone_number, dob, fullname, address } =
+                account;
 
-        const results = await query(
-            `SELECT * FROM customers WHERE email = $1`,
-            [email]
-        );
+            const results = await query(
+                `SELECT * FROM customers WHERE email = $1`,
+                [email]
+            );
 
-        if (results.rows.length) {
+            if (results.rows.length) {
+                return {
+                    statusCode: HttpStatusCode.NOT_FOUND,
+                    message: "Email already exist",
+                };
+            }
+
+            const hashPassword: string = await bcrypt.hash(password, 10);
+
+            const customer = await query(
+                `INSERT INTO customers( email, fullname, phone_number, dob, address, auth_method) 
+            VALUES ($1, $2, $3, $4, $5, $6, 'system') RETURNING customer_id`,
+                [email, fullname, phone_number, dob, address]
+            );
+
+            await query(
+                `INSERT INTO system_account(email, password, customer_id) VALUES ($1, $2, $3)`,
+                [email, hashPassword, customer.rows[0].customer_id]
+            );
+
             return {
-                statusCode: 406,
-                message: "Email already exist",
+                statusCode: HttpStatusCode.OK,
+                message: "You have registed successfully",
+            };
+        } catch (error) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Have error user",
+                data: error,
             };
         }
-
-        const hashPassword: string = await bcrypt.hash(password, 10);
-
-        await query(
-            `INSERT INTO customers( email, username, password, phone_number, birth_year, address, auth_method) VALUES ($1, $2, $3, $4, $5, $6, 'system')`,
-            [email, fullname, hashPassword, phone_number, dob, address]
-        );
-
-        return {
-            statusCode: HttpStatusCode.OK,
-            message: "You have registed successfully",
-        };
     }
 
     refreshTokenService(token: string): any {

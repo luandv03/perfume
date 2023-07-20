@@ -12,7 +12,10 @@ const configService = new ConfigService();
 const userRoutes: Router = Router();
 const userController: UserController = new UserController();
 
-/// system account
+/// 1.system account
+// register
+userRoutes.post("/auth/customer/register", userController.register);
+
 //login
 userRoutes.post("/auth/customer/login", userController.login);
 
@@ -30,7 +33,7 @@ userRoutes.post(
     userController.logout
 );
 
-// google login
+//2. google login
 passport.use(
     new GoogleStrategy(
         {
@@ -49,7 +52,7 @@ passport.use(
     )
 );
 
-//facebook login
+//3. facebook login
 passport.use(
     new FacebookStrategy(
         {

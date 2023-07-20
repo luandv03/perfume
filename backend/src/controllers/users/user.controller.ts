@@ -7,51 +7,50 @@ import { ResponseType } from "../../types/response.type";
 import { LoginUserAccountDto } from "../../dtos/users/user.dto";
 
 export class UserController {
-    // async register(req: Request, res: Response): Promise<any> {
-    //     try {
-    //         const {
-    //             fullname,
-    //             password,
-    //             phone_number,
-    //             address,
-    //             email,
-    //             dob,
-    //         }: IRegisterAccount = req.body;
+    async register(req: Request, res: Response): Promise<any> {
+        try {
+            const {
+                fullname,
+                password,
+                phone_number,
+                address,
+                email,
+                dob,
+            }: any = req.body;
 
-    //         // validate dữ liệu đầu vào nhờ DTO
-    //         // const errorResult: ResponseType<any> = await handleErrorDto<{
-    //         //     username: string;
-    //         //     password: string;
-    //         //     phone_number: string;
-    //         //     address: string;
-    //         //     mail: string;
-    //         //     birth_year: string;
-    //         // }>(
-    //         //     { username, password, phone_number, address, birth_year, mail },
-    //         //     new RegisterUserAccountDto()
-    //         // );
+            // validate dữ liệu đầu vào nhờ DTO
+            // const errorResult: ResponseType<any> = await handleErrorDto<{
+            //     username: string;
+            //     password: string;
+            //     phone_number: string;
+            //     address: string;
+            //     mail: string;
+            //     birth_year: string;
+            // }>(
+            //     { username, password, phone_number, address, birth_year, mail },
+            //     new RegisterUserAccountDto()
+            // );
 
-    //         // if (errorResult.statusCode) {
-    //         //     return res.status(errorResult.statusCode).json(errorResult);
-    //         // }
+            // if (errorResult.statusCode) {
+            //     return res.status(errorResult.statusCode).json(errorResult);
+            // }
 
-    //         const data = await userService.registerAccount({
-    //             username,
-    //             password,
-    //             phone_number,
-    //             mail,
-    //             birth_year,
-    //             address,
-    //         });
-    //         return res.status(data.statusCode).json(data);
-    //     } catch (err) {
-    //         console.log(err);
-    //         return res.status(500).json({
-    //             message: "Internal Server Error",
-    //             err,
-    //         });
-    //     }
-    // }
+            const data = await userService.registerAccount({
+                fullname,
+                password,
+                phone_number,
+                email,
+                dob,
+                address,
+            });
+            return res.status(data.statusCode).json(data);
+        } catch (err) {
+            return res.status(500).json({
+                message: "Internal Server Error",
+                err,
+            });
+        }
+    }
 
     async login(req: Request, res: Response): Promise<any> {
         try {
