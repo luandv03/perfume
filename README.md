@@ -99,6 +99,8 @@ Quyền lợi của khách hàng
 
 ### 2. Sơ đồ thực thể liên kết
 
+![Sơ đồ thực thể liên kết](https://res.cloudinary.com/dlbpgaw8k/image/upload/v1689872488/perfume/website_b%C3%A1n_n%C6%B0%E1%BB%9Bc_hoa_%C4%91%E1%BA%B3ng_s_c%E1%BA%A5p_fsxywt.png)
+
 ### 3. Sơ đồ quan hệ
 
 ## II. Công nghệ sử dụng
