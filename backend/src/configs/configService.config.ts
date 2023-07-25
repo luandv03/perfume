@@ -59,4 +59,23 @@ export class ConfigService {
     public getFacebookClientSecret(): string {
         return this.env.FACEBOOK_CLIENT_SECRET as string;
     }
+
+    // config cloudinary to upload file
+    public getCloudName(): string {
+        return this.env.CLD_CLOUD_NAME as string;
+    }
+
+    public getCldApiKey(): string {
+        return this.env.CLD_API_KEY as string;
+    }
+
+    public getCldApiSecret(): string {
+        return this.env.CLD_API_SECRET as string;
+    }
+
+    public getCloudFolder(): string {
+        return this.env.CLOUD_FOLDER as string;
+    }
 }
+
+export const configService = new ConfigService();
