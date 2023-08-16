@@ -138,7 +138,7 @@ class OrderService {
 
     async getValidCouponByCode(coupon_code: string): Promise<any> {
         const results = await query(
-            `SELECT * FROM coupons WHERE coupon_id = $s1`,
+            `SELECT * FROM coupons WHERE coupon_code = $1`,
             [coupon_code]
         );
 
@@ -162,7 +162,7 @@ class OrderService {
         const endTimeCoupon = handleTimeExpired(results.rows[0].end_time);
         const currentTime = handleTimeExpired(new Date());
 
-        if (startTimeCoupon < currentTime || endTimeCoupon > currentTime) {
+        if (startTimeCoupon > currentTime || endTimeCoupon < currentTime) {
             return {
                 statusCode: 400,
                 message: "Coupon expired",

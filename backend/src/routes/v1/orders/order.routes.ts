@@ -23,6 +23,6 @@ orderRoutes.get(
 orderRoutes.get("/order/view", orderController.getOrder);
 
 //use coupon
-orderRoutes.get("/coupon/:coupon_id", orderController.getValidCouponByCode);
+orderRoutes.get("/coupon/:coupon_code", orderController.getValidCouponByCode);
 
 export default orderRoutes;

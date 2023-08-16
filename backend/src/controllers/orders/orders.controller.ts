@@ -47,9 +47,9 @@ export class OrderController {
 
     async getValidCouponByCode(req: Request, res: Response): Promise<any> {
         try {
-            const coupon_id = req.params.coupon_id;
+            const coupon_code = req.params.coupon_code;
 
-            const data = await orderService.getValidCouponByCode(coupon_id);
+            const data = await orderService.getValidCouponByCode(coupon_code);
 
             res.status(data.statusCode).json(data);
         } catch (error) {
