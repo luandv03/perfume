@@ -58,10 +58,19 @@ class OrderService {
 
             // use coupon :if have then use else have no (empty) then next
             if (coupon_id) {
-                await query(`INSERT INTO coupon_orders VALUES ($1, $2)`, [
-                    Number(coupon_id),
-                    Number(order_id),
-                ]);
+                const coupon_results = await query(
+                    `INSERT INTO coupon_orders VALUES ($1, $2)`,
+                    [Number(coupon_id), Number(order_id)]
+                );
+
+                if (!coupon_results.rowCount) {
+                    await query(`ROLLBACK`);
+                    return {
+                        statusCode: HttpStatusCode.ACCEPTED,
+                        message:
+                            "Đặt hàng không thành công. Phiếu giảm giá đã hết hạn hoặc không hữu dụng!",
+                    };
+                }
             }
 
             await query("COMMIT");

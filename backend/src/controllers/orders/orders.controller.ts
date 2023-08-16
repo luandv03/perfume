@@ -14,7 +14,7 @@ export class OrderController {
                 orderList,
                 coupon_id, // have or no
             });
-            return res.status(200).json(data);
+            return res.status(data.statusCode).json(data);
         } catch (err) {
             res.status(500).json({ message: err });
         }
