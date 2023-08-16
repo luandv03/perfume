@@ -4,6 +4,7 @@ const orderRoutes: Router = Router();
 
 import { OrderController } from "../../../controllers/orders/orders.controller";
 import { userAuthMiddleware } from "../../../middlewares/user-auth.middleware";
+import { authMiddleware } from "../../../middlewares/auth.middleware";
 const orderController = new OrderController();
 
 orderRoutes.post(
@@ -21,6 +22,13 @@ orderRoutes.get(
 
 //get order
 orderRoutes.get("/order/view", orderController.getOrder);
+
+// accept order
+orderRoutes.put(
+    "/order/accept/:order_id",
+    authMiddleware,
+    orderController.acceptOrderByOrderId
+);
 
 //use coupon
 orderRoutes.get("/coupon/:coupon_code", orderController.getValidCouponByCode);

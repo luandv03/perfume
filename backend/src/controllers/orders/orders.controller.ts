@@ -56,4 +56,15 @@ export class OrderController {
             res.status(500).json({ message: error });
         }
     }
+
+    async acceptOrderByOrderId(req: Request, res: Response): Promise<any> {
+        try {
+            const order_id = req.params.order_id;
+            const data = await orderService.acceptOrderByOrderId(order_id);
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({ message: error });
+        }
+    }
 }

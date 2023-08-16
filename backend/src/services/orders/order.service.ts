@@ -145,6 +145,55 @@ class OrderService {
         }
     }
 
+    // update order with role customer
+    // async updateOrderWithCustomer(
+    //     order_id: string
+    // ): Promise<ResponseType<any>> {
+    //     const results = await query(
+    //         `SELECT order_id, status FROM orders WHERE order_id = $1`,
+    //         [Number(order_id)]
+    //     );
+
+    //     if (!results.rowCount) {
+    //         return {
+    //             statusCode: HttpStatusCode.NOT_FOUND,
+    //             message: "Order not exist!",
+    //         };
+    //     }
+
+    //     if (results.rows[0].status !== "Đang chờ xác nhận") {
+    //         return {
+    //             statusCode: HttpStatusCode.NOT_ACCEPTABLE,
+    //             message: "Không thể chỉnh sửa đơn hàng",
+    //         };
+    //     }
+
+    //     return {
+    //         statusCode: HttpStatusCode.OK,
+    //         message: "Update order successfully!",
+    //     };
+    // }
+
+    // acceptOrder
+    async acceptOrderByOrderId(order_id: string): Promise<ResponseType<any>> {
+        const results = await query(
+            `UPDATE orders SET status = 'Đã xác nhận' WHERE order_id = $1`,
+            [Number(order_id)]
+        );
+
+        if (!results.rowCount) {
+            return {
+                statusCode: HttpStatusCode.ACCEPTED,
+                message: "Update status order failure!",
+            };
+        }
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Accepted order!",
+        };
+    }
+
     async getValidCouponByCode(coupon_code: string): Promise<any> {
         const results = await query(
             `SELECT * FROM coupons WHERE coupon_code = $1`,
