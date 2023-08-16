@@ -1,6 +1,7 @@
 import { query } from "../../db/index.db";
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 import { ResponseType } from "../../types/response.type";
+import { handleTimeExpired } from "../../utils/handle_time_expired";
 
 interface OrderLine {
     order_id?: number;
@@ -14,12 +15,14 @@ type Order = {
     tax: number;
     delivery_cost: number;
     orderList: OrderLine[];
+    coupon_id?: string;
 };
 
 class OrderService {
     async createOrder(order: Order): Promise<any> {
         try {
-            const { customer_id, tax, delivery_cost, orderList } = order;
+            const { customer_id, tax, delivery_cost, coupon_id, orderList } =
+                order;
 
             await query("BEGIN");
 
@@ -51,6 +54,14 @@ class OrderService {
                     message:
                         "Tạo đơn hàng không thành công do có sản phẩm vượt quá số lượng trong kho ",
                 };
+            }
+
+            // use coupon :if have then use else have no (empty) then next
+            if (coupon_id) {
+                await query(`INSERT INTO coupon_orders VALUES ($1, $2)`, [
+                    Number(coupon_id),
+                    Number(order_id),
+                ]);
             }
 
             await query("COMMIT");
@@ -123,6 +134,47 @@ class OrderService {
                 message: "Have error",
             };
         }
+    }
+
+    async getValidCouponByCode(coupon_code: string): Promise<any> {
+        const results = await query(
+            `SELECT * FROM coupons WHERE coupon_id = $s1`,
+            [coupon_code]
+        );
+
+        if (!results.rows[0]) {
+            return {
+                statusCode: HttpStatusCode.NOT_FOUND,
+                message: "Coupon code not exist",
+            };
+        }
+
+        // check quantity
+        if (results.rows[0].quantity <= 0) {
+            return {
+                statusCode: HttpStatusCode.ACCEPTED,
+                message: "Coupon này đã hết",
+            };
+        }
+
+        // check expire
+        const startTimeCoupon = handleTimeExpired(results.rows[0].start_time);
+        const endTimeCoupon = handleTimeExpired(results.rows[0].end_time);
+        const currentTime = handleTimeExpired(new Date());
+
+        if (startTimeCoupon < currentTime || endTimeCoupon > currentTime) {
+            return {
+                statusCode: 400,
+                message: "Coupon expired",
+            };
+        }
+
+        // còn lại => OK
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "COUPON OK",
+            data: results.rows[0],
+        };
     }
 }
 

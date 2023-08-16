@@ -4,13 +4,15 @@ import { orderService } from "../../services/orders/order.service";
 export class OrderController {
     async createOrder(req: Request, res: Response): Promise<any> {
         try {
-            const { customer_id, tax, delivery_cost, orderList } = req.body;
+            const { customer_id, tax, delivery_cost, coupon_id, orderList } =
+                req.body;
 
             const data = await orderService.createOrder({
                 customer_id,
                 tax,
                 delivery_cost,
                 orderList,
+                coupon_id, // have or no
             });
             return res.status(200).json(data);
         } catch (err) {
@@ -40,6 +42,18 @@ export class OrderController {
             return res.status(200).json(data);
         } catch (err) {
             res.status(500).json({ message: err });
+        }
+    }
+
+    async getValidCouponByCode(req: Request, res: Response): Promise<any> {
+        try {
+            const coupon_id = req.params.coupon_id;
+
+            const data = await orderService.getValidCouponByCode(coupon_id);
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({ message: error });
         }
     }
 }
