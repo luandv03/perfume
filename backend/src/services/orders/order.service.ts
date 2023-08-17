@@ -145,34 +145,37 @@ class OrderService {
         }
     }
 
-    // update order with role customer
-    // async updateOrderWithCustomer(
-    //     order_id: string
-    // ): Promise<ResponseType<any>> {
-    //     const results = await query(
-    //         `SELECT order_id, status FROM orders WHERE order_id = $1`,
-    //         [Number(order_id)]
-    //     );
+    //update order with role customer
+    async cancelOrder(order_id: string): Promise<ResponseType<any>> {
+        const results = await query(
+            `SELECT order_id, status FROM orders WHERE order_id = $1`,
+            [Number(order_id)]
+        );
 
-    //     if (!results.rowCount) {
-    //         return {
-    //             statusCode: HttpStatusCode.NOT_FOUND,
-    //             message: "Order not exist!",
-    //         };
-    //     }
+        if (!results.rowCount) {
+            return {
+                statusCode: HttpStatusCode.NOT_FOUND,
+                message: "Order not exist!",
+            };
+        }
 
-    //     if (results.rows[0].status !== "Đang chờ xác nhận") {
-    //         return {
-    //             statusCode: HttpStatusCode.NOT_ACCEPTABLE,
-    //             message: "Không thể chỉnh sửa đơn hàng",
-    //         };
-    //     }
+        if (results.rows[0].status !== "Đang chờ xác nhận") {
+            return {
+                statusCode: HttpStatusCode.NOT_ACCEPTABLE,
+                message:
+                    "Không thể hủy đơn hàng. Hãy liên hệ với chúng tôi để được giúp đỡ!",
+            };
+        }
 
-    //     return {
-    //         statusCode: HttpStatusCode.OK,
-    //         message: "Update order successfully!",
-    //     };
-    // }
+        await query(`UPDATE orders SET status = 'Đã hủy' WHERE order_id = $1`, [
+            Number(order_id),
+        ]);
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Cancel order successfully!",
+        };
+    }
 
     // acceptOrder
     async acceptOrderByOrderId(order_id: string): Promise<ResponseType<any>> {

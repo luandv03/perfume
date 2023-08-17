@@ -23,11 +23,18 @@ orderRoutes.get(
 //get order
 orderRoutes.get("/order/view", orderController.getOrder);
 
-// accept order
-orderRoutes.put(
+// accept order : role admin
+orderRoutes.patch(
     "/order/accept/:order_id",
     authMiddleware,
     orderController.acceptOrderByOrderId
+);
+
+//cancel order : role customer
+orderRoutes.patch(
+    "/order/cancel/:order_id",
+    userAuthMiddleware,
+    orderController.cancelOrder
 );
 
 //use coupon
