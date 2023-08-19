@@ -37,7 +37,7 @@ class CartService {
             );
 
             // neu chua ton tai thi insert
-            if (!cartItemExist.rows[0].length) {
+            if (!cartItemExist.rows.length) {
                 const results = await query(
                     `INSERT INTO cart_items VALUES ($1, $2, $3)`,
                     [cart_id, product_id, quantity]
