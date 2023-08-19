@@ -66,6 +66,19 @@ class CartService {
         try {
             const { cart_id, product_id, quantity } = cartItem;
 
+            const cartItemExist = await query(
+                `SELECT product_id FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
+                [cart_id, product_id]
+            );
+
+            // neu chua ton tai thi next
+            if (!cartItemExist.rows.length) {
+                return {
+                    statusCode: HttpStatusCode.NOT_FOUND,
+                    message: "Cart item not exist",
+                };
+            }
+
             const results = await query(
                 `UPDATE cart_items SET quantity = quantity + $1 WHERE cart_id = $2 AND product_id = $3`,
                 [quantity, cart_id, product_id]
