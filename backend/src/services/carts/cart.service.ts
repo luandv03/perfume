@@ -33,19 +33,19 @@ class CartService {
             // kiem tra trong cart co product_id nay chua
             const cartItemExist = await query(
                 `SELECT product_id FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
-                [Number(cart_id), Number(product_id)]
+                [cart_id, product_id]
             );
 
             // neu chua ton tai thi insert
             if (!cartItemExist.rows[0].length) {
                 const results = await query(
                     `INSERT INTO cart_items VALUES ($1, $2, $3)`,
-                    [Number(cart_id), Number(product_id), quantity]
+                    [cart_id, product_id, quantity]
                 );
             } else {
                 const results = await query(
                     `UPDATE cart_items SET quantity = quantity + $1 WHERE cart_id = $2 AND product_id = $3`,
-                    [quantity, Number(cart_id), Number(product_id)]
+                    [quantity, cart_id, product_id]
                 );
             }
 
@@ -68,7 +68,7 @@ class CartService {
 
             const results = await query(
                 `UPDATE cart_items SET quantity = quantity + $1 WHERE cart_id = $2 AND product_id = $3`,
-                [quantity, Number(cart_id), Number(product_id)]
+                [quantity, cart_id, product_id]
             );
 
             return {
