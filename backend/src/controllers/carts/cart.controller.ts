@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, query } from "express";
 import { cartService } from "../../services/carts/cart.service";
 
 export class CartController {
@@ -14,7 +14,11 @@ export class CartController {
 
             res.status(data.statusCode).json(data);
         } catch (error) {
-            res.status(500).json({ message: error });
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
         }
     }
 
@@ -30,7 +34,11 @@ export class CartController {
 
             res.status(data.statusCode).json(data);
         } catch (error) {
-            res.status(500).json({ message: error });
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
         }
     }
 
@@ -45,7 +53,29 @@ export class CartController {
 
             res.status(data.statusCode).json(data);
         } catch (error) {
-            res.status(500).json({ message: error });
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
+        }
+    }
+
+    async getCartListByCustomerId(req: Request, res: Response): Promise<any> {
+        try {
+            const { customer_id } = req.params;
+
+            const data = await cartService.getCartListByCustomerId(
+                Number(customer_id)
+            );
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
         }
     }
 }

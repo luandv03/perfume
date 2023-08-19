@@ -15,3 +15,11 @@ cartRoutes.delete(
     "/cart/:cart_id/product/:product_id/delete",
     cartController.removeCartItem
 );
+
+// get cart list by customer id
+cartRoutes.get(
+    "/cart/customer/:customer_id",
+    cartController.getCartListByCustomerId
+);
+
+export default cartRoutes;

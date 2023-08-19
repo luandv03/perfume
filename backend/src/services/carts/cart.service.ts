@@ -114,6 +114,36 @@ class CartService {
             };
         }
     }
+
+    // get cart list by customer_id
+    async getCartListByCustomerId(customer_id: number) {
+        const results = await query(
+            `SELECT cart_id FROM carts WHERE customer_id = $1`,
+            [customer_id]
+        );
+
+        if (!results.rows.length) {
+            return {
+                statusCode: HttpStatusCode.NOT_FOUND,
+                message: "User not have cart list",
+            };
+        }
+
+        const cartList = await query(
+            `SELECT product_id, quantity FROM cart_items WHERE cart_id = $1`,
+            [results.rows[0].cart_id]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get cart list successfull!",
+            data: {
+                cart_id: results.rows[0].cart_id,
+                cart_item_number: cartList.rows[0].length,
+                cart_list: cartList.rows[0],
+            },
+        };
+    }
 }
 
 export const cartService = new CartService();
