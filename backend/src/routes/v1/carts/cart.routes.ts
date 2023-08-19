@@ -9,3 +9,9 @@ cartRoutes.post("/cart/add_cart_item", cartController.addCartItemIntoCart);
 
 // update cart item
 cartRoutes.patch("/cart/update_cart_item", cartController.updateCartItem);
+
+//remove cart item
+cartRoutes.delete(
+    "/cart/:cart_id/product/:product_id/delete",
+    cartController.removeCartItem
+);
