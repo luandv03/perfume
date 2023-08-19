@@ -139,8 +139,8 @@ class CartService {
             message: "Get cart list successfull!",
             data: {
                 cart_id: results.rows[0].cart_id,
-                cart_item_number: cartList.rows[0].length,
-                cart_list: cartList.rows[0],
+                cart_item_number: cartList.rows.length,
+                cart_list: cartList.rows,
             },
         };
     }
