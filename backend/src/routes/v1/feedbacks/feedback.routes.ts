@@ -7,4 +7,9 @@ const feedbackController = new FeedbackController();
 // create feedback
 feedbackRoutes.post("/feedback/create", feedbackController.createFeedback);
 
+// update feedback
+feedbackRoutes.patch("/feedback/update", feedbackController.updateFeedback);
+
+// delete feedback
+
 export default feedbackRoutes;
