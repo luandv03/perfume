@@ -43,4 +43,23 @@ export class FeedbackController {
             });
         }
     }
+
+    async removeFeedback(req: Request, res: Response): Promise<any> {
+        try {
+            const { customer_id, product_id } = req.params;
+
+            const data = await feedbackService.removeFeedback(
+                Number(customer_id),
+                Number(product_id)
+            );
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
+        }
+    }
 }

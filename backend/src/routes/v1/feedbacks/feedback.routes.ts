@@ -11,5 +11,9 @@ feedbackRoutes.post("/feedback/create", feedbackController.createFeedback);
 feedbackRoutes.patch("/feedback/update", feedbackController.updateFeedback);
 
 // delete feedback
+feedbackRoutes.delete(
+    "/feedback/customer/:customer_id/product/:product_id",
+    feedbackController.updateFeedback
+);
 
 export default feedbackRoutes;

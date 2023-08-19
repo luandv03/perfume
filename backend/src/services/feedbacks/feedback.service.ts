@@ -58,7 +58,7 @@ class FeedbackService {
         };
     }
 
-    async removeFeedbackById(
+    async removeFeedback(
         customer_id: number,
         product_id: number
     ): Promise<ResponseType<any>> {
