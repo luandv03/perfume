@@ -20,8 +20,8 @@ orderRoutes.get(
     orderController.getOrderByCustomerId
 );
 
-//get order
-orderRoutes.get("/order/view", orderController.getOrder);
+//get orders : role admin
+orderRoutes.get("/order/view", authMiddleware, orderController.getOrder);
 
 // accept order : role admin
 orderRoutes.patch(
@@ -30,7 +30,7 @@ orderRoutes.patch(
     orderController.acceptOrderByOrderId
 );
 
-//cancel order : role customer
+// cancel order : role customer
 orderRoutes.patch(
     "/order/cancel/:order_id",
     userAuthMiddleware,

@@ -145,7 +145,7 @@ class OrderService {
         }
     }
 
-    //update order with role customer
+    //cancel order with role customer
     async cancelOrder(order_id: string): Promise<ResponseType<any>> {
         const results = await query(
             `SELECT order_id, status FROM orders WHERE order_id = $1`,

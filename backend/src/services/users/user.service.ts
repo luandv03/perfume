@@ -11,6 +11,7 @@ import { UserProfileType } from "../../types/users/user.type";
 import { ILoginUser } from "../../types/users/user.type";
 import { IRegisterUser } from "../../types/users/user.type";
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
+import { cartService } from "../carts/cart.service";
 
 const configService = new ConfigService();
 
@@ -112,6 +113,8 @@ class UserService {
                 `INSERT INTO system_account(email, password, customer_id) VALUES ($1, $2, $3)`,
                 [email, hashPassword, customer.rows[0].customer_id]
             );
+
+            await cartService.createCart(customer.rows[0].customer_id);
 
             return {
                 statusCode: HttpStatusCode.OK,
