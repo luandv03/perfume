@@ -6,3 +6,6 @@ const cartController = new CartController();
 
 // add cart item into cart list
 cartRoutes.post("/cart/add_cart_item", cartController.addCartItemIntoCart);
+
+// update cart item
+cartRoutes.patch("/cart/update_cart_item", cartController.updateCartItem);
