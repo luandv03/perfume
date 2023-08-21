@@ -92,6 +92,52 @@ class FeedbackService {
             message: "Delete feedback success!",
         };
     }
+    async getFeedbackByProductId({
+        product_id,
+        page,
+        limit,
+    }: {
+        product_id: number;
+        page: number;
+        limit: number;
+    }): Promise<ResponseType<any>> {
+        const offset = (page - 1) * limit;
+
+        const feedbacks = await query(
+            `SELECT * FROM feedbacks WHERE product_id = $1 OFFSET $2 LIMIT $3`,
+            [product_id, offset, limit]
+        );
+        //VD: limit = 5, page = 1
+        // page = 1 => offset = 0 : 1 2 3 4 5  | offset = (page-1)*limit
+        // page 2 => offset = 5   | 6 7 8 9 10
+        // page 3 => offset = 10
+        const totalFeedback = await this.countFeedbackCountByProductId(
+            product_id
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get feedback success",
+            data: {
+                feedbackList: feedbacks.rows,
+                pageNumber: page,
+                feedbackPerPage: limit,
+                totalPage: Math.ceil(totalFeedback / limit),
+                totalFeedback,
+            },
+        };
+    }
+
+    async countFeedbackCountByProductId(product_id: number) {
+        const results = await query(
+            `SELECT count(*) AS feedback_number FROM feedbacks WHERE product_id = $1`,
+            [product_id]
+        );
+
+        if (results.rowCount) {
+            return results.rows[0]?.feedback_number;
+        }
+    }
 }
 
 export const feedbackService = new FeedbackService();

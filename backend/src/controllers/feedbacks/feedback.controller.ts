@@ -62,4 +62,24 @@ export class FeedbackController {
             });
         }
     }
+
+    async getFeedbackByProductId(req: Request, res: Response): Promise<any> {
+        try {
+            const { product_id, page, limit } = req.query;
+
+            const data = await feedbackService.getFeedbackByProductId({
+                product_id: Number(product_id),
+                page: Number(page),
+                limit: Number(limit),
+            });
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
+        }
+    }
 }
