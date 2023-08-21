@@ -4,7 +4,8 @@ import { feedbackService } from "../../services/feedbacks/feedback.service";
 export class FeedbackController {
     async createFeedback(req: Request, res: Response): Promise<any> {
         try {
-            const { customer_id, product_id, content, stars } = req.body;
+            const { customer_id } = res.locals.data;
+            const { product_id, content, stars } = req.body;
 
             const data = await feedbackService.createFeedback({
                 customer_id,
@@ -25,7 +26,9 @@ export class FeedbackController {
 
     async updateFeedback(req: Request, res: Response): Promise<any> {
         try {
-            const { customer_id, product_id, content, stars } = req.body;
+            const { customer_id } = res.locals.data;
+
+            const { product_id, content, stars } = req.body;
 
             const data = await feedbackService.updateFeedback({
                 customer_id,
@@ -46,7 +49,9 @@ export class FeedbackController {
 
     async removeFeedback(req: Request, res: Response): Promise<any> {
         try {
-            const { customer_id, product_id } = req.params;
+            const { customer_id } = res.locals.data;
+
+            const { product_id } = req.params;
 
             const data = await feedbackService.removeFeedback(
                 Number(customer_id),

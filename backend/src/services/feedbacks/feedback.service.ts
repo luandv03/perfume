@@ -12,6 +12,20 @@ interface FeedbackType {
 class FeedbackService {
     async createFeedback(feedback: FeedbackType): Promise<ResponseType<any>> {
         const { customer_id, product_id, content, stars } = feedback;
+        // check customer bought that product ?
+        const checkBought = await this.checkCustomerBoughtProuduct(
+            product_id,
+            customer_id
+        );
+
+        if (!checkBought) {
+            return {
+                statusCode: HttpStatusCode.NOT_ACCEPTABLE,
+                message:
+                    "You haven't already bought this product, so you can't feedback it",
+            };
+        }
+
         const results = await query(
             `INSERT INTO feedbacks VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *`,
             [product_id, customer_id, content, stars]
@@ -123,7 +137,7 @@ class FeedbackService {
                 pageNumber: page,
                 feedbackPerPage: limit,
                 totalPage: Math.ceil(totalFeedback / limit),
-                totalFeedback,
+                totalFeedback: Number(totalFeedback),
             },
         };
     }
@@ -137,6 +151,22 @@ class FeedbackService {
         if (results.rowCount) {
             return results.rows[0]?.feedback_number;
         }
+    }
+
+    async checkCustomerBoughtProuduct(
+        product_id: number,
+        customer_id: number
+    ): Promise<boolean> {
+        const results = await query(
+            `select customer_id from orders
+        join orderlines using(order_id)
+        where product_id = $1 and customer_id = $2 and status = 'Đã giao hàng'`,
+            [product_id, customer_id]
+        );
+
+        if (!results.rows.length) return false;
+
+        return true;
     }
 }
 
