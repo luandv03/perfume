@@ -1,8 +1,18 @@
-// import { useState, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Input } from "@mantine/core";
-import { IconSearch, IconLoader2, IconX } from "@tabler/icons-react";
+import {
+    // IconSearch,
+    // IconLoader2,
+    IconX,
+} from "@tabler/icons-react";
 
-export function SearchBar({ value, setValue }) {
+export function SearchBar({
+    value,
+    setValue,
+}: {
+    value: string;
+    setValue: Dispatch<SetStateAction<string>>;
+}) {
     const handleDeleteSearch = () => {
         setValue("");
     };

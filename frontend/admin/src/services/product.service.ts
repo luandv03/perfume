@@ -24,6 +24,30 @@ class ProductService extends BaseService {
             return error;
         }
     }
+
+    async getProductById(product_id: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/product/${product_id}/view`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async getPhotoProductById(product_id: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/product/${product_id}/product_photo/view`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const productService: ProductService = new ProductService();

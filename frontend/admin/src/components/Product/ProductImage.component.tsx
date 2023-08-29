@@ -1,4 +1,7 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Flex, Box, Image, createStyles } from "@mantine/core";
+import { productService } from "../../services/product.service";
 
 const useStyles = createStyles({
     shadowHover: {
@@ -10,7 +13,27 @@ const useStyles = createStyles({
 });
 
 export function ProductImage() {
+    const [photos, setPhotos] = useState([
+        {
+            product_photo_id: 1,
+            product_photo_url: "",
+        },
+    ]);
     const { classes } = useStyles();
+    const { product_id } = useParams();
+
+    const handleGetPhotoProduct = async () => {
+        const data = await productService.getPhotoProductById(
+            Number(product_id)
+        );
+
+        setPhotos(data.data);
+    };
+
+    useEffect(() => {
+        handleGetPhotoProduct();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Flex
@@ -21,15 +44,18 @@ export function ProductImage() {
             direction="row"
             gap="xs"
         >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(
-                (item: number) => (
+            {photos.map(
+                (item: {
+                    product_photo_id: number;
+                    product_photo_url: string;
+                }) => (
                     <Box className={classes.shadowHover}>
                         <Image
-                            key={item}
+                            key={item.product_photo_id}
                             width={150}
                             mx="auto"
                             radius="md"
-                            src="https://cdn.shopify.com/s/files/1/0268/8267/0792/products/1_e73ea800-9922-49cb-ba2f-555060ec1e99.jpg?v=1674566715"
+                            src={item.product_photo_url}
                             alt="Random image"
                         />
                     </Box>

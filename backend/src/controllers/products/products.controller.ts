@@ -56,11 +56,8 @@ export class ProductController {
     async getProductPhotoById(req: Request, res: Response): Promise<any> {
         try {
             const product_id = req.params.product_id;
-            const { offset, limit } = req.query;
             const data = await productService.getProductPhotoById(
-                Number(product_id),
-                Number(offset),
-                Number(limit)
+                Number(product_id)
             );
 
             return res.status(data.statusCode).json(data);

@@ -78,13 +78,12 @@ class ProductService {
     }
 
     async getProductPhotoById(
-        product_id: number,
-        offset: number,
-        limit: number
+        product_id: number
     ): Promise<ResponseType<ProductType[]>> {
         const results = await query(
-            `SELECT product_photo_id, product_photo_url FROM product_photos WHERE product_id = $1 OFFSET $2 LIMIT $3`,
-            [product_id, offset, limit]
+            `SELECT product_photo_id, product_photo_url FROM product_photos 
+            WHERE product_id = $1 `,
+            [product_id]
         );
 
         return {

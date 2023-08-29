@@ -144,7 +144,7 @@ function App() {
                             element={<ProductView />}
                         >
                             <Route
-                                path="/product/:product_id/image"
+                                path="/product/:product_id"
                                 element={<ProductImage />}
                             />
                             <Route

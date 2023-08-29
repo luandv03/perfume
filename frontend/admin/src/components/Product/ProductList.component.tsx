@@ -76,9 +76,9 @@ export function ProductList({ data }: ProductType) {
         );
     const toggleAll = () =>
         setSelection((current) =>
-            current.length === data.length
+            current.length === products.length
                 ? []
-                : data.map((item) => item.product_id)
+                : products.map((item) => item.product_id)
         );
 
     const handleListProducts = async () => {
@@ -101,10 +101,12 @@ export function ProductList({ data }: ProductType) {
 
     useEffect(() => {
         !value && handleListProducts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, total, value]);
 
     useEffect(() => {
         value && handleSearch(debounced);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debounced, page, total]);
 
     const rows =
@@ -149,11 +151,7 @@ export function ProductList({ data }: ProductType) {
         <Stack>
             <Group>
                 <Flex sx={{ width: "100%" }} justify="space-between">
-                    <SearchBar
-                        handleSearch={handleSearch}
-                        value={value}
-                        setValue={setValue}
-                    />
+                    <SearchBar value={value} setValue={setValue} />
 
                     <Group>
                         <NativeSelect
