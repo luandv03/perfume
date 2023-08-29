@@ -223,6 +223,48 @@ class ProductService {
         };
     }
 
+    //update product by id
+    async updateProductById(product: any): Promise<ResponseType<any>> {
+        const {
+            product_id,
+            title,
+            description,
+            category_id,
+            volume,
+            price,
+            quantity,
+            year_publish,
+            brand,
+            discount,
+        } = product;
+
+        const results = await query(
+            `UPDATE products SET title = $1, category_id = $2, 
+            brand = $3, year_publish = $4, volume = $5, price = $6, discount = $7, quantity = $8,
+            description = $9, updated_at = current_timestamp
+            WHERE product_id = $10  RETURNING *
+        `,
+            [
+                title,
+                category_id,
+                brand,
+                year_publish,
+                volume,
+                Number(price),
+                Number(discount),
+                quantity,
+                description,
+                product_id,
+            ]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Update successfull",
+            data: results.rows[0],
+        };
+    }
+
     // count products in store
     async countProducts(): Promise<number> {
         const results = await query(

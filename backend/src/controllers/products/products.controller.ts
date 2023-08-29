@@ -140,4 +140,20 @@ export class ProductController {
             });
         }
     }
+
+    async updateProductById(req: Request, res: Response): Promise<any> {
+        try {
+            const product = req.body;
+
+            const data = await productService.updateProductById(product);
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+                error,
+            });
+        }
+    }
 }

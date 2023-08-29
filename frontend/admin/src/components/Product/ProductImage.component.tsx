@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Flex, Box, Image, createStyles } from "@mantine/core";
+
 import { productService } from "../../services/product.service";
 
 const useStyles = createStyles({

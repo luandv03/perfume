@@ -40,6 +40,6 @@ productRoutes.get("/product/view/filter", productController.getProductByFilter);
 // delete product by product_id
 
 // update product by product_id
-// o day ta se sua toi da cac thuoc tinh
+productRoutes.patch("/product/update", productController.updateProductById);
 
 export default productRoutes;

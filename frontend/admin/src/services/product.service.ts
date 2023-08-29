@@ -48,6 +48,19 @@ class ProductService extends BaseService {
             return error;
         }
     }
+
+    async updateProductById(product: any) {
+        try {
+            const res = await this.httpClientPublic.patch(
+                `/product/update`,
+                product
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const productService: ProductService = new ProductService();

@@ -9,6 +9,8 @@ import {
     IconTrash,
 } from "@tabler/icons-react";
 import { Link, Outlet, useParams } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
+
 import { productService } from "../../services/product.service";
 
 interface ProductType {
@@ -44,6 +46,18 @@ export function ProductView() {
 
     const handleGetProductById = async () => {
         const data = await productService.getProductById(Number(product_id));
+
+        markProduct = data.data;
+        setProduct(data.data);
+    };
+
+    const handleUpdateProduct = async () => {
+        const data = await productService.updateProductById(product);
+
+        notifications.show({
+            title: "Update product",
+            message: data.message + data.statusCode,
+        });
 
         markProduct = data.data;
         setProduct(data.data);
@@ -112,7 +126,9 @@ export function ProductView() {
             </Tabs.List>
 
             {/* body */}
-            <Outlet context={[product, setProduct]} />
+            <Flex style={{ minWidth: "800px" }}>
+                <Outlet context={[product, setProduct]} />
+            </Flex>
 
             {/* //footer */}
             <Flex style={{ width: "100%", marginTop: "20px" }}>
@@ -146,6 +162,7 @@ export function ProductView() {
                                 JSON.stringify(markProduct) ===
                                 JSON.stringify(product)
                             }
+                            onClick={() => handleUpdateProduct()}
                         >
                             <IconDeviceFloppy style={{ marginRight: "5px" }} />
                             Save

@@ -24,7 +24,7 @@ export function ProductDes() {
     return (
         <Container
             style={{
-                width: "800px",
+                width: "100%",
             }}
         >
             <Textarea
