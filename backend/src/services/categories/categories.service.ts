@@ -91,7 +91,7 @@ class CategoryService {
 
     async deleteCategoryById(category_id: string): Promise<ResponseType<any>> {
         const result = await query(
-            `DELETE FROM categories WHERE category_id = $1`,
+            `DELETE FROM categories WHERE category_id = $1 RETURNING *`,
             [category_id]
         );
 
@@ -105,6 +105,7 @@ class CategoryService {
         return {
             statusCode: HttpStatusCode.OK,
             message: "Delete category successfull",
+            data: result.rows[0],
         };
     }
 }

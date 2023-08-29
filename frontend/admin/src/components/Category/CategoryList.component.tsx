@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconPlus, IconPencil } from "@tabler/icons-react";
+import { IconPlus, IconPencil, IconTrash } from "@tabler/icons-react";
 
 import { categoryService } from "../../services/category.service";
 
@@ -101,6 +101,25 @@ export function CategoryList() {
         });
     };
 
+    const handleDeleteCategoryById = async (category_id: number) => {
+        const data = await categoryService.deleteCategoryById(category_id);
+
+        if (data.statusCode === 200) {
+            setListCategories((prev) => {
+                const cate = prev.filter(
+                    (item) => item.category_id !== data.data.category_id
+                );
+
+                return cate;
+            });
+        }
+
+        notifications.show({
+            title: "Default notification",
+            message: data.message + ": " + data.statusCode,
+        });
+    };
+
     useEffect(() => {
         handleGetCategory();
     }, []);
@@ -124,16 +143,26 @@ export function CategoryList() {
                     <td>{item.category_id}</td>
                     <td>{item.category_name}</td>
                     <td>
-                        <ActionIcon
-                            onClick={() => {
-                                open();
-                                setCategory(item);
-                                setCategorySelected(item.category_name);
-                            }}
-                            color="black"
-                        >
-                            <IconPencil />
-                        </ActionIcon>
+                        <Flex>
+                            <ActionIcon
+                                onClick={() => {
+                                    open();
+                                    setCategory(item);
+                                    setCategorySelected(item.category_name);
+                                }}
+                                color="black"
+                            >
+                                <IconPencil />
+                            </ActionIcon>
+                            <ActionIcon
+                                onClick={() => {
+                                    handleDeleteCategoryById(item.category_id);
+                                }}
+                                color="black"
+                            >
+                                <IconTrash />
+                            </ActionIcon>
+                        </Flex>
                     </td>
                 </tr>
             );

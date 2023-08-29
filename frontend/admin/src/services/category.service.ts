@@ -37,6 +37,18 @@ class CategoryService extends BaseService {
             return error;
         }
     }
+
+    async deleteCategoryById(category_id: number) {
+        try {
+            const res = await this.httpClientPublic.delete(
+                `/category/${category_id}/delete`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const categoryService: CategoryService = new CategoryService();

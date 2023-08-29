@@ -33,7 +33,7 @@ categoryRoutes.put(
 //delete categories by id
 categoryRoutes.delete(
     "/category/:category_id/delete",
-    authMiddleware,
+    // authMiddleware,
     categoryController.deleteCategoryById
 );
 
