@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     createStyles,
     Table,
@@ -16,6 +16,8 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus, IconPencil } from "@tabler/icons-react";
+
+import { categoryService } from "../../services/category.service";
 
 const useStyles = createStyles((theme) => ({
     rowSelected: {
@@ -50,6 +52,12 @@ export function CategoryList() {
     const { classes, cx } = useStyles();
     const [selection, setSelection] = useState([1]);
     const [opened, { open, close }] = useDisclosure(false);
+    const [listCategories, setListCategories] = useState([
+        {
+            category_id: 0,
+            category_name: "",
+        },
+    ]);
     const [category, setCategory] = useState({
         category_id: 0,
         category_name: "",
@@ -71,37 +79,49 @@ export function CategoryList() {
                 : data.map((item) => item.category_id)
         );
 
-    const rows = data.map((item) => {
-        const selected = selection.includes(item.category_id);
-        return (
-            <tr
-                key={item.category_id}
-                className={cx({ [classes.rowSelected]: selected })}
-            >
-                <td>
-                    <Checkbox
-                        checked={selection.includes(item.category_id)}
-                        onChange={() => toggleRow(item.category_id)}
-                        transitionDuration={0}
-                    />
-                </td>
-                <td>{item.category_id}</td>
-                <td>{item.category_name}</td>
-                <td>
-                    <ActionIcon
-                        onClick={() => {
-                            open();
-                            setCategory(item);
-                            setCategorySelected(item.category_name);
-                        }}
-                        color="black"
-                    >
-                        <IconPencil />
-                    </ActionIcon>
-                </td>
-            </tr>
-        );
-    });
+    const handleGetCategory = async () => {
+        const data = await categoryService.getAllCategories();
+
+        setListCategories(data.data);
+    };
+
+    useEffect(() => {
+        handleGetCategory();
+    }, []);
+
+    const rows =
+        listCategories.length &&
+        listCategories.map((item: TableSelectionProps) => {
+            const selected = selection.includes(item.category_id);
+            return (
+                <tr
+                    key={item.category_id}
+                    className={cx({ [classes.rowSelected]: selected })}
+                >
+                    <td>
+                        <Checkbox
+                            checked={selection.includes(item.category_id)}
+                            onChange={() => toggleRow(item.category_id)}
+                            transitionDuration={0}
+                        />
+                    </td>
+                    <td>{item.category_id}</td>
+                    <td>{item.category_name}</td>
+                    <td>
+                        <ActionIcon
+                            onClick={() => {
+                                open();
+                                setCategory(item);
+                                setCategorySelected(item.category_name);
+                            }}
+                            color="black"
+                        >
+                            <IconPencil />
+                        </ActionIcon>
+                    </td>
+                </tr>
+            );
+        });
 
     return (
         <ScrollArea>

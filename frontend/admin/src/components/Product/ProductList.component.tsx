@@ -13,7 +13,9 @@ import {
     Box,
     Pagination,
     ActionIcon,
+    Select,
 } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
 import { IconPlus, IconDownload, IconEye } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { SearchBar } from "../SearchBar/SearchBar.component";
@@ -60,9 +62,12 @@ export function ProductList({ data }: ProductType) {
     ]);
     const [totalPage, setTotalPage] = useState(0);
     const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(10);
+    const [total, setTotal] = useState<string>("10");
     const { classes, cx } = useStyles();
     const [selection, setSelection] = useState<number[]>([0]);
+    const [value, setValue] = useState<string>("");
+    const [debounced] = useDebouncedValue(value, 200);
+
     const toggleRow = (id: number) =>
         setSelection((current) =>
             current.includes(id)
@@ -77,15 +82,30 @@ export function ProductList({ data }: ProductType) {
         );
 
     const handleListProducts = async () => {
-        const data = await productService.listProducts(page, total);
+        const data = await productService.listProducts(page, Number(total));
+
+        setTotalPage(data.data.totalPage);
+        setProducts(data.data.products);
+    };
+
+    const handleSearch = async (searchValue: string) => {
+        const data = await productService.getProductByTitle(
+            searchValue,
+            page,
+            Number(total)
+        );
 
         setTotalPage(data.data.totalPage);
         setProducts(data.data.products);
     };
 
     useEffect(() => {
-        handleListProducts();
-    }, [page]);
+        !value && handleListProducts();
+    }, [page, total, value]);
+
+    useEffect(() => {
+        value && handleSearch(debounced);
+    }, [debounced, page, total]);
 
     const rows =
         products.length &&
@@ -129,7 +149,11 @@ export function ProductList({ data }: ProductType) {
         <Stack>
             <Group>
                 <Flex sx={{ width: "100%" }} justify="space-between">
-                    <SearchBar />
+                    <SearchBar
+                        handleSearch={handleSearch}
+                        value={value}
+                        setValue={setValue}
+                    />
 
                     <Group>
                         <NativeSelect
@@ -191,7 +215,18 @@ export function ProductList({ data }: ProductType) {
                 <tbody>{rows}</tbody>
             </Table>
 
-            <Flex sx={{ width: "100%" }} justify="flex-end">
+            <Flex sx={{ width: "100%" }} justify="flex-end" gap="xs">
+                <Select
+                    placeholder="Pick one"
+                    data={[
+                        { value: "10", label: "10 products" },
+                        { value: "20", label: "20 products" },
+                        { value: "50", label: "50 products" },
+                        { value: "100", label: "100 products" },
+                    ]}
+                    value={total}
+                    onChange={setTotal}
+                />
                 <Pagination value={page} onChange={setPage} total={totalPage} />
             </Flex>
         </Stack>

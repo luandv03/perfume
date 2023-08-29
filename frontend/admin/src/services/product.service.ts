@@ -12,6 +12,18 @@ class ProductService extends BaseService {
             return error;
         }
     }
+
+    async getProductByTitle(title: string, page: number, limit: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/product/search?title=${title}&page=${page}&limit=${limit}`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const productService: ProductService = new ProductService();

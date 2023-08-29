@@ -118,25 +118,38 @@ class ProductService {
 
     async getProductByTitle(
         title: string,
-        offset: string,
-        limit: string
-    ): Promise<ResponseType<ProductType[]>> {
-        const results = await query(
-            `SELECT product_id, title, price, volume, discount FROM products WHERE title ILIKE '%' || $1 || '%' OFFSET $2 LIMIT $3 `,
-            [title, Number(offset), Number(limit)]
+        page: number,
+        limit: number
+    ): Promise<ResponseType<any>> {
+        //limit = 10, page 1: => offset = 0,
+        // page 2: offset = (page-1)*limit
+        const totalProducts = await query(
+            `SELECT count(product_id) number_of_products
+            FROM products WHERE title ILIKE '%' || $1 || '%'`,
+            [title]
         );
 
-        if (!results.rows.length) {
-            return {
-                statusCode: HttpStatusCode.NOT_FOUND,
-                message: "Product not found",
-            };
-        }
+        const offset = (page - 1) * limit;
+        const results = await query(
+            `SELECT product_id, category_name, title, description , brand, year_publish, 
+            volume, price, discount, quantity, created_at
+            FROM products JOIN categories using(category_id) 
+            WHERE title ILIKE '%' || $1 || '%' OFFSET $2 LIMIT $3 `,
+            [title, offset, limit]
+        );
 
         return {
             statusCode: HttpStatusCode.OK,
             message: "Get Product Success",
-            data: results.rows,
+            data: {
+                products: results.rows,
+                page: page,
+                total: limit,
+                totalPage: Math.ceil(
+                    totalProducts.rows[0].number_of_products / limit
+                ),
+                totalProducts: Number(totalProducts.rows[0].number_of_products),
+            },
         };
     }
 

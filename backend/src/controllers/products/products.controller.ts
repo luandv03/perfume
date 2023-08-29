@@ -90,11 +90,11 @@ export class ProductController {
 
     async getProductByTitle(req: Request, res: Response): Promise<any> {
         try {
-            const { title, offset, limit } = req.query;
+            const { title, page, limit } = req.query;
             const data = await productService.getProductByTitle(
                 title as string,
-                offset as string,
-                limit as string
+                Number(page),
+                Number(limit)
             );
 
             return res.status(data.statusCode).json(data);
