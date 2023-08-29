@@ -3,6 +3,23 @@ import { productService } from "../../services/products/products.service";
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 
 export class ProductController {
+    async listProducts(req: Request, res: Response): Promise<any> {
+        try {
+            const { page, limit } = req.query;
+            const data = await productService.listProducts(
+                Number(page),
+                Number(limit)
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Server Error",
+            });
+        }
+    }
+
     async getProductByCateId(req: Request, res: Response): Promise<any> {
         try {
             const category_id = req.params.category_id;

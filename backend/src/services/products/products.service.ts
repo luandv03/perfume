@@ -4,6 +4,33 @@ import { ProductType } from "../../types/products/product.type";
 import { ResponseType } from "../../types/response.type";
 
 class ProductService {
+    // list in admin page
+    async listProducts(
+        page: number,
+        limit: number
+    ): Promise<ResponseType<any>> {
+        //limit = 10, page 1: => offset = 0,
+        // page 2: offset = (page-1)*limit
+        const totalProducts = await this.countProducts();
+        const offset = (page - 1) * limit;
+        const results = await query(
+            `SELECT * FROM products OFFSET $1 LIMIT $2`,
+            [offset, limit]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get products successfully",
+            data: {
+                products: results.rows,
+                page: page,
+                total: limit,
+                totalPage: Math.ceil(totalProducts / limit),
+                totalProducts,
+            },
+        };
+    }
+
     async getProductByCateId(
         category_id: number,
         offset: string,
@@ -180,6 +207,15 @@ class ProductService {
             message: "Get products success",
             data: results.rows,
         };
+    }
+
+    // count products in store
+    async countProducts(): Promise<number> {
+        const results = await query(
+            `SELECT count(product_id) number_of_products FROM products`
+        );
+
+        return Number(results.rows[0].number_of_products);
     }
 }
 

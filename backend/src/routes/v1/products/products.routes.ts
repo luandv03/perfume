@@ -1,8 +1,16 @@
 import { Router } from "express";
 import { ProductController } from "../../../controllers/products/products.controller";
+import { authMiddleware } from "../../../middlewares/auth.middleware";
 
 const productRoutes: Router = Router();
 const productController: ProductController = new ProductController();
+
+//list product in admin page
+productRoutes.get(
+    "/product/view",
+    authMiddleware,
+    productController.listProducts
+);
 
 // get product by category
 productRoutes.get(
@@ -30,10 +38,6 @@ productRoutes.get("/product/search", productController.getProductByTitle);
 
 // get products by filter: ?brand=["A","B","C"]&price=[1,2,3]
 productRoutes.get("/product/view/filter", productController.getProductByFilter);
-
-// get product by id
-
-//  do priority basic something
 
 // create product
 
