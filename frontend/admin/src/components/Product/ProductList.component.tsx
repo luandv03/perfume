@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     createStyles,
     Table,
@@ -17,6 +17,7 @@ import {
 import { IconPlus, IconDownload, IconEye } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { SearchBar } from "../SearchBar/SearchBar.component";
+import { productService } from "../../services/product.service";
 
 const useStyles = createStyles((theme) => ({
     rowSelected: {
@@ -29,7 +30,8 @@ const useStyles = createStyles((theme) => ({
 
 interface ProductType {
     data: {
-        product_id: string;
+        product_id: number;
+        category_name: string;
         avatar: string;
         title: string;
         brand: string;
@@ -42,9 +44,26 @@ interface ProductType {
 }
 
 export function ProductList({ data }: ProductType) {
+    const [products, setProducts] = useState([
+        {
+            product_id: 0,
+            category_name: "",
+            avatar: "",
+            title: "",
+            brand: "",
+            year_publish: 0,
+            volume: 0,
+            price: 0,
+            discount: 0,
+            quantity: 0,
+        },
+    ]);
+    const [totalPage, setTotalPage] = useState(0);
+    const [page, setPage] = useState(1);
+    const [total, setTotal] = useState(10);
     const { classes, cx } = useStyles();
-    const [selection, setSelection] = useState(["1"]);
-    const toggleRow = (id: string) =>
+    const [selection, setSelection] = useState<number[]>([0]);
+    const toggleRow = (id: number) =>
         setSelection((current) =>
             current.includes(id)
                 ? current.filter((item) => item !== id)
@@ -57,40 +76,54 @@ export function ProductList({ data }: ProductType) {
                 : data.map((item) => item.product_id)
         );
 
-    const rows = data.map((item) => {
-        const selected = selection.includes(item.product_id);
-        return (
-            <tr
-                key={item.product_id}
-                className={cx({ [classes.rowSelected]: selected })}
-            >
-                <td>
-                    <Checkbox
-                        checked={selection.includes(item.product_id)}
-                        onChange={() => toggleRow(item.product_id)}
-                        transitionDuration={0}
-                    />
-                </td>
-                <td>
-                    <Avatar size={26} src={item.avatar} radius={26} />
-                </td>
-                <td>{item.title}</td>
-                <td>{item.brand}</td>
-                <td>{item.year_publish}</td>
-                <td>{item.volume}</td>
-                <td>{new Intl.NumberFormat("vi-VN").format(item.price)}</td>
-                <td>{item.discount}</td>
-                <td>{item.quantity}</td>
-                <td>
-                    <Link to={`/product/${item.product_id}`}>
-                        <ActionIcon>
-                            <IconEye />
-                        </ActionIcon>
-                    </Link>
-                </td>
-            </tr>
-        );
-    });
+    const handleListProducts = async () => {
+        const data = await productService.listProducts(page, total);
+
+        setTotalPage(data.data.totalPage);
+        setProducts(data.data.products);
+    };
+
+    useEffect(() => {
+        handleListProducts();
+    }, [page]);
+
+    const rows =
+        products.length &&
+        products.map((item) => {
+            const selected = selection.includes(item.product_id);
+            return (
+                <tr
+                    key={item.product_id}
+                    className={cx({ [classes.rowSelected]: selected })}
+                >
+                    <td>
+                        <Checkbox
+                            checked={selection.includes(item.product_id)}
+                            onChange={() => toggleRow(item.product_id)}
+                            transitionDuration={0}
+                        />
+                    </td>
+                    <td>
+                        <Avatar size={26} src={item.avatar} radius={26} />
+                    </td>
+                    <td>{item.title}</td>
+                    <td>{item.category_name}</td>
+                    <td>{item.brand}</td>
+                    <td>{item.year_publish}</td>
+                    <td>{item.volume}</td>
+                    <td>{new Intl.NumberFormat("vi-VN").format(item.price)}</td>
+                    <td>{item.discount}</td>
+                    <td>{item.quantity}</td>
+                    <td>
+                        <Link to={`/product/${item.product_id}`}>
+                            <ActionIcon>
+                                <IconEye />
+                            </ActionIcon>
+                        </Link>
+                    </td>
+                </tr>
+            );
+        });
 
     return (
         <Stack>
@@ -146,6 +179,7 @@ export function ProductList({ data }: ProductType) {
                         </th>
                         <th>Avatar</th>
                         <th>Tên</th>
+                        <th>Loại</th>
                         <th>Thương hiệu</th>
                         <th>Năm sản xuất</th>
                         <th>Dung tích(ml)</th>
@@ -158,7 +192,7 @@ export function ProductList({ data }: ProductType) {
             </Table>
 
             <Flex sx={{ width: "100%" }} justify="flex-end">
-                <Pagination total={10} />
+                <Pagination value={page} onChange={setPage} total={totalPage} />
             </Flex>
         </Stack>
     );

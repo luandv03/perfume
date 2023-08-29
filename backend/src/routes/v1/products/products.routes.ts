@@ -6,11 +6,7 @@ const productRoutes: Router = Router();
 const productController: ProductController = new ProductController();
 
 //list product in admin page
-productRoutes.get(
-    "/product/view",
-    authMiddleware,
-    productController.listProducts
-);
+productRoutes.get("/product/view", productController.listProducts);
 
 // get product by category
 productRoutes.get(
