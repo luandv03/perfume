@@ -14,7 +14,9 @@ class ProductService {
         const totalProducts = await this.countProducts();
         const offset = (page - 1) * limit;
         const results = await query(
-            `SELECT * FROM products OFFSET $1 LIMIT $2`,
+            `SELECT product_id, category_name, title, description , brand, year_publish, 
+            volume, price, discount, quantity, created_at
+            FROM products JOIN categories using(category_id) OFFSET $1 LIMIT $2`,
             [offset, limit]
         );
 

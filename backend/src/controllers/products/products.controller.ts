@@ -16,6 +16,7 @@ export class ProductController {
             return res.status(500).json({
                 statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
                 message: "Server Error",
+                error: error,
             });
         }
     }
