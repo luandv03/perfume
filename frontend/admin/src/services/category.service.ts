@@ -10,6 +10,33 @@ class CategoryService extends BaseService {
             return error;
         }
     }
+
+    async updateCategoryById(category_id: number, category_name: string) {
+        try {
+            const res = await this.httpClientPublic.put(
+                `/category/${category_id}/update`,
+                {
+                    category_name,
+                }
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async createCategory(category_name: string) {
+        try {
+            const res = await this.httpClientPublic.post(`/category/create`, {
+                category_name,
+            });
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const categoryService: CategoryService = new CategoryService();

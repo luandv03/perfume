@@ -15,6 +15,7 @@ import {
     Button,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { IconPlus, IconPencil } from "@tabler/icons-react";
 
 import { categoryService } from "../../services/category.service";
@@ -32,21 +33,6 @@ interface TableSelectionProps {
     category_id: number;
     category_name: string;
 }
-
-const data: TableSelectionProps[] = [
-    {
-        category_id: 1,
-        category_name: "Nước hoa Nam",
-    },
-    {
-        category_id: 2,
-        category_name: "Nước hoa Nữ",
-    },
-    {
-        category_id: 3,
-        category_name: "Nước hoa Unisex",
-    },
-];
 
 export function CategoryList() {
     const { classes, cx } = useStyles();
@@ -74,15 +60,45 @@ export function CategoryList() {
         );
     const toggleAll = () =>
         setSelection((current) =>
-            current.length === data.length
+            current.length === listCategories.length
                 ? []
-                : data.map((item) => item.category_id)
+                : listCategories.map((item) => item.category_id)
         );
 
     const handleGetCategory = async () => {
         const data = await categoryService.getAllCategories();
 
         setListCategories(data.data);
+    };
+
+    const handeEditCategory = async ({
+        category_id,
+        category_name,
+    }: {
+        category_id: number;
+        category_name: string;
+    }) => {
+        const data = await categoryService.updateCategoryById(
+            category_id,
+            category_name
+        );
+
+        if (data.statusCode === 200) {
+            setListCategories((prev) => {
+                const cate = prev.map((item) =>
+                    item.category_id == data.data.category_id ? data.data : item
+                );
+
+                return cate;
+            });
+        }
+
+        close();
+
+        notifications.show({
+            title: "Default notification",
+            message: data.message + ": " + data.statusCode,
+        });
     };
 
     useEffect(() => {
@@ -147,10 +163,14 @@ export function CategoryList() {
                             <th style={{ width: rem(40) }}>
                                 <Checkbox
                                     onChange={toggleAll}
-                                    checked={selection.length === data.length}
+                                    checked={
+                                        selection.length ===
+                                        listCategories.length
+                                    }
                                     indeterminate={
                                         selection.length > 0 &&
-                                        selection.length !== data.length
+                                        selection.length !==
+                                            listCategories.length
                                     }
                                     transitionDuration={0}
                                 />
@@ -188,7 +208,7 @@ export function CategoryList() {
 
                     <Flex justify="flex-end">
                         <Button
-                            onClick={() => console.log(category)}
+                            onClick={() => handeEditCategory(category)}
                             disabled={!activeSave}
                         >
                             Save

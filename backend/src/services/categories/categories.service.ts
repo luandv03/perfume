@@ -71,7 +71,7 @@ class CategoryService {
         category_name: string
     ): Promise<ResponseType<any>> {
         const result = await query(
-            `UPDATE categories SET category_name = $1 WHERE category_id = $2`,
+            `UPDATE categories SET category_name = $1 WHERE category_id = $2 RETURNING *`,
             [category_name, category_id]
         );
 

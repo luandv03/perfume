@@ -19,14 +19,14 @@ categoryRoutes.get(
 // create all categories
 categoryRoutes.post(
     "/category/create",
-    authMiddleware,
+    // authMiddleware,
     categoryController.createCategory
 );
 
 //update categories by id
 categoryRoutes.put(
     "/category/:category_id/update",
-    authMiddleware,
+    // authMiddleware,
     categoryController.updateCategoryById
 );
 
