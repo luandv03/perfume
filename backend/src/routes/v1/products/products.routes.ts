@@ -36,6 +36,7 @@ productRoutes.get("/product/search", productController.getProductByTitle);
 productRoutes.get("/product/view/filter", productController.getProductByFilter);
 
 // create product
+productRoutes.post("/product/create", productController.createProduct);
 
 // delete product by product_id
 

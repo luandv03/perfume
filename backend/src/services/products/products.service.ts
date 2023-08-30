@@ -241,7 +241,7 @@ class ProductService {
         const results = await query(
             `UPDATE products SET title = $1, category_id = $2, 
             brand = $3, year_publish = $4, volume = $5, price = $6, discount = $7, quantity = $8,
-            description = $9, updated_at = current_timestamp
+            description = $9, updated_at = current_date
             WHERE product_id = $10  RETURNING *
         `,
             [
@@ -261,6 +261,52 @@ class ProductService {
         return {
             statusCode: HttpStatusCode.OK,
             message: "Update successfull",
+            data: results.rows[0],
+        };
+    }
+
+    // create product
+    async createProduct(
+        product: ProductType
+    ): Promise<ResponseType<ProductType>> {
+        const {
+            title,
+            description,
+            category_id,
+            volume,
+            price,
+            quantity,
+            year_publish,
+            brand,
+            discount,
+        } = product;
+
+        const results = await query(
+            `INSERT INTO products VALUES (DEFAULT, $1, $2,$3,$4,$5,$6,$7,$8,$9, current_date, current_date) RETURNING *`,
+            [
+                category_id,
+                title,
+                description,
+                brand,
+                year_publish,
+                volume,
+                price,
+                discount,
+                quantity,
+            ]
+        );
+
+        if (!results.rowCount) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Create product failed",
+                data: results.rows[0],
+            };
+        }
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Create product successfull",
             data: results.rows[0],
         };
     }
