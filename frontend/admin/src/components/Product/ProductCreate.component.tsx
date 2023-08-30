@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
     Tabs,
     Text,
@@ -18,6 +19,11 @@ import {
     IconSettings,
     IconDeviceFloppy,
 } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
+
+import { categoryService } from "../../services/category.service";
+import { productService } from "../../services/product.service";
 
 const useStyles = createStyles({
     shadowHover: {
@@ -28,19 +34,84 @@ const useStyles = createStyles({
     },
 });
 
+interface ProductType {
+    category_id: number;
+    title: string;
+    description: string;
+    brand: string;
+    year_publish: number;
+    volume: number;
+    price: number;
+    discount: number;
+    quantity: number;
+}
+
 export function ProductCreate() {
     const { classes } = useStyles();
 
-    // const [product, setProduct] = useState({
-    //     product_id: 0,
-    //     product_name: "",
-    //     product_description: "",
-    //     brand: "",
-    //     year_publish: 0,
-    //     price: 0,
-    //     quantity: 0,
-    //     discount: 0,
-    // });
+    const navigate = useNavigate();
+
+    const [listCategorySelect, setListCategorySelect] = useState([
+        {
+            value: "0",
+            label: "",
+        },
+    ]);
+
+    const [product, setProduct] = useState<ProductType>({
+        category_id: 0,
+        title: "",
+        description: "",
+        brand: "",
+        year_publish: 0,
+        price: 0,
+        quantity: 0,
+        discount: 0,
+        volume: 0,
+    });
+
+    const handleGetCategories = async () => {
+        const data = await categoryService.getAllCategories();
+
+        const cateList = data.data.map(
+            (item: { category_id: string; category_name: string }) => {
+                return {
+                    value: String(item.category_id),
+                    label: item.category_name,
+                };
+            }
+        );
+
+        setListCategorySelect(cateList);
+    };
+
+    const handleCreateProduct = async () => {
+        console.log("create");
+        const res = await productService.createProduct(product);
+
+        notifications.show({
+            title: "Update product",
+            message: res.message + res.statusCode,
+        });
+
+        if (res.statusCode === 200) {
+            navigate(`/product/${res.data.product_id}`);
+        }
+    };
+
+    const handleCheckValidateInput = (): boolean => {
+        let key: string;
+        for (key of Object.keys(product)) {
+            if (key !== "discount" && !product[key]) return false;
+        }
+
+        return true;
+    };
+
+    useEffect(() => {
+        handleGetCategories();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Tabs defaultValue="gallery" sx={{ width: "100%" }}>
@@ -107,28 +178,53 @@ export function ProductCreate() {
                             label="Tên"
                             withAsterisk
                             miw={400}
+                            value={product.title}
+                            onChange={(e) => {
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    title: e.target.value,
+                                }));
+                            }}
                         />
                         <TextInput
                             placeholder="Your name"
                             label="Thương hiệu"
                             withAsterisk
                             miw={300}
+                            value={product.brand}
+                            onChange={(e) => {
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    brand: e.target.value,
+                                }));
+                            }}
                         />
                         <Select
                             label="Category"
                             placeholder="Pick one"
-                            data={[
-                                { value: "react", label: "Nước hoa Nam" },
-                                { value: "ng", label: "Nước hoa nữ" },
-                                { value: "svelte", label: "Nước hoa Unisex" },
-                                { value: "vue", label: "Vue" },
-                            ]}
+                            data={listCategorySelect}
+                            value={String(product.category_id)}
+                            onChange={(value) =>
+                                setProduct((prev) => {
+                                    return {
+                                        ...prev,
+                                        category_id: Number(value),
+                                    };
+                                })
+                            }
                         />
                         <NumberInput
                             defaultValue={2018}
                             placeholder="Năm phát hành"
                             label="Năm phát hành"
                             withAsterisk
+                            value={product.year_publish}
+                            onChange={(value) => {
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    year_publish: value,
+                                }));
+                            }}
                         />
 
                         <NumberInput
@@ -136,6 +232,13 @@ export function ProductCreate() {
                             placeholder="Dung tích"
                             label="Dung tích(ml)"
                             withAsterisk
+                            value={product.volume}
+                            onChange={(value) => {
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    volume: value,
+                                }));
+                            }}
                         />
 
                         <NumberInput
@@ -143,18 +246,39 @@ export function ProductCreate() {
                             placeholder="Price(vnđ)"
                             label="Price"
                             withAsterisk
+                            value={product.price}
+                            onChange={(value) => {
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    price: value,
+                                }));
+                            }}
                         />
                         <NumberInput
                             defaultValue={18}
                             placeholder="Discount(%)"
                             label="Discount"
                             withAsterisk
+                            value={product.discount}
+                            onChange={(value) => {
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    discount: value,
+                                }));
+                            }}
                         />
                         <NumberInput
                             defaultValue={18}
                             placeholder="Quantity"
                             label="Quantity"
                             withAsterisk
+                            value={product.quantity}
+                            onChange={(value) => {
+                                setProduct((prev) => ({
+                                    ...prev,
+                                    quantity: value,
+                                }));
+                            }}
                         />
                     </Flex>
                 </Stack>
@@ -168,6 +292,15 @@ export function ProductCreate() {
                     autosize
                     minRows={4}
                     maxRows={8}
+                    value={product.description}
+                    onChange={(e) =>
+                        setProduct((prev) => {
+                            return {
+                                ...prev,
+                                description: e.target.value,
+                            };
+                        })
+                    }
                 />
             </Tabs.Panel>
 
@@ -202,7 +335,8 @@ export function ProductCreate() {
                                     opacity: "0.9",
                                 },
                             })}
-                            disabled
+                            onClick={() => handleCreateProduct()}
+                            disabled={!handleCheckValidateInput()}
                         >
                             <IconDeviceFloppy style={{ marginRight: "5px" }} />
                             Save

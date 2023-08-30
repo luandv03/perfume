@@ -1,4 +1,5 @@
 import { BaseService } from "./base.service";
+import { ProductType } from "../types/product/product.type";
 
 class ProductService extends BaseService {
     async listProducts(offset: number, limit: number) {
@@ -49,7 +50,20 @@ class ProductService extends BaseService {
         }
     }
 
-    async updateProductById(product: any) {
+    async createProduct(product: ProductType) {
+        try {
+            const res = await this.httpClientPublic.post(
+                `/product/create`,
+                product
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async updateProductById(product: ProductType) {
         try {
             const res = await this.httpClientPublic.patch(
                 `/product/update`,
