@@ -2,16 +2,17 @@ import { useState, useEffect } from "react";
 import {
     Tabs,
     Text,
-    Image,
+    // Image,
     Flex,
     Box,
     Textarea,
-    createStyles,
+    // createStyles,
     TextInput,
     Select,
     NumberInput,
     Stack,
     Button,
+    FileInput,
 } from "@mantine/core";
 import {
     IconPhoto,
@@ -25,14 +26,14 @@ import { useNavigate } from "react-router-dom";
 import { categoryService } from "../../services/category.service";
 import { productService } from "../../services/product.service";
 
-const useStyles = createStyles({
-    shadowHover: {
-        "&:hover": {
-            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-            cursor: "pointer",
-        },
-    },
-});
+// const useStyles = createStyles({
+//     shadowHover: {
+//         "&:hover": {
+//             boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+//             cursor: "pointer",
+//         },
+//     },
+// });
 
 interface ProductType {
     category_id: number;
@@ -47,7 +48,8 @@ interface ProductType {
 }
 
 export function ProductCreate() {
-    const { classes } = useStyles();
+    // const { classes } = useStyles();
+    const [files, setFiles] = useState<File[]>([]);
 
     const navigate = useNavigate();
 
@@ -108,6 +110,17 @@ export function ProductCreate() {
         return true;
     };
 
+    const handleUploadToCloud = async () => {
+        if (!files.length) return;
+
+        const formData = new FormData();
+        formData.append("file", files);
+
+        const res = await productService.uploadImage(formData);
+
+        console.log(res);
+    };
+
     useEffect(() => {
         handleGetCategories();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,18 +161,21 @@ export function ProductCreate() {
                     direction="row"
                     gap="xs"
                 >
-                    {[1, 2, 3].map((item: number) => (
-                        <Box className={classes.shadowHover}>
-                            <Image
-                                key={item}
-                                width={150}
-                                mx="auto"
-                                radius="md"
-                                src="https://cdn.shopify.com/s/files/1/0268/8267/0792/products/1_e73ea800-9922-49cb-ba2f-555060ec1e99.jpg?v=1674566715"
-                                alt="Random image"
+                    <Stack>
+                        <Box maw={800}>
+                            <FileInput
+                                label="Upload files"
+                                placeholder="Upload files"
+                                multiple
+                                value={files}
+                                onChange={setFiles}
                             />
                         </Box>
-                    ))}
+
+                        <Button onClick={() => handleUploadToCloud()}>
+                            Upload
+                        </Button>
+                    </Stack>
                 </Flex>
             </Tabs.Panel>
 

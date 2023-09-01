@@ -75,6 +75,19 @@ class ProductService extends BaseService {
             return error;
         }
     }
+
+    async uploadImage(formData: FormData) {
+        try {
+            const res = await this.httpClientPublic.post(
+                `/image/upload`,
+                formData
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const productService: ProductService = new ProductService();

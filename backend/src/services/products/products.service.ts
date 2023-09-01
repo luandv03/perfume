@@ -311,6 +311,14 @@ class ProductService {
         };
     }
 
+    // //create product image
+    // async createProductPhoto(
+    //     product_id: number,
+    //     listFile: string[]
+    // ): Promise<ResponseType<any>> {
+    //     const;
+    // }
+
     // count products in store
     async countProducts(): Promise<number> {
         const results = await query(
