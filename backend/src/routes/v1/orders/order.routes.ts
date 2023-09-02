@@ -21,7 +21,7 @@ orderRoutes.get(
 );
 
 //get orders : role admin
-orderRoutes.get("/order/view", authMiddleware, orderController.getOrder);
+orderRoutes.get("/order/view", orderController.getOrder);
 
 // accept order : role admin
 orderRoutes.patch(

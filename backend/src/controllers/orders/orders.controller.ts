@@ -34,10 +34,10 @@ export class OrderController {
 
     async getOrder(req: Request, res: Response): Promise<any> {
         try {
-            const { offset, limit } = req.query;
+            const { page, limit } = req.query;
             const data = await orderService.getOrder(
-                offset as string,
-                limit as string
+                Number(page),
+                Number(limit)
             );
             return res.status(200).json(data);
         } catch (err) {

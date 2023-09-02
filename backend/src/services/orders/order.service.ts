@@ -89,16 +89,26 @@ class OrderService {
         }
     }
 
-    async getOrder(offset: string, limit: string): Promise<any> {
+    async getOrder(page: number, limit: number): Promise<any> {
+        const offset = (page - 1) * limit;
+
         const results = await query(`SELECT * from ORDERS OFFSET $1 LIMIT $2`, [
-            Number(offset),
-            Number(limit),
+            offset,
+            limit,
         ]);
+
+        const totalOrders = await this.countOrder();
 
         return {
             stausCode: HttpStatusCode.OK,
-            message: "Success",
-            data: results.rows,
+            message: "Get order Success",
+            data: {
+                orders: results.rows,
+                page: page,
+                total: limit,
+                totalPage: Math.ceil(totalOrders / limit),
+                totalOrders: Number(totalOrders),
+            },
         };
     }
 
@@ -236,6 +246,14 @@ class OrderService {
             message: "COUPON OK",
             data: results.rows[0],
         };
+    }
+
+    async countOrder(): Promise<number> {
+        const results = await query(
+            `SELECT count(order_id) number_of_orders FROM orders`
+        );
+
+        return results.rows[0].number_of_orders;
     }
 }
 
