@@ -2,6 +2,7 @@ import { query } from "../../db/index.db";
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 import { ProductType } from "../../types/products/product.type";
 import { ResponseType } from "../../types/response.type";
+import { PhotoType } from "../../types/products/product.type";
 
 class ProductService {
     // list in admin page
@@ -267,7 +268,8 @@ class ProductService {
 
     // create product
     async createProduct(
-        product: ProductType
+        product: ProductType,
+        photos: PhotoType[]
     ): Promise<ResponseType<ProductType>> {
         const {
             title,
@@ -304,6 +306,8 @@ class ProductService {
             };
         }
 
+        await this.createProductPhoto(photos, results.rows[0].product_id);
+
         return {
             statusCode: HttpStatusCode.OK,
             message: "Create product successfull",
@@ -311,13 +315,32 @@ class ProductService {
         };
     }
 
-    // //create product image
-    // async createProductPhoto(
-    //     product_id: number,
-    //     listFile: string[]
-    // ): Promise<ResponseType<any>> {
-    //     const;
-    // }
+    //create product image
+    async createProductPhoto(
+        product_photos: { public_id: string; secure_url: string }[],
+        product_id: number
+    ): Promise<ResponseType<any>> {
+        const promises = product_photos.map(
+            (photo: { public_id: string; secure_url: string }) =>
+                query(
+                    `INSERT INTO product_photos 
+             VALUES (DEFAULT, $1, $2, $3) RETURNING *`,
+                    [product_id, photo.secure_url, photo.public_id]
+                )
+        );
+
+        const results = await Promise.all(promises)
+            .then((res) => res)
+            .catch((err) => err);
+
+        /// neu thanh cong se tra ve 1 mang result cua moi cau query
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Create product photo successfull",
+            data: results.map((item: any) => item.rows[0]),
+        };
+    }
 
     // count products in store
     async countProducts(): Promise<number> {

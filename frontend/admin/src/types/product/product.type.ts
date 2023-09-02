@@ -10,3 +10,8 @@ export interface ProductType {
     category_id: number;
     year_publish: number;
 }
+
+export interface PhotoType {
+    public_id: string;
+    secure_url: string;
+}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
     Tabs,
     Text,
-    // Image,
+    Image,
     Flex,
     Box,
     Textarea,
@@ -13,18 +13,22 @@ import {
     Stack,
     Button,
     FileInput,
+    SimpleGrid,
+    ActionIcon,
 } from "@mantine/core";
 import {
-    IconPhoto,
     IconMessageCircle,
     IconSettings,
     IconDeviceFloppy,
+    IconPhoto,
+    IconTrash,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "react-router-dom";
 
 import { categoryService } from "../../services/category.service";
 import { productService } from "../../services/product.service";
+import { ValueComponent } from "../UploadFile/UploadMultiFile";
 
 // const useStyles = createStyles({
 //     shadowHover: {
@@ -47,9 +51,15 @@ interface ProductType {
     quantity: number;
 }
 
+interface PhotoType {
+    public_id: string;
+    secure_url: string;
+}
+
 export function ProductCreate() {
     // const { classes } = useStyles();
     const [files, setFiles] = useState<File[]>([]);
+    const [photos, setPhotos] = useState<PhotoType[]>([]);
 
     const navigate = useNavigate();
 
@@ -88,8 +98,7 @@ export function ProductCreate() {
     };
 
     const handleCreateProduct = async () => {
-        console.log("create");
-        const res = await productService.createProduct(product);
+        const res = await productService.createProduct(product, photos);
 
         notifications.show({
             title: "Update product",
@@ -112,13 +121,36 @@ export function ProductCreate() {
 
     const handleUploadToCloud = async () => {
         if (!files.length) return;
-
         const formData = new FormData();
-        formData.append("file", files);
+
+        for (let i = 0; i < files.length; i++) {
+            formData.append("file", files[i]);
+        }
 
         const res = await productService.uploadImage(formData);
 
-        console.log(res);
+        if (res.statusCode === 200) {
+            setPhotos(res.data);
+        }
+    };
+
+    const handleDeletePhoto = async (public_id: string) => {
+        const res = await productService.deletePhotoById(public_id);
+
+        if (res.statusCode === 200) {
+            notifications.show({
+                title: "Delete photo",
+                message: res.message + "::::" + res.statusCode,
+            });
+
+            setPhotos((pre: PhotoType[]) => {
+                const photos = pre.filter(
+                    (photo: PhotoType) => photo.public_id !== res.data.public_id
+                );
+
+                return photos;
+            });
+        }
     };
 
     useEffect(() => {
@@ -162,19 +194,49 @@ export function ProductCreate() {
                     gap="xs"
                 >
                     <Stack>
-                        <Box maw={800}>
+                        <Box maw={320} mx="auto">
                             <FileInput
-                                label="Upload files"
-                                placeholder="Upload files"
+                                label="Multiple"
+                                placeholder="Multiple"
                                 multiple
                                 value={files}
                                 onChange={setFiles}
+                                valueComponent={ValueComponent}
                             />
                         </Box>
 
-                        <Button onClick={() => handleUploadToCloud()}>
+                        <Button
+                            disabled={files.length <= 0}
+                            onClick={() => handleUploadToCloud()}
+                        >
                             Upload
                         </Button>
+
+                        <SimpleGrid cols={3}>
+                            {photos.length > 0 &&
+                                photos.map((photo: PhotoType) => (
+                                    <Stack>
+                                        <Image
+                                            maw={240}
+                                            mx="auto"
+                                            radius="md"
+                                            src={photo.secure_url}
+                                            alt={photo.public_id}
+                                            key={photo.public_id}
+                                        />
+                                        <ActionIcon
+                                            variant="default"
+                                            onClick={() =>
+                                                handleDeletePhoto(
+                                                    photo.public_id
+                                                )
+                                            }
+                                        >
+                                            <IconTrash size="1rem" />
+                                        </ActionIcon>
+                                    </Stack>
+                                ))}
+                        </SimpleGrid>
                     </Stack>
                 </Flex>
             </Tabs.Panel>
@@ -352,7 +414,9 @@ export function ProductCreate() {
                                 },
                             })}
                             onClick={() => handleCreateProduct()}
-                            disabled={!handleCheckValidateInput()}
+                            disabled={
+                                !handleCheckValidateInput() || !photos.length
+                            }
                         >
                             <IconDeviceFloppy style={{ marginRight: "5px" }} />
                             Save

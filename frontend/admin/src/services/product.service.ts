@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import { ProductType } from "../types/product/product.type";
+import { ProductType, PhotoType } from "../types/product/product.type";
 
 class ProductService extends BaseService {
     async listProducts(offset: number, limit: number) {
@@ -50,12 +50,12 @@ class ProductService extends BaseService {
         }
     }
 
-    async createProduct(product: ProductType) {
+    async createProduct(product: ProductType, photos: PhotoType[]) {
         try {
-            const res = await this.httpClientPublic.post(
-                `/product/create`,
-                product
-            );
+            const res = await this.httpClientPublic.post(`/product/create`, {
+                product,
+                photos,
+            });
 
             return res.data;
         } catch (error) {
@@ -79,9 +79,21 @@ class ProductService extends BaseService {
     async uploadImage(formData: FormData) {
         try {
             const res = await this.httpClientPublic.post(
-                `/image/upload`,
+                `/image/upload/multi`,
                 formData
             );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async deletePhotoById(public_id: string) {
+        try {
+            const res = await this.httpClientPublic.post(`/image/destroy`, {
+                public_id,
+            });
 
             return res.data;
         } catch (error) {

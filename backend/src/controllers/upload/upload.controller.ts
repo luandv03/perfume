@@ -22,6 +22,7 @@ export class UploadController {
     async uploadImageMulti(req: Request, res: Response): Promise<any> {
         try {
             const pictureFiles: any = req.files;
+            console.log(pictureFiles);
 
             if (!pictureFiles)
                 return res

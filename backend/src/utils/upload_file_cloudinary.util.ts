@@ -74,7 +74,10 @@ class UploadService {
 
     async destroyImage(public_id: string): Promise<any> {
         const destroy = await v2.uploader.destroy(public_id);
-        return destroy;
+        return {
+            destroy,
+            public_id,
+        };
     }
 }
 

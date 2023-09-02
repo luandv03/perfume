@@ -12,3 +12,8 @@ export interface ProductType {
     created_at?: string;
     updated_at?: string;
 }
+
+export interface PhotoType {
+    public_id: string;
+    secure_url: string;
+}
