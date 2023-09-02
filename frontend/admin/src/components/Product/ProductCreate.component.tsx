@@ -15,6 +15,7 @@ import {
     FileInput,
     SimpleGrid,
     ActionIcon,
+    Loader,
 } from "@mantine/core";
 import {
     IconMessageCircle,
@@ -59,6 +60,7 @@ interface PhotoType {
 export function ProductCreate() {
     // const { classes } = useStyles();
     const [files, setFiles] = useState<File[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [photos, setPhotos] = useState<PhotoType[]>([]);
 
     const navigate = useNavigate();
@@ -127,7 +129,9 @@ export function ProductCreate() {
             formData.append("file", files[i]);
         }
 
+        setLoading(true);
         const res = await productService.uploadImage(formData);
+        setLoading(false);
 
         if (res.statusCode === 200) {
             setPhotos(res.data);
@@ -209,7 +213,15 @@ export function ProductCreate() {
                             disabled={files.length <= 0}
                             onClick={() => handleUploadToCloud()}
                         >
-                            Upload
+                            {loading ? (
+                                <Loader
+                                    size="sm"
+                                    variant="dots"
+                                    color="white"
+                                />
+                            ) : (
+                                "Upload"
+                            )}
                         </Button>
 
                         <SimpleGrid cols={3}>

@@ -125,9 +125,6 @@ export function ProductList({ data }: ProductType) {
                             transitionDuration={0}
                         />
                     </td>
-                    <td>
-                        <Avatar size={26} src={item.avatar} radius={26} />
-                    </td>
                     <td>{item.title}</td>
                     <td>{item.category_name}</td>
                     <td>{item.brand}</td>
@@ -199,7 +196,6 @@ export function ProductList({ data }: ProductType) {
                                 transitionDuration={0}
                             />
                         </th>
-                        <th>Avatar</th>
                         <th>Tên</th>
                         <th>Loại</th>
                         <th>Thương hiệu</th>
