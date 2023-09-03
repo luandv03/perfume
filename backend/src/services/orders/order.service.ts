@@ -89,21 +89,66 @@ class OrderService {
         }
     }
 
-    async getOrder(page: number, limit: number): Promise<any> {
+    // status
+    // all: all of types
+    // ordered: ordered but no accepted
+    // canceled
+    // accepted: processing, shipping
+    // done!
+    async getOrder(page: number, limit: number, status: string): Promise<any> {
         const offset = (page - 1) * limit;
 
-        const results = await query(`SELECT * from ORDERS OFFSET $1 LIMIT $2`, [
-            offset,
-            limit,
-        ]);
+        let results;
+        if (status === "all") {
+            results = await query(
+                `with tmp_2 as (
+                    with tmp as (
+                    select order_id, customer_id, cast(count(orderline_id) as int) n_item , tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date 
+                    from orders
+                    join orderlines using(order_id)
+                    group by order_id
+                )
+                select tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+                from tmp
+                left join coupon_orders cpo on tmp.order_id = cpo. order_id
+                left join coupons cp on cp.coupon_id = cpo.coupon_id
+                group by tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, order_date
+                )
+                select order_id, customer_id, n_item, tax, delivery_cost, cast(tong_giam_gia as int), order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost   as tong_hoa_don
+                from tmp_2 ORDER BY order_id
+                OFFSET $1 LIMIT $2 `,
+                [offset, limit]
+            );
+        } else {
+            results = await query(
+                `with tmp_2 as (
+                    with tmp as (
+                    select order_id, customer_id, cast(count(orderline_id) as int) n_item , tax , delivery_cost, sum(quantity*net_price) tam_tinh , order_date 
+                    from orders
+                    join orderlines using(order_id)
+                    WHERE status = $1 
+                    group by order_id
+                )
+                select tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+                from tmp
+                left join coupon_orders cpo on tmp.order_id = cpo. order_id
+                left join coupons cp on cp.coupon_id = cpo.coupon_id
+                group by tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, order_date
+                )
+                select order_id, customer_id, n_item, tax, delivery_cost, cast(tong_giam_gia as int), order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost   as tong_hoa_don
+                from tmp_2 ORDER BY order_id
+                OFFSET $2 LIMIT $3 `,
+                [status, offset, limit]
+            );
+        }
 
-        const totalOrders = await this.countOrder();
+        const totalOrders = await this.countOrder(status);
 
         return {
             stausCode: HttpStatusCode.OK,
             message: "Get order Success",
             data: {
-                orders: results.rows,
+                orders: results?.rows,
                 page: page,
                 total: limit,
                 totalPage: Math.ceil(totalOrders / limit),
@@ -248,12 +293,27 @@ class OrderService {
         };
     }
 
-    async countOrder(): Promise<number> {
-        const results = await query(
-            `SELECT count(order_id) number_of_orders FROM orders`
-        );
+    // status
+    // all: all of types
+    // ordered: ordered but no accepted
+    // canceled
+    // accepted: processing, shipping
+    // done!
+    async countOrder(status: string): Promise<number> {
+        let results;
+        if (status === "all") {
+            results = await query(
+                `SELECT count(order_id) number_of_orders FROM orders`
+            );
+        } else {
+            results = await query(
+                `SELECT count(order_id) number_of_orders FROM orders 
+                 WHERE status = $1`,
+                [status]
+            );
+        }
 
-        return results.rows[0].number_of_orders;
+        return results?.rows[0].number_of_orders;
     }
 }
 
