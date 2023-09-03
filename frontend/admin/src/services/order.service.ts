@@ -12,6 +12,18 @@ class OrderService extends BaseService {
             return error;
         }
     }
+
+    async getOrderById(order_id: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/order/detail/${order_id}`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const orderService: OrderService = new OrderService();

@@ -11,7 +11,7 @@ export const handleOrderDate = (orderDate: string) => {
     return `${second >= 10 ? second : "0" + `${second}`}:${
         minute >= 10 ? minute : "0" + `${minute}`
     }:${hour >= 10 ? hour : "0" + `${hour}`} 
-    ${day >= 10 ? day : "0" + `${day}`}/ ${
+    ${day >= 10 ? day : "0" + `${day}`}/${
         month >= 10 ? month : "0" + `${month}`
     }/${year}`;
 };

@@ -159,14 +159,14 @@ class OrderService {
 
     async getOrderById(order_id: number): Promise<ResponseType<any>> {
         const orderQuery = query(
-            `select o.*, c.email, c.address  from orders o 
+            `select o.*, c.email, c.fullname, c.address  from orders o 
         join customers c using(customer_id)
         where order_id = $1`,
             [order_id]
         );
 
         const orderlinesQuery = query(
-            `select ol.*, p.title
+            `select ol.orderline_id, ol.product_id, ol.quantity, cast(ol.net_price as int), p.title
         from orderlines ol
         join products p using(product_id)
         where order_id = $1`,
@@ -174,7 +174,7 @@ class OrderService {
         );
 
         const couponQuery = query(
-            `select coupon_id, coupon_code, coupon_discount from coupons 
+            `select coupon_id, coupon_code, cast(coupon_discount as int) from coupons 
         where coupon_id in (select coupon_id from coupon_orders where order_id = $1)`,
             [order_id]
         );
@@ -186,7 +186,7 @@ class OrderService {
             statusCode: HttpStatusCode.OK,
             message: "Get order detail successfull",
             data: {
-                orders: orderResults.rows[0],
+                order: orderResults.rows[0],
                 orderlines: orderlinesResults.rows,
                 coupons: couponResults.rows,
             },
