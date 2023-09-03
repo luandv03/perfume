@@ -3,7 +3,6 @@ import {
     createStyles,
     Table,
     Checkbox,
-    Avatar,
     rem,
     Stack,
     Group,
@@ -30,22 +29,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-interface ProductType {
-    data: {
-        product_id: number;
-        category_name: string;
-        avatar: string;
-        title: string;
-        brand: string;
-        year_publish: number;
-        volume: number;
-        price: number;
-        discount: number;
-        quantity: number;
-    }[];
-}
-
-export function ProductList({ data }: ProductType) {
+export function ProductList() {
     const [products, setProducts] = useState([
         {
             product_id: 0,
@@ -108,6 +92,10 @@ export function ProductList({ data }: ProductType) {
         value && handleSearch(debounced);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debounced, page, total]);
+
+    useEffect(() => {
+        setPage(1); // set page default = 1 moi lan search
+    }, [debounced]);
 
     const rows =
         products.length &&
@@ -188,10 +176,10 @@ export function ProductList({ data }: ProductType) {
                         <th style={{ width: rem(40) }}>
                             <Checkbox
                                 onChange={toggleAll}
-                                checked={selection.length === data.length}
+                                checked={selection.length === products.length}
                                 indeterminate={
                                     selection.length > 0 &&
-                                    selection.length !== data.length
+                                    selection.length !== products.length
                                 }
                                 transitionDuration={0}
                             />
@@ -219,7 +207,10 @@ export function ProductList({ data }: ProductType) {
                         { value: "100", label: "100 products" },
                     ]}
                     value={total}
-                    onChange={setTotal}
+                    onChange={(value) => {
+                        setPage(1); // page default = 1 when change total product / page
+                        setTotal(value);
+                    }}
                 />
                 <Pagination value={page} onChange={setPage} total={totalPage} />
             </Flex>

@@ -157,6 +157,42 @@ class OrderService {
         };
     }
 
+    async getOrderById(order_id: number): Promise<ResponseType<any>> {
+        const orderQuery = query(
+            `select o.*, c.email, c.address  from orders o 
+        join customers c using(customer_id)
+        where order_id = $1`,
+            [order_id]
+        );
+
+        const orderlinesQuery = query(
+            `select ol.*, p.title
+        from orderlines ol
+        join products p using(product_id)
+        where order_id = $1`,
+            [order_id]
+        );
+
+        const couponQuery = query(
+            `select coupon_id, coupon_code, coupon_discount from coupons 
+        where coupon_id in (select coupon_id from coupon_orders where order_id = $1)`,
+            [order_id]
+        );
+
+        const [orderResults, orderlinesResults, couponResults] =
+            await Promise.all([orderQuery, orderlinesQuery, couponQuery]);
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get order detail successfull",
+            data: {
+                orders: orderResults.rows[0],
+                orderlines: orderlinesResults.rows,
+                coupons: couponResults.rows,
+            },
+        };
+    }
+
     async getOrderByCustomerId(
         customer_id: number
     ): Promise<ResponseType<any>> {

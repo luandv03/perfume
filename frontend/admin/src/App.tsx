@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 // import { TableSelection } from "./components/Table";
-import { OrderList } from "./components/Order/Order.component";
+import Order from "./components/Order/Order.component";
+import { OrderList } from "./components/Order/OrderList.Component.tsx";
+import { OrderDetail } from "./components/Order/OrderDetail.component.tsx";
 import Dashboard from "./components/Dashboard/Dashboard.component";
 import LayoutApp from "./pages/layout.page";
 import { ProductDetail } from "./components/Product/ProductDetail.component";
@@ -19,108 +21,6 @@ import Category from "./components/Category/Category.component";
 import { Login } from "./components/Login/Login.tsx";
 
 function App() {
-    const data = [
-        {
-            product_id: "200",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "201",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "202",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin ",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "203",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin ",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "204",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin ",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "205",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin ",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "206",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin ",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "207",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin ",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-        {
-            product_id: "208",
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_GEi8ov-n2sxU_8KvipBQ34AAlCe9xIhskwo-dhQ&s",
-            title: "Nuoc hoa Michelin ",
-            brand: "Gucci",
-            year_publish: 2019,
-            volume: 100,
-            price: 2000000,
-            discount: 10,
-            quantity: 20,
-        },
-    ];
-
     return (
         <>
             <Routes>
@@ -135,10 +35,7 @@ function App() {
                     </Route>
 
                     <Route path="/product" element={<Product />}>
-                        <Route
-                            path="/product"
-                            element={<ProductList data={data} />}
-                        />
+                        <Route path="/product" element={<ProductList />} />
                         <Route
                             path="/product/:product_id"
                             element={<ProductView />}
@@ -165,7 +62,13 @@ function App() {
                             element={<ProductCreate />}
                         />
                     </Route>
-                    <Route path="/order" element={<OrderList />} />
+                    <Route path="/order" element={<Order />}>
+                        <Route path="/order/:status" element={<OrderList />} />
+                        <Route
+                            path="/order/detail/:order_id"
+                            element={<OrderDetail />}
+                        />
+                    </Route>
                     <Route path="/customer" element={<Customer />}>
                         <Route
                             path="/customer"

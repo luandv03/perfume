@@ -23,6 +23,9 @@ orderRoutes.get(
 //get orders : role admin
 orderRoutes.get("/order/view", orderController.getOrder);
 
+//get orders by id : role admin
+orderRoutes.get("/order/detail/:order_id", orderController.getOrderById);
+
 // accept order : role admin
 orderRoutes.patch(
     "/order/accept/:order_id",

@@ -95,7 +95,7 @@ const data = [
     { link: "/", label: "Dashboard", icon: IconLayoutDashboard },
     { link: "/category", label: "Category", icon: IconBellRinging },
     { link: "/product", label: "Product", icon: IconReceipt2 },
-    { link: "/order", label: "Orders", icon: IconFingerprint },
+    { link: "/order/all", label: "Orders", icon: IconFingerprint },
     { link: "/feedback", label: "Feedbacks", icon: IconDatabaseImport },
     { link: "/customer", label: "Customers", icon: IconUsers },
     { link: "/admin", label: "Admins", icon: Icon2fa },

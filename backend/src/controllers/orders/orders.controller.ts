@@ -46,6 +46,16 @@ export class OrderController {
         }
     }
 
+    async getOrderById(req: Request, res: Response): Promise<any> {
+        try {
+            const { order_id } = req.params;
+            const data = await orderService.getOrderById(Number(order_id));
+            return res.status(200).json(data);
+        } catch (err) {
+            res.status(500).json({ message: err });
+        }
+    }
+
     async getValidCouponByCode(req: Request, res: Response): Promise<any> {
         try {
             const coupon_code = req.params.coupon_code;
