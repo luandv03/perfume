@@ -258,9 +258,10 @@ class OrderService {
             };
         }
 
-        await query(`UPDATE orders SET status = 'Đã hủy' WHERE order_id = $1`, [
-            Number(order_id),
-        ]);
+        await query(
+            `UPDATE orders SET status = 'canceled' WHERE order_id = $1`,
+            [Number(order_id)]
+        );
 
         return {
             statusCode: HttpStatusCode.OK,
@@ -271,7 +272,7 @@ class OrderService {
     // acceptOrder
     async acceptOrderByOrderId(order_id: string): Promise<ResponseType<any>> {
         const results = await query(
-            `UPDATE orders SET status = 'Đã xác nhận' WHERE order_id = $1`,
+            `UPDATE orders SET status = 'accepted' WHERE order_id = $1`,
             [Number(order_id)]
         );
 

@@ -132,6 +132,20 @@ export const OrderDetail = () => {
         return total;
     };
 
+    const handleAcceptOrderById = async (order_id: number) => {
+        const res = await orderService.acceptOrderById(order_id);
+
+        if (res.statusCode === 200) {
+            setOrderDetail((prev) => ({
+                ...prev,
+                order: {
+                    ...prev.order,
+                    status: "accepted",
+                },
+            }));
+        }
+    };
+
     useEffect(() => {
         handleGetOrderById();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,27 +191,37 @@ export const OrderDetail = () => {
                     </Stack>
                     <Select
                         data={[
+                            {
+                                value: "done",
+                                label: "Đã hoàn thành",
+                            },
                             { value: "canceled", label: "Đã hủy" },
                             { value: "ordered", label: "Đang chờ xác nhận" },
                             {
                                 value: "accepted",
                                 label: "Đang xử lý",
                             },
-                            {
-                                value: "done",
-                                label: "Đã hoàn thành",
-                            },
                         ]}
                         value={orderDetail.order.status}
                     />
                 </Stack>
-                <Stack spacing={0}>
-                    <Stack>
-                        <Text fw={700} fz="xl">
-                            Mã đơn
-                        </Text>
+                <Stack>
+                    <Stack spacing={0}>
+                        <Stack>
+                            <Text fw={700} fz="xl">
+                                Mã đơn
+                            </Text>
+                        </Stack>
+                        <Stack>{orderDetail.order.order_id}</Stack>
                     </Stack>
-                    <Stack>{orderDetail.order.order_id}</Stack>
+                    <Button
+                        disabled={orderDetail.order.status !== "ordered"}
+                        onClick={() =>
+                            handleAcceptOrderById(orderDetail.order.order_id)
+                        }
+                    >
+                        Xác nhận
+                    </Button>
                 </Stack>
                 <Stack>
                     <Stack spacing={0}>

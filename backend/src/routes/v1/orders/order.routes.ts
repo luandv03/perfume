@@ -29,7 +29,7 @@ orderRoutes.get("/order/detail/:order_id", orderController.getOrderById);
 // accept order : role admin
 orderRoutes.patch(
     "/order/accept/:order_id",
-    authMiddleware,
+    // authMiddleware,
     orderController.acceptOrderByOrderId
 );
 
