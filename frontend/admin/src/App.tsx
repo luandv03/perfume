@@ -15,6 +15,7 @@ import { ProductImage } from "./components/Product/ProductImage.component";
 import { ProductView } from "./components/Product/ProductView.component";
 import Customer from "./components/Customer/Customer.component";
 import { CustomerList } from "./components/Customer/CustomerList.component";
+import { CustomerDetail } from "./components/Customer/CustomerDetail.component.tsx";
 import { CategoryList } from "./components/Category/CategoryList.component";
 import { CategoryCreate } from "./components/Category/CategoryCreate.component";
 import Category from "./components/Category/Category.component";
@@ -71,7 +72,7 @@ function App() {
                     </Route>
                     <Route path="/customer" element={<Customer />}>
                         <Route
-                            path="/customer"
+                            path="/customer/:type"
                             element={<CustomerList />}
                         ></Route>
                     </Route>

@@ -164,7 +164,7 @@ export const OrderDetail = () => {
                     </Link>
                 </td>
                 <td>{item.title}</td>
-                <td>{item.net_price}</td>
+                <td>{new Intl.NumberFormat("vi-VN").format(item.net_price)}</td>
                 <td>{item.quantity}</td>
                 <td>
                     {new Intl.NumberFormat("vi-VN").format(
@@ -332,21 +332,6 @@ export const OrderDetail = () => {
                 align="center"
             >
                 <Button
-                    size="md"
-                    radius="md"
-                    sx={() => ({
-                        cursor: "pointer",
-                        "&hover": {
-                            opacity: "0.9",
-                        },
-                    })}
-                    disabled
-                >
-                    <IconDeviceFloppy style={{ marginRight: "5px" }} />
-                    Save
-                </Button>
-
-                <Button
                     color="red"
                     size="md"
                     radius="md"
@@ -358,7 +343,7 @@ export const OrderDetail = () => {
                     })}
                 >
                     <IconTrash style={{ marginRight: "5px" }} />
-                    Save
+                    Xóa
                 </Button>
             </Flex>
         </Stack>

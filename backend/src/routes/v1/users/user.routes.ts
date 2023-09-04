@@ -108,4 +108,10 @@ userRoutes.get(
     userController.loginWithFacebook
 );
 
+// get customers: role admin
+// ?type=all&page=...&limit=...
+// all: both customers who bougth and no buy
+// yes: customers who bougth
+// no: customers who no buy
+userRoutes.get("/customer/view", userController.getCustomers);
 export default userRoutes;

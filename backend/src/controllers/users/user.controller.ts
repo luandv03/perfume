@@ -210,4 +210,22 @@ export class UserController {
             });
         }
     }
+
+    async getCustomers(req: Request, res: Response): Promise<any> {
+        try {
+            const { type, page, limit } = req.query;
+            const data = await userService.getCustomers(
+                type as string,
+                Number(page),
+                Number(limit)
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (err) {
+            res.status(500).json({
+                statusCode: 500,
+                message: err,
+            });
+        }
+    }
 }

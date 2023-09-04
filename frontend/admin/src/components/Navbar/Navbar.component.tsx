@@ -97,7 +97,7 @@ const data = [
     { link: "/product", label: "Product", icon: IconReceipt2 },
     { link: "/order/all", label: "Orders", icon: IconFingerprint },
     { link: "/feedback", label: "Feedbacks", icon: IconDatabaseImport },
-    { link: "/customer", label: "Customers", icon: IconUsers },
+    { link: "/customer/all", label: "Customers", icon: IconUsers },
     { link: "/admin", label: "Admins", icon: Icon2fa },
     { link: "", label: "Other Settings", icon: IconSettings },
 ];

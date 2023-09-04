@@ -364,6 +364,121 @@ class UserService {
             data: results.rows[0],
         };
     }
+
+    // get customers : role admin
+    async getCustomers(
+        type: string,
+        page: number,
+        limit: number
+    ): Promise<ResponseType<any>> {
+        const offset = (page - 1) * limit;
+
+        // type = all (both bought and not buy)
+        let results, n_customers;
+        if (type === "all") {
+            results = await query(
+                `with tmp_4 as (
+            with tmp_3 as (
+            with tmp_2 as (
+                            with tmp as (
+                            select order_id, customer_id, tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date from orders
+                            join orderlines using(order_id)
+                            group by order_id
+                        )
+                        select tmp.order_id, customer_id, tax, delivery_cost, tam_tinh,   sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+                        from tmp
+                        left join coupon_orders cpo on tmp.order_id = cpo.order_id
+                        left join coupons cp on cp.coupon_id = cpo.coupon_id
+                        group by tmp.order_id, customer_id, tax, delivery_cost, tam_tinh, order_date
+                    )
+                    select order_id, customer_id, tax, delivery_cost, tong_giam_gia, order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost as tong_hoa_don
+                    from tmp_2 order by customer_id, order_id
+            ) select customer_id, count(order_id) n_orders , sum(tong_hoa_don) total_spent from tmp_3 
+            group by customer_id)
+            select c.customer_id, COALESCE(n_orders, 0) n_orders, COALESCE(total_spent, 0) total_spent, c.fullname, c.address, c.email, c.dob from tmp_4
+            right join customers c using(customer_id)
+            ORDER BY customer_id
+            OFFSET $1 LIMIT $2
+            `,
+                [offset, limit]
+            );
+
+            n_customers = await this.countCustomers("all");
+        } else if (type === "yes") {
+            results = await query(
+                `with tmp_4 as (
+            with tmp_3 as (
+            with tmp_2 as (
+                            with tmp as (
+                            select order_id, customer_id, tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date from orders
+                            join orderlines using(order_id)
+                            group by order_id
+                        )
+                        select tmp.order_id, customer_id, tax, delivery_cost, tam_tinh,   sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+                        from tmp
+                        left join coupon_orders cpo on tmp.order_id = cpo.order_id
+                        left join coupons cp on cp.coupon_id = cpo.coupon_id
+                        group by tmp.order_id, customer_id, tax, delivery_cost, tam_tinh, order_date
+                    )
+                    select order_id, customer_id, tax, delivery_cost, tong_giam_gia, order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost as tong_hoa_don
+                    from tmp_2 order by customer_id, order_id
+            ) select customer_id, count(order_id) n_orders , sum(tong_hoa_don) total_spent from tmp_3 
+            group by customer_id)
+            select c.customer_id, COALESCE(n_orders, 0) n_orders, COALESCE(total_spent, 0) total_spent, c.fullname, c.address, c.email, c.dob from tmp_4
+            join customers c using(customer_id)
+            ORDER BY customer_id
+            OFFSET $1 LIMIT $2
+            `,
+                [offset, limit]
+            );
+
+            n_customers = await this.countCustomers("yes");
+        } else if (type === "no") {
+            results = await query(
+                `SELECT c.customer_id, c.fullname, c.address, c.email, c.dob, 0 n_orders, 0 total_spent FROM customers c
+                WHERE customer_id NOT IN (select customer_id from orders)
+                ORDER BY customer_id
+                OFFSET $1 LIMIT $2
+            `,
+                [offset, limit]
+            );
+
+            n_customers = await this.countCustomers("no");
+        }
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get customer successfully",
+            data: {
+                customers: results?.rows,
+                page: page,
+                limit: limit,
+                totalPage: n_customers && Math.ceil(n_customers / limit),
+                totalCustomer: n_customers,
+            },
+        };
+    }
+
+    async countCustomers(type: string): Promise<number> {
+        let results;
+
+        if (type === "all") {
+            results = await query(`SELECT count(*) n_customers FROM customers`);
+        } else if (type === "yes") {
+            // list customers who ordered
+            results = await query(
+                `SELECT count(*) n_customers FROM customers 
+                WHERE customer_id IN (select customer_id from orders)`
+            );
+        } else if (type === "no") {
+            results = await query(
+                `SELECT count(*) n_customers FROM customers 
+                WHERE customer_id NOT IN (select customer_id from orders)`
+            );
+        }
+
+        return Number(results?.rows[0].n_customers);
+    }
 }
 
 export const userService = new UserService();

@@ -77,26 +77,10 @@ export function OrderList() {
         setOrders(data.data.orders);
     };
 
-    // const handleSearch = async (searchValue: string) => {
-    //     const data = await productService.getProductByTitle(
-    //         searchValue,
-    //         page,
-    //         Number(total)
-    //     );
-
-    //     setTotalPage(data.data.totalPage);
-    //     setOrders(data.data.orders);
-    // };
-
     useEffect(() => {
         !value && handleListOrders();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, total, value, status]);
-
-    // useEffect(() => {
-    //     value && handleSearch(debounced);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [debounced, page, total]);
 
     const rows =
         orders.length &&

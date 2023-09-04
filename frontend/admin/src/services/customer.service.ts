@@ -1,5 +1,17 @@
 import { BaseService } from "./base.service";
 
-class ProductService extends BaseService {}
+class CustomerService extends BaseService {
+    async getCustomers(type: string, page: number, limit: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/customer/view?type=${type}&page=${page}&limit=${limit}`
+            );
 
-export const productService: ProductService = new ProductService();
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+}
+
+export const customerService: CustomerService = new CustomerService();
