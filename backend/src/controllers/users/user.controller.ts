@@ -228,4 +228,18 @@ export class UserController {
             });
         }
     }
+
+    async getCustomerById(req: Request, res: Response): Promise<any> {
+        try {
+            const { customer_id } = req.params;
+            const data = await userService.getCustomerById(Number(customer_id));
+
+            return res.status(data.statusCode).json(data);
+        } catch (err) {
+            res.status(500).json({
+                statusCode: 500,
+                message: err,
+            });
+        }
+    }
 }

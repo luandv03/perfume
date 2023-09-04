@@ -81,7 +81,7 @@ export function CustomerList() {
                         )}
                     </td>
                     <td>
-                        <Link to={`/product/${item.customer_id}`}>
+                        <Link to={`/customer/detail/${item.customer_id}`}>
                             <ActionIcon>
                                 <IconEye />
                             </ActionIcon>

@@ -75,6 +75,10 @@ function App() {
                             path="/customer/:type"
                             element={<CustomerList />}
                         ></Route>
+                        <Route
+                            path="/customer/detail/:customer_id"
+                            element={<CustomerDetail />}
+                        ></Route>
                     </Route>
                 </Route>
                 <Route path="login" element={<Login />} />

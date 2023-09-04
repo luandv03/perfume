@@ -448,7 +448,7 @@ class UserService {
 
         return {
             statusCode: HttpStatusCode.OK,
-            message: "Get customer successfully",
+            message: "Get customers successfully",
             data: {
                 customers: results?.rows,
                 page: page,
@@ -456,6 +456,19 @@ class UserService {
                 totalPage: n_customers && Math.ceil(n_customers / limit),
                 totalCustomer: n_customers,
             },
+        };
+    }
+
+    async getCustomerById(customer_id: number): Promise<ResponseType<any>> {
+        const results = await query(
+            `SELECT * FROM customers WHERE customer_id = $1`,
+            [customer_id]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get customer successfully",
+            data: results.rows[0],
         };
     }
 

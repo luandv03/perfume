@@ -114,4 +114,8 @@ userRoutes.get(
 // yes: customers who bougth
 // no: customers who no buy
 userRoutes.get("/customer/view", userController.getCustomers);
+
+// get customer by id: role admin
+userRoutes.get("/customer/detail/:customer_id", userController.getCustomerById);
+
 export default userRoutes;
