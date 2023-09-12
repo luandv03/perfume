@@ -465,6 +465,14 @@ class UserService {
             [customer_id]
         );
 
+        if (!results.rowCount) {
+            return {
+                statusCode: HttpStatusCode.NOT_FOUND,
+                message: "Get customer failed",
+                data: {},
+            };
+        }
+
         return {
             statusCode: HttpStatusCode.OK,
             message: "Get customer successfully",

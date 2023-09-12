@@ -9,6 +9,7 @@ const useStyles = createStyles(() => ({
     },
 
     content: {
+        flex: 1,
         padding: "20px",
         overflowX: "scroll",
     },

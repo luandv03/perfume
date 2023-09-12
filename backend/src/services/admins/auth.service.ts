@@ -159,7 +159,7 @@ class AdminService {
 
     async getProfile(admin_id: number): Promise<ResponseType<any>> {
         const results = await query(
-            `SELECT admin_id, username FROM admins WHERE admin_id = $1`,
+            `SELECT admin_id, username, role FROM admins WHERE admin_id = $1`,
             [admin_id]
         );
 

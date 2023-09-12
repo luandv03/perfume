@@ -1,7 +1,7 @@
 import { ScrollArea } from "@mantine/core";
 import { Outlet } from "react-router-dom";
 
-export default function Order() {
+export function Order() {
     return (
         <ScrollArea sx={{ width: "100%" }}>
             <Outlet />

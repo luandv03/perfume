@@ -13,10 +13,16 @@ orderRoutes.post(
     orderController.createOrder
 );
 
-// get order by customer_id
+// get order by customer_id: role customer
+orderRoutes.get(
+    "/order/view/customer",
+    userAuthMiddleware,
+    orderController.getOrderByOwnerId
+);
+
+// get order by customer_id: role admin
 orderRoutes.get(
     "/order/view/customer/:customer_id",
-    userAuthMiddleware,
     orderController.getOrderByCustomerId
 );
 
@@ -29,7 +35,7 @@ orderRoutes.get("/order/detail/:order_id", orderController.getOrderById);
 // accept order : role admin
 orderRoutes.patch(
     "/order/accept/:order_id",
-    // authMiddleware,
+    authMiddleware,
     orderController.acceptOrderByOrderId
 );
 

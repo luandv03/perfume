@@ -13,9 +13,12 @@ import {
     // ActionIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
+import { authService } from "../../services/auth.service";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -92,7 +95,27 @@ export function HeaderApp() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
         useDisclosure(false);
     const { classes, theme } = useStyles();
-    const { profile } = useContext(AuthContext);
+    const { profile, setProfile } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        const res = await authService.logout();
+
+        if (res.statusCode === 200) {
+            setProfile({
+                admin_id: 0,
+                role: "",
+                username: "",
+            });
+            localStorage.removeItem("isAuthenticated");
+
+            navigate("/login");
+        }
+
+        notifications.show({
+            message: res.message,
+        });
+    };
 
     return (
         <Box>
@@ -109,7 +132,9 @@ export function HeaderApp() {
                             <Button variant="default">
                                 {profile.username}
                             </Button>
-                            <Button>Logout</Button>
+                            <Button onClick={() => handleLogout()}>
+                                Logout
+                            </Button>
                         </Group>
                     ) : (
                         <Group className={classes.hiddenMobile}>

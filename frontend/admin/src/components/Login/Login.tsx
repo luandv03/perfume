@@ -23,7 +23,7 @@ import {
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { authService } from "../../services/auth.service";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 
@@ -98,6 +98,12 @@ export function Login() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (JSON.parse(localStorage.getItem("isAuthenticated") as string))
+            navigate("/");
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>

@@ -99,7 +99,7 @@ export class AdminController {
         const refresh_token = req.cookies.refresh_token;
 
         if (!refresh_token) {
-            res.status(403).json({
+            return res.status(403).json({
                 statusCode: 403,
                 message: "Refresh token not valid",
             });

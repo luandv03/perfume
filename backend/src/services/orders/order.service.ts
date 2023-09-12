@@ -194,39 +194,57 @@ class OrderService {
     }
 
     async getOrderByCustomerId(
-        customer_id: number
+        customer_id: number,
+        page: number,
+        limit: number
     ): Promise<ResponseType<any>> {
         try {
+            const offset = (page - 1) * limit;
             const results = await query(
                 `with tmp_2 as (
                 with tmp as (
-                select order_id, tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date from orders
+                select order_id,cast(count(orderline_id) as int) n_item, status, tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date from orders
                 join orderlines using(order_id)
                 where customer_id = $1
                 group by order_id
             )
-            select tmp.order_id, tax, delivery_cost, tam_tinh,   sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+            select tmp.order_id, n_item, status, tax, delivery_cost, tam_tinh,   sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
             from tmp
             left join coupon_orders cpo on tmp.order_id = cpo. order_id
             left join coupons cp on cp.coupon_id = cpo.coupon_id
-            group by tmp.order_id, tax, delivery_cost, tam_tinh, order_date
+            group by tmp.order_id, n_item, status, tax, delivery_cost, tam_tinh, order_date
         )
-        select order_id, tax, delivery_cost, tong_giam_gia, order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost   as tong_hoa_don
-        from tmp_2 order by order_id`,
-                [customer_id]
+        select order_id, n_item, status, tax, delivery_cost, tong_giam_gia, order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost as tong_hoa_don
+        from tmp_2 order by order_id OFFSET $2 LIMIT $3`,
+                [customer_id, offset, limit]
             );
+
+            const n_orders = await this.countOrderByCustomerId(customer_id);
 
             if (!results.rows.length) {
                 return {
                     statusCode: HttpStatusCode.NOT_FOUND,
                     message: "Not orders",
+                    data: {
+                        orders: results.rows,
+                        page: page,
+                        limit: limit,
+                        totalPage: Math.ceil(n_orders / limit),
+                        totalOrder: n_orders,
+                    },
                 };
             }
 
             return {
-                statusCode: HttpStatusCode.NOT_FOUND,
+                statusCode: HttpStatusCode.OK,
                 message: "Get orders successfull",
-                data: results.rows,
+                data: {
+                    orders: results.rows,
+                    page: page,
+                    limit: limit,
+                    totalPage: Math.ceil(n_orders / limit),
+                    totalOrder: n_orders,
+                },
             };
         } catch (error) {
             return {
@@ -351,6 +369,15 @@ class OrderService {
         }
 
         return results?.rows[0].number_of_orders;
+    }
+
+    async countOrderByCustomerId(customer_id: number): Promise<number> {
+        const results = await query(
+            `SELECT count(order_id) n_orders FROM orders WHERE customer_id = $1`,
+            [customer_id]
+        );
+
+        return Number(results.rows[0].n_orders);
     }
 }
 

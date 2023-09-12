@@ -36,11 +36,19 @@ productRoutes.get("/product/search", productController.getProductByTitle);
 productRoutes.get("/product/view/filter", productController.getProductByFilter);
 
 // create product
-productRoutes.post("/product/create", productController.createProduct);
+productRoutes.post(
+    "/product/create",
+    authMiddleware,
+    productController.createProduct
+);
 
 // delete product by product_id
 
 // update product by product_id
-productRoutes.patch("/product/update", productController.updateProductById);
+productRoutes.patch(
+    "/product/update",
+    authMiddleware,
+    productController.updateProductById
+);
 
 export default productRoutes;

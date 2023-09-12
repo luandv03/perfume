@@ -1,25 +1,23 @@
 import { Routes, Route } from "react-router-dom";
-// import { TableSelection } from "./components/Table";
-import Order from "./components/Order/Order.component";
-import { OrderList } from "./components/Order/OrderList.Component.tsx";
-import { OrderDetail } from "./components/Order/OrderDetail.component.tsx";
-import Dashboard from "./components/Dashboard/Dashboard.component";
+
 import LayoutApp from "./pages/layout.page";
-import { ProductDetail } from "./components/Product/ProductDetail.component";
-import { ProductList } from "./components/Product/ProductList.component";
-import Product from "./components/Product/Product.component";
-import { ProductFeedback } from "./components/Product/ProductFeedback.component";
-import { ProductCreate } from "./components/Product/ProductCreate.component";
-import { ProductDes } from "./components/Product/ProductDes.component";
-import { ProductImage } from "./components/Product/ProductImage.component";
-import { ProductView } from "./components/Product/ProductView.component";
-import Customer from "./components/Customer/Customer.component";
-import { CustomerList } from "./components/Customer/CustomerList.component";
-import { CustomerDetail } from "./components/Customer/CustomerDetail.component.tsx";
-import { CategoryList } from "./components/Category/CategoryList.component";
-import { CategoryCreate } from "./components/Category/CategoryCreate.component";
-import Category from "./components/Category/Category.component";
+import Dashboard from "./components/Dashboard/Dashboard.component";
+import { Order, OrderList, OrderDetail } from "./components/Order";
+import {
+    Product,
+    ProductFeedback,
+    ProductCreate,
+    ProductDes,
+    ProductImage,
+    ProductView,
+    ProductList,
+    ProductDetail,
+} from "./components/Product";
+import { Customer, CustomerList, CustomerDetail } from "./components/Customer";
+import { Category, CategoryList, CategoryCreate } from "./components/Category";
 import { Login } from "./components/Login/Login.tsx";
+import { PrivateRoute } from "./routes/PrivateRoute.route.tsx";
+import { Account } from "./components/Account";
 
 function App() {
     return (
@@ -80,6 +78,15 @@ function App() {
                             element={<CustomerDetail />}
                         ></Route>
                     </Route>
+
+                    <Route
+                        path="/account"
+                        element={
+                            <PrivateRoute>
+                                <Account />
+                            </PrivateRoute>
+                        }
+                    />
                 </Route>
                 <Route path="login" element={<Login />} />
             </Routes>

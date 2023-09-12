@@ -12,6 +12,18 @@ class CustomerService extends BaseService {
             return error;
         }
     }
+
+    async getCustomerById(customer_id: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/customer/detail/${customer_id}`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const customerService: CustomerService = new CustomerService();

@@ -38,7 +38,7 @@ class AuthService extends BaseService {
     async logout() {
         try {
             const res = await this.httpClientPrivate.post(
-                "/auth/customer/logout"
+                "/admin/account/logout"
             );
 
             return res.data;

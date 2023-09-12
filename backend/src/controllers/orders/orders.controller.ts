@@ -20,11 +20,29 @@ export class OrderController {
         }
     }
 
+    async getOrderByOwnerId(req: Request, res: Response): Promise<any> {
+        try {
+            const { customer_id } = res.locals.data;
+            const { page, limit } = req.query;
+            const data = await orderService.getOrderByCustomerId(
+                Number(customer_id),
+                Number(page),
+                Number(limit)
+            );
+            return res.status(200).json(data);
+        } catch (err) {
+            res.status(500).json({ message: err });
+        }
+    }
+
     async getOrderByCustomerId(req: Request, res: Response): Promise<any> {
         try {
             const { customer_id } = req.params;
+            const { page, limit } = req.query;
             const data = await orderService.getOrderByCustomerId(
-                Number(customer_id)
+                Number(customer_id),
+                Number(page),
+                Number(limit)
             );
             return res.status(200).json(data);
         } catch (err) {

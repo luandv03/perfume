@@ -50,7 +50,7 @@ export function ProductList() {
     const { classes, cx } = useStyles();
     const [selection, setSelection] = useState<number[]>([0]);
     const [value, setValue] = useState<string>("");
-    const [debounced] = useDebouncedValue(value, 200);
+    const [debounced] = useDebouncedValue(value, 400);
 
     const toggleRow = (id: number) =>
         setSelection((current) =>

@@ -14,8 +14,8 @@ export const userAuthMiddleware = (
 
     if (!access_token_user) {
         return res
-            .status(403)
-            .json({ status: 403, message: "Not access token" });
+            .status(401)
+            .json({ statusCode: 401, message: "Not access token" });
     }
 
     try {

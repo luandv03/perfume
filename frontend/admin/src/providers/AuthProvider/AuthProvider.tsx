@@ -11,6 +11,7 @@ import { authService } from "../../services/auth.service";
 export interface Profile {
     admin_id: number;
     username: string;
+    role: string;
 }
 
 interface ContextValue {
@@ -21,6 +22,7 @@ interface ContextValue {
 export const AuthContext = createContext<ContextValue>({
     profile: {
         admin_id: 0,
+        role: "",
         username: "",
     },
     setProfile: () => {
@@ -32,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [profile, setProfile] = useState<Profile>({
         admin_id: 0,
         username: "",
+        role: "",
     });
 
     const navigate = useNavigate();
@@ -39,7 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handleGetProfile = async () => {
         const data = await authService.getProfile();
 
-        if (!data.data.admin_id) {
+        console.log(data);
+
+        if (data.statusCode !== 200) {
             navigate("/login");
             return localStorage.setItem("isAuthenticated", "false");
         }
@@ -51,7 +56,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         handleGetProfile();
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [window.location.pathname]);
 
     return (
         <AuthContext.Provider value={{ profile, setProfile }}>
