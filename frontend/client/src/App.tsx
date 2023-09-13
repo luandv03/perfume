@@ -10,6 +10,7 @@ import { Profile } from "./components/Profile/Proifle";
 import { Checkout } from "./components/Checkout/Checkout";
 import { LoginAuth } from "./components/Login/Login";
 import { SearchResult } from "./components/SearchResult/SearchResult";
+import { PrivateRoute } from "./routes";
 
 function App() {
     return (
@@ -26,7 +27,14 @@ function App() {
                         element={<FilterProduct />}
                     />
                     <Route path="/cart" element={<Cart />} />
-                    <Route path="/customer" element={<Customer />}>
+                    <Route
+                        path="/customer"
+                        element={
+                            <PrivateRoute>
+                                <Customer />
+                            </PrivateRoute>
+                        }
+                    >
                         <Route path="/customer" element={<Profile />} />
                         <Route
                             path="/customer/orders"

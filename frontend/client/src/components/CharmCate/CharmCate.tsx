@@ -65,6 +65,7 @@ export function CharmCate({ category }: { category: CategoryType }) {
 
     useEffect(() => {
         handleGetProductByCateId();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

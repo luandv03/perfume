@@ -47,13 +47,6 @@ class ProductService {
             [category_id, offset, limit]
         );
 
-        if (!results.rows.length) {
-            return {
-                statusCode: HttpStatusCode.OK,
-                message: "Empty",
-            };
-        }
-
         return {
             statusCode: HttpStatusCode.OK,
             message: "Get Products Success",

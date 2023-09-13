@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handleGetProfile = async () => {
         const data = await authService.getProfile();
 
-        if (!data.data.customer_id) {
+        if (data.statusCode !== 200) {
             return localStorage.setItem("isAuthenticated", "false");
         }
 

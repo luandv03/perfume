@@ -43,14 +43,10 @@ class ProductService extends BaseService {
         }
     }
 
-    async getProductBySearchTitle(
-        title: string,
-        offset: number,
-        limit: number
-    ) {
+    async getProductBySearchTitle(title: string, page: number, limit: number) {
         try {
             const res = await this.httpClientPublic.get(
-                `product/search?title=${title}&offset=${offset}&limit=${limit}`
+                `product/search?title=${title}&page=${page}&limit=${limit}`
             );
 
             return res.data;

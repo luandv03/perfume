@@ -17,6 +17,7 @@ import {
     Badge,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 import { Link, useNavigate } from "react-router-dom";
 import {
     IconChevronDown,
@@ -24,6 +25,7 @@ import {
     IconSearch,
 } from "@tabler/icons-react";
 import { useState, useEffect, useContext, KeyboardEvent } from "react";
+
 import { CategoryType } from "../../types/category.type";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { categoryService } from "../../services/category.service";
@@ -138,8 +140,7 @@ export function HeaderApp() {
 
     const handleLogout = async () => {
         const res = await authService.logout();
-        if (res) {
-            alert(res.message);
+        if (res.statusCode === 200) {
             setProfile({
                 customer_id: 0,
                 email: "",
@@ -147,6 +148,10 @@ export function HeaderApp() {
                 address: "",
                 phone_number: "",
                 dob: "",
+            });
+            localStorage.removeItem("isAuthenticated");
+            notifications.show({
+                message: res.message,
             });
         }
     };

@@ -39,11 +39,11 @@ export function SearchResult() {
     const handleGetProductBySearch = async () => {
         const resData = await productService.getProductBySearchTitle(
             searchParams.get("title") as string,
-            0,
+            1,
             10
         );
 
-        setProducts(resData.data);
+        setProducts(resData.data.products);
     };
 
     const handleAddToCart = (product: ProductType) => {

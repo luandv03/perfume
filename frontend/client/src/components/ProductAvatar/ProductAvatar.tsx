@@ -18,11 +18,12 @@ export function ProductAvatar({ data }: { data: number }) {
 
     useEffect(() => {
         handleGetProductAvatar();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <>
-            {productAvatar.product_photo_id && (
+            {productAvatar?.product_photo_id && (
                 <Image
                     src={productAvatar.product_photo_url}
                     height={160}
