@@ -17,7 +17,7 @@ import { IconTrash } from "@tabler/icons-react";
 import { useState, useRef, useContext } from "react";
 
 import { CartContext } from "../../providers/CartProvider/CartProvider";
-import { ProductAvatar } from "../ProductAvatar/ProductAvatar";
+import { ProductAvatar } from "../Product/ProductAvatar";
 
 interface CartItem {
     product_id: number;

@@ -1,6 +1,6 @@
 import {
     Card,
-    Image,
+    // Image,
     Group,
     Text,
     createStyles,
@@ -14,6 +14,7 @@ import { notifications } from "@mantine/notifications";
 
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { ProductType } from "../../types/products.type";
+import { ProductAvatar } from "./ProductAvatar";
 
 const useStyles = createStyles(() => ({
     hover: {
@@ -23,8 +24,7 @@ const useStyles = createStyles(() => ({
         },
     },
 }));
-// { item }: { item: { image: string; title: string } }
-export function Product() {
+export function Product({ data }: { data: ProductType }) {
     const { addToCart } = useContext(CartContext);
 
     const handleAddToCart = (product: ProductType) => {
@@ -53,20 +53,21 @@ export function Product() {
             radius="md"
             className={classes.hover}
             style={{ borderRadius: 0 }}
+            key={data.product_id}
         >
             <Card.Section>
-                <Image
-                    src="https://charmecosmetic.vn/wp-content/uploads/2022/10/charme-no-1-peace-1.jpg"
-                    height={100}
-                    alt="Norway"
-                    fit="contain"
-                />
+                {data.product_id !== 0 && (
+                    <ProductAvatar data={data.product_id} />
+                )}
             </Card.Section>
 
             <Group position="apart" mt="md" mb="xs">
-                <Link to="/product/2/detail">
+                <Link
+                    to={`/product/${data.product_id}/detail`}
+                    state={{ product: data }}
+                >
                     <Text size="16px" weight={500} lineClamp={2} color="black">
-                        Creed Avetus For Men EDP
+                        {data.title}
                     </Text>
                 </Link>
 
@@ -75,8 +76,14 @@ export function Product() {
                 </Group>
 
                 <Group>
-                    <Text fw={500}>2.000.000 đ</Text>
-                    <Text td="line-through">3.000.000 đ</Text>
+                    <Text fw={500}>
+                        {" "}
+                        {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                            maximumFractionDigits: 9,
+                        }).format(data.price)}
+                    </Text>
                 </Group>
 
                 <Group spacing={4}>
@@ -85,7 +92,11 @@ export function Product() {
                     </Button>
 
                     <Button size="16px">
-                        <Link to="/product/1/detail" style={{ color: "white" }}>
+                        <Link
+                            to={`/product/${data.product_id}/detail`}
+                            state={{ product: data }}
+                            style={{ color: "white" }}
+                        >
                             <IconEye />
                         </Link>
                     </Button>
@@ -100,7 +111,7 @@ export function Product() {
                         left: "10px",
                     }}
                 >
-                    -10%
+                    -{data.discount}%
                 </Badge>
             </Group>
         </Card>

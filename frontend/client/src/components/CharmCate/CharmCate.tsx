@@ -15,7 +15,8 @@ import { notifications } from "@mantine/notifications";
 import { IconShoppingCartPlus, IconEye } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import { ProductAvatar } from "../ProductAvatar/ProductAvatar";
+
+import { ProductAvatar } from "../Product/ProductAvatar";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { productService } from "../../services/product.service";
 import { ProductType, ProductConstant } from "../../types/products.type";
@@ -39,10 +40,10 @@ export function CharmCate({ category }: { category: CategoryType }) {
     const handleGetProductByCateId = async () => {
         const resProduct = await productService.getProductByCateId(
             category.category_id,
-            0,
+            1,
             8
         );
-        setProducts(resProduct.data);
+        setProducts(resProduct.data.products);
     };
 
     const handleAddToCart = (product: ProductType) => {
@@ -165,7 +166,10 @@ export function CharmCate({ category }: { category: CategoryType }) {
                     ))}
             </SimpleGrid>
             <Center>
-                <Link to={`/product/${category.category_id}/filter`}>
+                <Link
+                    to={`/product/${category.category_id}/filter`}
+                    state={{ category_name: category.category_name }}
+                >
                     <Text color="gray">Xem tất cả</Text>
                 </Link>
             </Center>

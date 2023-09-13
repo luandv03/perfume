@@ -8,6 +8,7 @@ import {
     Group,
     Button,
     Badge,
+    Pagination,
 } from "@mantine/core";
 
 import { useEffect, useState, useContext } from "react";
@@ -15,7 +16,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { IconShoppingCartPlus, IconEye } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 
-import { ProductAvatar } from "../ProductAvatar/ProductAvatar";
+import { ProductAvatar } from "../Product/ProductAvatar";
 import { ProductType, ProductConstant } from "../../types/products.type";
 import { productService } from "../../services/product.service";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
@@ -34,15 +35,22 @@ export function SearchResult() {
     const { addToCart } = useContext(CartContext);
 
     const [products, setProducts] = useState<ProductType[]>([ProductConstant]);
+    const [totalProduct, setTotalProduct] = useState<number>(0);
     const [searchParams] = useSearchParams();
+
+    const [totalPage, setTotalPage] = useState(0);
+    const [page, setPage] = useState(1);
+    // const [total, setTotal] = useState<string>("10");
 
     const handleGetProductBySearch = async () => {
         const resData = await productService.getProductBySearchTitle(
             searchParams.get("title") as string,
-            1,
-            10
+            page,
+            12
         );
 
+        setTotalProduct(resData.data.totalProducts);
+        setTotalPage(resData.data.totalPage);
         setProducts(resData.data.products);
     };
 
@@ -66,13 +74,14 @@ export function SearchResult() {
 
     useEffect(() => {
         handleGetProductBySearch();
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, searchParams]);
 
     return (
         <Stack spacing={10}>
             <Center>
                 <Text size={20} fw={500}>
-                    Có {products.length} sản phẩm phù hợp
+                    Có {totalProduct} sản phẩm phù hợp
                 </Text>
             </Center>
             <SimpleGrid cols={4} sx={{ width: "100%" }}>
@@ -165,6 +174,9 @@ export function SearchResult() {
                         </Card>
                     ))}
             </SimpleGrid>
+            <Center mt={50}>
+                <Pagination value={page} onChange={setPage} total={totalPage} />
+            </Center>
         </Stack>
     );
 }

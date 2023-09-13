@@ -1,14 +1,10 @@
 import { BaseService } from "./base.service";
 
 class ProductService extends BaseService {
-    async getProductByCateId(
-        category_id: number,
-        offset: number,
-        limit: number
-    ) {
+    async getProductByCateId(category_id: number, page: number, limit: number) {
         try {
             const res = await this.httpClientPublic.get(
-                `/product/category/${category_id}/view?offset=${offset}&limit=${limit}`
+                `/product/category/${category_id}/view?page=${page}&limit=${limit}`
             );
 
             return res.data;

@@ -1,31 +1,42 @@
-import { Group, Stack, Text } from "@mantine/core";
-import { Outlet, Link } from "react-router-dom";
+import { Flex, Stack, Text } from "@mantine/core";
+import { Outlet, Link, useLocation } from "react-router-dom";
 
 export default function Customer() {
+    const location = useLocation();
+
     return (
         <div style={{ width: "100%" }}>
-            <Group>
-                <div
-                    style={{
-                        display: "flex",
-                    }}
-                >
-                    <Stack sx={{ height: "100%" }}>
-                        <Text size={20}>Trang tài khoản</Text>
-                        <Text size={16} fw={500}>
-                            Xin chào, Văn Luận Đinh
+            <Flex>
+                <Stack sx={{ height: "100%" }}>
+                    <Text size={20}>Trang tài khoản</Text>
+                    <Link to="/customer">
+                        <Text
+                            color={
+                                location.pathname === "/customer"
+                                    ? "red"
+                                    : "black"
+                            }
+                        >
+                            Thông tin tài khoản
                         </Text>
-                        <Link to="/customer">
-                            <Text color="black">Thông tin tài khoản</Text>
-                        </Link>
+                    </Link>
 
-                        <Link to="/customer/orders">
-                            <Text color="black">Đơn hàng của bạn</Text>
-                        </Link>
-                    </Stack>
+                    <Link to="/customer/orders">
+                        <Text
+                            color={
+                                location.pathname === "/customer/orders"
+                                    ? "red"
+                                    : "black"
+                            }
+                        >
+                            Đơn hàng của bạn
+                        </Text>
+                    </Link>
+                </Stack>
+                <div style={{ paddingLeft: "20px" }}>
+                    <Outlet />
                 </div>
-                <Outlet />
-            </Group>
+            </Flex>
         </div>
     );
 }

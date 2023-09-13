@@ -27,10 +27,10 @@ class OrderService extends BaseService {
         }
     }
 
-    async getOrderByCustomerId(customr_id: number) {
+    async getOrderByCustomerId(page: number, limit: number) {
         try {
             const res = await this.httpClientPrivate.get(
-                `/order/view/customer/${customr_id}`
+                `/order/view/customer?page=${page}&limit=${limit}`
             );
 
             return res.data;
@@ -39,7 +39,17 @@ class OrderService extends BaseService {
         }
     }
 
-    // async getOrderById() {}
+    async getOrderById(order_id: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/order/detail/${order_id}`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const orderService: OrderService = new OrderService();

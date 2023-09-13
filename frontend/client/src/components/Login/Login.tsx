@@ -82,6 +82,7 @@ export function LoginAuth() {
             });
             const response = await authService.getProfile();
             setProfile(response.data);
+            localStorage.setItem("isAuthenticated", "true");
             navigate("/");
             form.reset();
         } catch (error: any) {

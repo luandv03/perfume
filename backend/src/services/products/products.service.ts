@@ -36,9 +36,11 @@ class ProductService {
 
     async getProductByCateId(
         category_id: number,
-        offset: string,
-        limit: string
-    ): Promise<ResponseType<ProductType[]>> {
+        page: number,
+        limit: number
+    ): Promise<ResponseType<any>> {
+        const offset = (page - 1) * limit;
+
         const results = await query(
             `SELECT product_id, title, price, discount, volume, brand, year_publish, description 
             FROM products  JOIN categories USING(category_id)
@@ -47,10 +49,23 @@ class ProductService {
             [category_id, offset, limit]
         );
 
+        const totalProductRes = await query(
+            `SELECT count(*) as total_product FROM products WHERE category_id = $1`,
+            [category_id]
+        );
+
+        const totalProduct = Number(totalProductRes.rows[0].total_product);
+
         return {
             statusCode: HttpStatusCode.OK,
             message: "Get Products Success",
-            data: results.rows,
+            data: {
+                products: results.rows,
+                page: page,
+                total: limit,
+                totalPage: Math.ceil(totalProduct / limit),
+                totalProduct,
+            },
         };
     }
 

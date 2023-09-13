@@ -1,11 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import LayoutApp from "./pages/layout.page";
 import { Home } from "./components/Home/Home";
-import { ProductDetail } from "./components/ProductDetail/ProductDetail";
+import { ProductDetail } from "./components/Product";
 import { FilterProduct } from "./components/FilterProduct/FilterProduct";
 import { Cart } from "./components/Cart/Cart";
 import Customer from "./components/Customer/Customer.component";
-import { OrderCustomer } from "./components/OrderCustomer/OrderCustomer";
+import { OrderCustomer, OrderDetail } from "./components/Order";
 import { Profile } from "./components/Profile/Proifle";
 import { Checkout } from "./components/Checkout/Checkout";
 import { LoginAuth } from "./components/Login/Login";
@@ -39,6 +39,10 @@ function App() {
                         <Route
                             path="/customer/orders"
                             element={<OrderCustomer />}
+                        />
+                        <Route
+                            path="/customer/order/detail/:order_id"
+                            element={<OrderDetail />}
                         />
                     </Route>
                     <Route path="/checkout" element={<Checkout />} />

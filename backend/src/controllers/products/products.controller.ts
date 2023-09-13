@@ -24,11 +24,11 @@ export class ProductController {
     async getProductByCateId(req: Request, res: Response): Promise<any> {
         try {
             const category_id = req.params.category_id;
-            const { offset, limit } = req.query;
+            const { page, limit } = req.query;
             const data = await productService.getProductByCateId(
                 Number(category_id),
-                offset as string,
-                limit as string
+                Number(page),
+                Number(limit)
             );
 
             return res.status(data.statusCode).json(data);

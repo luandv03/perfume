@@ -20,7 +20,7 @@ import { useState, useEffect, useContext } from "react";
 import { Carousel } from "react-responsive-carousel";
 
 import { ProductType } from "../../types/products.type";
-import { Product } from "../Product/Product";
+// import { Product } from "../Product/Product";
 import { ProductPhoto } from "../../types/products.type";
 import { productService } from "../../services/product.service";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
@@ -65,6 +65,7 @@ export function ProductDetail() {
 
     useEffect(() => {
         handleGetProductPhotos();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -77,7 +78,11 @@ export function ProductDetail() {
                 <Grid.Col span={4}>
                     <Stack sx={{ position: "relative" }}>
                         <Image
-                            src={photos[0].product_photo_url}
+                            src={
+                                photos.length > 0
+                                    ? photos[0].product_photo_url
+                                    : ""
+                            }
                             height={300}
                             alt="Norway"
                             fit="contain"
@@ -92,21 +97,33 @@ export function ProductDetail() {
                             // onClickThumb={onClickThumb}
                         >
                             <Image
-                                src={photos[0].product_photo_url}
+                                src={
+                                    photos.length > 0
+                                        ? photos[0].product_photo_url
+                                        : ""
+                                }
                                 height={100}
                                 alt="Norway"
                                 fit="contain"
                                 sx={{ border: "1px solid #f0e7e7" }}
                             />
                             <Image
-                                src={photos[0].product_photo_url}
+                                src={
+                                    photos.length > 0
+                                        ? photos[0].product_photo_url
+                                        : ""
+                                }
                                 height={100}
                                 alt="Norway"
                                 fit="contain"
                                 sx={{ border: "1px solid #f0e7e7" }}
                             />
                             <Image
-                                src={photos[0].product_photo_url}
+                                src={
+                                    photos.length > 0
+                                        ? photos[0].product_photo_url
+                                        : ""
+                                }
                                 height={100}
                                 alt="Norway"
                                 fit="contain"
@@ -262,7 +279,7 @@ export function ProductDetail() {
                 <Text size="24px" fw={500}>
                     Sản phẩm liên quan
                 </Text>
-                <Grid gutter={0}>
+                {/* <Grid gutter={0}>
                     <Grid.Col span={3}>
                         <Product />
                     </Grid.Col>
@@ -275,7 +292,7 @@ export function ProductDetail() {
                     <Grid.Col span={3}>
                         <Product />
                     </Grid.Col>
-                </Grid>
+                </Grid> */}
             </Stack>
         </Stack>
     );

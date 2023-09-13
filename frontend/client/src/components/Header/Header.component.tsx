@@ -289,6 +289,10 @@ export function HeaderApp() {
                                     categories.map((category: CategoryType) => (
                                         <Link
                                             to={`/product/${category.category_id}/filter`}
+                                            state={{
+                                                category_name:
+                                                    category.category_name,
+                                            }}
                                             style={{
                                                 textDecoration: "none",
                                                 borderBottom: "1px solid gray",

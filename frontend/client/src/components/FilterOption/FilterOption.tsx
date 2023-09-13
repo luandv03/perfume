@@ -36,12 +36,12 @@ export function FilterOption() {
                 />
                 <ScrollArea h={150} scrollbarSize="5px">
                     <Stack>
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
+                        <Checkbox label="Dior" />
+                        <Checkbox label="Gucci" />
+                        <Checkbox label="Channel" />
+                        <Checkbox label="Versace" />
+                        <Checkbox label="Luis vutton" />
+                        <Checkbox label="D&G" />
                     </Stack>
                 </ScrollArea>
             </Stack>

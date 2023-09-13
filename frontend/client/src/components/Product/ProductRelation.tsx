@@ -1,7 +1,7 @@
 import { Carousel } from "@mantine/carousel";
 import { useMediaQuery } from "@mantine/hooks";
 import { useMantineTheme, rem } from "@mantine/core";
-import { Product } from "../Product/Product";
+import { Product } from "./Product";
 
 const data = [
     {
