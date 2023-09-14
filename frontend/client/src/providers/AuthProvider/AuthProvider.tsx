@@ -5,6 +5,8 @@ import {
     Dispatch,
     SetStateAction,
 } from "react";
+import { useLocation } from "react-router-dom";
+
 import { authService } from "../../services/auth.service";
 import { Profile } from "../../components/Profile/Proifle";
 
@@ -46,10 +48,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         dob: "",
     });
 
+    const location = useLocation();
+
     const handleGetProfile = async () => {
         const data = await authService.getProfile();
 
         if (data.statusCode !== 200) {
+            setProfile({
+                customer_id: 0,
+                email: "",
+                fullname: "",
+                address: "",
+                phone_number: "",
+                dob: "",
+            });
             return localStorage.setItem("isAuthenticated", "false");
         }
 
@@ -60,7 +72,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         handleGetProfile();
-    }, []);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.pathname]);
 
     return (
         <AuthContext.Provider value={{ profile, setProfile }}>

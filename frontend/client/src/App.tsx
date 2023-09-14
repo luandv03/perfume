@@ -8,9 +8,9 @@ import Customer from "./components/Customer/Customer.component";
 import { OrderCustomer, OrderDetail } from "./components/Order";
 import { Profile } from "./components/Profile/Proifle";
 import { Checkout } from "./components/Checkout/Checkout";
-import { LoginAuth } from "./components/Login/Login";
 import { SearchResult } from "./components/SearchResult/SearchResult";
 import { PrivateRoute } from "./routes";
+import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
 
 function App() {
     return (
@@ -50,6 +50,7 @@ function App() {
                 </Route>
 
                 <Route path="/login" element={<LoginAuth />} />
+                <Route path="/login/success" element={<LoginGoogleSuccess />} />
             </Routes>
         </>
     );

@@ -54,6 +54,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         });
     };
 
+    // const handleGetCartByUser = async () => {
+    //     const res = await
+    // };
+
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(state.cart));
     }, [state.cart]);

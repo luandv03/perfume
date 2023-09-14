@@ -17,6 +17,26 @@ class AuthService extends BaseService {
         }
     }
 
+    async loginWithGoogle() {
+        try {
+            const res = await this.httpClientPublic.get("auth/google/login");
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async loginWithFacebook() {
+        try {
+            const res = await this.httpClientPublic.get("/auth/facebook/login");
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
     async getProfile() {
         try {
             const res = await this.httpClientPrivate.get(

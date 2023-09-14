@@ -147,7 +147,7 @@ export function ProductDetail() {
                     </Stack>
                 </Grid.Col>
 
-                <Grid.Col span={8}>
+                <Grid.Col span={8} pl={20}>
                     <Stack spacing={10}>
                         <Text size="20px" fw={500}>
                             {state.product.title}

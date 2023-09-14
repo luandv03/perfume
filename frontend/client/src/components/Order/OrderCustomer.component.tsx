@@ -6,6 +6,7 @@ import {
     Text,
     ActionIcon,
     Select,
+    Alert,
 } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
@@ -109,37 +110,49 @@ export function OrderCustomer() {
         <Stack>
             <Text size={20}>ĐƠN HÀNG CỦA BẠN</Text>
 
-            <Table miw={800} verticalSpacing="sm" striped>
-                <thead>
-                    <tr>
-                        <th>Mã đơn hàng</th>
-                        <th>Số sản phẩm</th>
-                        <th>Trạng thái</th>
-                        <th>Thuế(%)</th>
-                        <th>Giảm giá(%)</th>
-                        <th>Vận chuyển</th>
-                        <th>Tổng giá trị đơn hàng</th>
-                        <th>Ngày đặt hàng</th>
-                        <th>Xem</th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </Table>
+            {orders.length <= 0 ? (
+                <Alert title="Bummer!" color="red">
+                    <Text fw={700}> Bạn chưa có đơn hàng nào</Text>
+                </Alert>
+            ) : (
+                <>
+                    <Table miw={800} verticalSpacing="sm" striped>
+                        <thead>
+                            <tr>
+                                <th>Mã đơn hàng</th>
+                                <th>Số sản phẩm</th>
+                                <th>Trạng thái</th>
+                                <th>Thuế(%)</th>
+                                <th>Giảm giá(%)</th>
+                                <th>Vận chuyển</th>
+                                <th>Tổng giá trị đơn hàng</th>
+                                <th>Ngày đặt hàng</th>
+                                <th>Xem</th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows}</tbody>
+                    </Table>
 
-            <Flex sx={{ width: "100%" }} justify="flex-end" gap="xs">
-                <Select
-                    placeholder="Pick one"
-                    data={[
-                        { value: "10", label: "10 products" },
-                        { value: "20", label: "20 products" },
-                        { value: "50", label: "50 products" },
-                        { value: "100", label: "100 products" },
-                    ]}
-                    value={total}
-                    onChange={setTotal}
-                />
-                <Pagination value={page} onChange={setPage} total={totalPage} />
-            </Flex>
+                    <Flex sx={{ width: "100%" }} justify="flex-end" gap="xs">
+                        <Select
+                            placeholder="Pick one"
+                            data={[
+                                { value: "10", label: "10 products" },
+                                { value: "20", label: "20 products" },
+                                { value: "50", label: "50 products" },
+                                { value: "100", label: "100 products" },
+                            ]}
+                            value={total}
+                            onChange={setTotal}
+                        />
+                        <Pagination
+                            value={page}
+                            onChange={setPage}
+                            total={totalPage}
+                        />
+                    </Flex>
+                </>
+            )}
         </Stack>
     );
 }

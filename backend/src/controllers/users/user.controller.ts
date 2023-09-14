@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { userService } from "../../services/users/user.service";
 // import { IRegisterAccount } from "../../types/admins/register-account.type";
@@ -138,7 +138,9 @@ export class UserController {
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
                 });
 
-            res.status(data.statusCode).json(data);
+            res.redirect("http://localhost:5173/login/success");
+
+            // res.status(data.statusCode).json(data);
         } catch (err) {
             return res.status(500).json({
                 statusCode: 500,
@@ -171,7 +173,9 @@ export class UserController {
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
                 });
 
-            res.status(data.statusCode).json(data);
+            res.redirect("http://localhost:5173/login/success");
+
+            // res.status(data.statusCode).json(data);
         } catch (err) {
             return res.status(500).json({
                 statusCode: 500,

@@ -11,6 +11,7 @@ import {
     Button,
     Center,
     LoadingOverlay,
+    Flex,
 } from "@mantine/core";
 import { useForm, isEmail, hasLength } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
@@ -20,15 +21,22 @@ import {
     IconAt,
     IconLock,
     IconChevronLeft,
+    IconBrandFacebook,
+    IconBrandGoogle,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
+
 import { authService } from "../../services/auth.service";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 
 export function LoginAuth() {
     const [loading, setLoading] = useState(false);
+    const [isOAuth, setIsOAuth] = useState({
+        status: false,
+        method: "",
+    });
 
     const { setProfile } = useContext(AuthContext);
 
@@ -66,6 +74,11 @@ export function LoginAuth() {
     };
 
     const handleSubmit = (values: typeof form.values): void => {
+        setIsOAuth((prev: { status: boolean; method: string }) => ({
+            ...prev,
+            status: false,
+        }));
+
         handleValidate(values);
     };
 
@@ -85,6 +98,7 @@ export function LoginAuth() {
             localStorage.setItem("isAuthenticated", "true");
             navigate("/");
             form.reset();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             showNotification({
                 title: "Login failure!",
@@ -94,6 +108,68 @@ export function LoginAuth() {
                 autoClose: 3000,
             });
             setLoading(false);
+        }
+    };
+
+    const handleLoginWithGoogle = () => {
+        setIsOAuth((prev: { status: boolean; method: string }) => ({
+            ...prev,
+            status: false,
+        }));
+
+        let timer: ReturnType<typeof setTimeout> | null = null;
+        const newWindow = window.open(
+            "http://localhost:4000/api/v1/auth/google/login",
+            "_blank",
+            "width=500, height=600"
+        );
+
+        if (newWindow) {
+            timer = setInterval(() => {
+                if (newWindow.closed) {
+                    JSON.parse(
+                        localStorage.getItem("isAuthenticated") as string
+                    )
+                        ? navigate("/")
+                        : setIsOAuth({
+                              method: "Google",
+                              status: true,
+                          });
+
+                    if (timer) clearInterval(timer);
+                }
+            }, 500);
+        }
+    };
+
+    const handleLoginWithFacebook = () => {
+        setIsOAuth((prev: { status: boolean; method: string }) => ({
+            ...prev,
+            status: false,
+        }));
+
+        let timer: ReturnType<typeof setTimeout> | null = null;
+        const newWindow = window.open(
+            "http://localhost:4000/api/v1/auth/facebook/login",
+            "_blank",
+            "width=500, height=600"
+        );
+
+        if (newWindow) {
+            timer = setInterval(() => {
+                if (newWindow.closed) {
+                    JSON.parse(
+                        localStorage.getItem("isAuthenticated") as string
+                    )
+                        ? navigate("/")
+                        : setIsOAuth({
+                              method: "Facebook",
+                              status: true,
+                          });
+
+                    if (timer) clearInterval(timer);
+                }
+            }, 500);
         }
     };
 
@@ -133,6 +209,57 @@ export function LoginAuth() {
                             Create account
                         </Anchor>
                     </Text>
+
+                    <Flex style={{ width: "100%" }} justify="center" gap="md">
+                        <Group>
+                            {/* <form
+                                action="http://localhost:4000/api/v1/auth/facebook/login"
+                                method="get"
+                            >
+                                <Button type="submit">
+                                    <IconBrandFacebook />
+                                    &nbsp;
+                                    <Text>FACEBOOK</Text>
+                                </Button>
+                            </form> */}
+
+                            <Button onClick={() => handleLoginWithFacebook()}>
+                                <IconBrandFacebook />
+                                &nbsp;
+                                <Text>FACEBOOK</Text>
+                            </Button>
+                        </Group>
+
+                        <Group>
+                            {/* <form
+                                action="http://localhost:4000/api/v1/auth/google/login"
+                                method="get"
+                            >
+                                <Button color="red" type="submit">
+                                    <IconBrandGoogle />
+                                    &nbsp;
+                                    <Text>GOOGLE</Text>
+                                </Button>
+                            </form> */}
+
+                            <Button
+                                color="red"
+                                onClick={() => handleLoginWithGoogle()}
+                            >
+                                <IconBrandGoogle />
+                                &nbsp;
+                                <Text>GOOGLE</Text>
+                            </Button>
+                        </Group>
+                    </Flex>
+                    <Flex mt={8}>
+                        {isOAuth.status && (
+                            <span style={{ color: "red" }}>
+                                Email này đã được sử dụng cho 1 hình thức đăng
+                                nhập khác {isOAuth.method}
+                            </span>
+                        )}
+                    </Flex>
 
                     <Paper withBorder shadow="md" p={30} mt={30} radius="md">
                         <form
