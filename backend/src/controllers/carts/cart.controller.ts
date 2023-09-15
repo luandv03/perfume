@@ -63,7 +63,7 @@ export class CartController {
 
     async getCartListByCustomerId(req: Request, res: Response): Promise<any> {
         try {
-            const { customer_id } = req.params;
+            const { customer_id } = res.locals.data;
 
             const data = await cartService.getCartListByCustomerId(
                 Number(customer_id)

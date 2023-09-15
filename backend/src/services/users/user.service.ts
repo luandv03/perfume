@@ -195,6 +195,9 @@ class UserService {
                 await query("COMMIT");
 
                 customer_id = account.rows[0].customer_id;
+
+                // sau khi đăng ký tài khoản thành công thì tự động tạo cart
+                await cartService.createCart(Number(customer_id));
             }
 
             // check email này đã đăng nhập dưới 1 hình thức khác google
@@ -285,6 +288,9 @@ class UserService {
                 await query("COMMIT");
 
                 customer_id = account.rows[0].customer_id;
+
+                // sau khi đăng ký thành công thì tự động tạo cart
+                await cartService.createCart(Number(customer_id));
             }
 
             // check email này đã đăng nhập dưới 1 hình thức khác facebook

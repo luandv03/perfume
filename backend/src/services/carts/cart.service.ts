@@ -10,9 +10,10 @@ interface CartItem {
 
 class CartService {
     async createCart(customer_id: number): Promise<ResponseType<any>> {
-        const results = await query(`INSERT INTO carts (DEFAULT, $1)`, [
-            customer_id,
-        ]);
+        const results = await query(
+            `INSERT INTO carts (DEFAULT, $1) RETURNING *`,
+            [customer_id]
+        );
 
         if (!results.rowCount) {
             return {
@@ -24,6 +25,7 @@ class CartService {
         return {
             statusCode: HttpStatusCode.OK,
             message: " Create Cart successfully",
+            data: results.rows[0],
         };
     }
 
@@ -36,15 +38,17 @@ class CartService {
                 [cart_id, product_id]
             );
 
+            let results;
             // neu chua ton tai thi insert
             if (!cartItemExist.rows.length) {
-                const results = await query(
-                    `INSERT INTO cart_items VALUES ($1, $2, $3)`,
+                results = await query(
+                    `INSERT INTO cart_items VALUES ($1, $2, $3) RETURNING *`,
                     [cart_id, product_id, quantity]
                 );
             } else {
-                const results = await query(
-                    `UPDATE cart_items SET quantity = quantity + $1 WHERE cart_id = $2 AND product_id = $3`,
+                results = await query(
+                    `UPDATE cart_items SET quantity = quantity + $1 
+                    WHERE cart_id = $2 AND product_id = $3 RETURNING *`,
                     [quantity, cart_id, product_id]
                 );
             }
@@ -52,6 +56,7 @@ class CartService {
             return {
                 statusCode: HttpStatusCode.OK,
                 message: "Add cart item successfully",
+                data: results.rows[0],
             };
         } catch (error: any) {
             return {
@@ -79,14 +84,23 @@ class CartService {
                 };
             }
 
+            if (quantity < 0) {
+                return {
+                    statusCode: HttpStatusCode.BAD_REQUEST,
+                    message: "Quantity can't less than 0",
+                };
+            }
+
             const results = await query(
-                `UPDATE cart_items SET quantity = quantity + $1 WHERE cart_id = $2 AND product_id = $3`,
+                `UPDATE cart_items SET quantity = $1 
+                WHERE cart_id = $2 AND product_id = $3 RETURNING *`,
                 [quantity, cart_id, product_id]
             );
 
             return {
                 statusCode: HttpStatusCode.OK,
-                message: "Add cart item successfully",
+                message: "Update cart item successfully",
+                data: results.rows[0],
             };
         } catch (error: any) {
             return {
@@ -105,7 +119,7 @@ class CartService {
     }): Promise<ResponseType<any>> {
         try {
             const results = await query(
-                `DELETE FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
+                `DELETE FROM cart_items WHERE cart_id = $1 AND product_id = $2 RETURNING *`,
                 [Number(cart_id), Number(product_id)]
             );
 
@@ -119,6 +133,7 @@ class CartService {
             return {
                 statusCode: HttpStatusCode.OK,
                 message: "Delete cart item success",
+                data: results.rows[0],
             };
         } catch (error: any) {
             return {
@@ -152,7 +167,6 @@ class CartService {
             message: "Get cart list successfull!",
             data: {
                 cart_id: results.rows[0].cart_id,
-                cart_item_number: cartList.rows.length,
                 cart_list: cartList.rows,
             },
         };

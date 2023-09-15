@@ -96,8 +96,6 @@ export const reducer = (state: Cart, action: ActionType) => {
                     item.product_id !== action.payload.product_id
             );
 
-            console.log(cartList);
-
             return {
                 cart: cartList,
             };

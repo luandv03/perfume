@@ -19,6 +19,13 @@ userRoutes.post("/auth/customer/register", userController.register);
 //login
 userRoutes.post("/auth/customer/login", userController.login);
 
+//refresh token user
+userRoutes.get(
+    "/auth/customer/refresh_token",
+    userAuthMiddleware,
+    userController.refreshToken
+);
+
 //get profile
 userRoutes.get(
     "/auth/customer/profile",

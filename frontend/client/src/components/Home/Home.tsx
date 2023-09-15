@@ -2,10 +2,10 @@ import {
     Stack,
     Center,
     Text,
-    Card,
-    Image,
-    Group,
-    SimpleGrid,
+    // Card,
+    // Image,
+    // Group,
+    // SimpleGrid,
     createStyles,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
@@ -15,17 +15,17 @@ import { CategoryType } from "../../types/category.type";
 import { categoryService } from "../../services/category.service";
 import { CharmCate } from "../CharmCate/CharmCate";
 
-const useStyles = createStyles(() => ({
-    hover: {
-        "&:hover": {
-            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;",
-            cursor: "pointer",
-        },
-    },
-}));
+// const useStyles = createStyles(() => ({
+//     hover: {
+//         "&:hover": {
+//             boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;",
+//             cursor: "pointer",
+//         },
+//     },
+// }));
 
 export function Home() {
-    const { classes } = useStyles();
+    // const { classes } = useStyles();
 
     const [categories, setCategories] = useState<CategoryType[]>([
         {
