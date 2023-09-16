@@ -40,7 +40,7 @@ export const CartContext = createContext<CartContextType>({
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cartUser, setCartUser] = useState<CartItem[] | []>(
-        getItemLocalStorage("cart")
+        getItemLocalStorage("cart") ? getItemLocalStorage("cart") : []
     );
 
     const { profile } = useContext(AuthContext);

@@ -6,11 +6,17 @@ import {
     TextInput,
     Button,
     LoadingOverlay,
+    Center,
+    Paper,
+    Container,
+    Accordion,
+    Radio,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { useContext, useState } from "react";
+
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { orderService } from "../../services/order.service";
@@ -39,6 +45,15 @@ export function Checkout() {
     const [loading, setLoading] = useState(false);
     const { cartUser } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
+    const [methodPayment, setMethodPayment] = useState("offline");
+
+    const handlePayment = async (amount: number) => {
+        window.open(
+            `http://localhost:8888/payment/create_payment_url?amount=${amount}`,
+            "_blank",
+            "width=500, height=600"
+        );
+    };
 
     const handleCheckout = async () => {
         setLoading(true);
@@ -62,13 +77,25 @@ export function Checkout() {
 
             if (resData.statusCode == 200) {
                 showNotification({
-                    title: "Thanh cong",
+                    title: "Đặt hàng thành công",
                     message: resData.message,
                 });
-                return setLoading(false);
+                setLoading(false);
+
+                /// vn pay
+                const amount = cartUser.reduce(
+                    (acc, curr) =>
+                        acc +
+                        curr.quantity * curr.price * (1 - curr.discount * 0.01),
+                    0
+                );
+
+                if (methodPayment === "vnpay") handlePayment(amount);
+
+                return;
             }
             showNotification({
-                title: "Khong thanh cong",
+                title: "Đặt hàng thất bại",
                 message: resData.message,
             });
             setLoading(false);
@@ -82,116 +109,241 @@ export function Checkout() {
     };
 
     return (
-        <Stack w={700} spacing={6}>
-            <Text size={24} fw={500}>
-                Đơn hàng
-            </Text>
-            <Divider></Divider>
-            {cartUser.length > 0 &&
-                cartUser.map((item) => (
-                    <Group spacing={30} position="apart" key={item.product_id}>
-                        <Stack spacing={0}>
-                            <Text size={20} fw={500}>
-                                {item.title}
-                            </Text>
-                            <Group>
-                                <Text color="gray">
-                                    {item.brand} / {item.volume}ml
-                                </Text>
-                            </Group>
-                        </Stack>
-                        <Text size={20} color="gray">
-                            x{item.quantity}
-                        </Text>
-                        <Stack spacing={0}>
-                            <Text size={20} color="gray">
-                                {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                    maximumFractionDigits: 9,
-                                }).format(
-                                    item.price * (1 - item.discount / 100)
-                                )}
-                            </Text>
-                            <Text td="line-through" color="gray">
-                                {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                    maximumFractionDigits: 9,
-                                }).format(item.price * (item.discount / 100))}
-                            </Text>
-                        </Stack>
-                    </Group>
-                ))}
-            <Divider my="lg" variant="dashed"></Divider>
-            <Group position="apart">
-                <Text size={20} fw={500}>
+        <Center>
+            <Container
+                w={400}
+                sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
+                p={10}
+            >
+                <Stack>
+                    <Text size="lg" fw={700}>
+                        Thanh toán
+                    </Text>
+                    <Stack>
+                        <Accordion>
+                            <Radio.Group
+                                value={methodPayment}
+                                onChange={setMethodPayment}
+                                withAsterisk
+                            >
+                                <Accordion.Item value="customization">
+                                    <Accordion.Control>
+                                        <Radio
+                                            value="momo"
+                                            label="Thanh toán qua MOMO"
+                                        />
+                                    </Accordion.Control>
+                                    <Accordion.Panel>
+                                        <Paper shadow="xs" p="md">
+                                            <Text>
+                                                Bước 1: Quý Khách Hàng vui lòng
+                                                chọn hình thức Thanh toán qua
+                                                MOMO-QR và Bấm Đặt hàng.
+                                                <br />
+                                                Bước 2: Quý Khách Hàng làm theo
+                                                hướng dẫn để sử dụng mã QR thanh
+                                                toán.
+                                                <br />
+                                                Bước 3: Nhân viên CSKH của
+                                                Parfumerie.vn sẽ liên hệ Quý
+                                                Khách Hàng để xác nhận thanh
+                                                toán và xử lý đơn hàng.
+                                            </Text>
+                                        </Paper>
+                                    </Accordion.Panel>
+                                </Accordion.Item>
+
+                                <Accordion.Item value="flexibility">
+                                    <Accordion.Control>
+                                        <Radio
+                                            value="vnpay"
+                                            label="Thanh toán qua VNPAY-QR"
+                                        />
+                                    </Accordion.Control>
+                                    <Accordion.Panel>
+                                        <Paper shadow="xs" p="md">
+                                            <Text>
+                                                Bước 1: Quý Khách Hàng vui lòng
+                                                chọn hình thức Thanh toán qua
+                                                VNPay-QR và Bấm Đặt hàng.
+                                                <br />
+                                                Bước 2: Quý Khách Hàng làm theo
+                                                hướng dẫn để sử dụng mã QR thanh
+                                                toán.
+                                                <br />
+                                                Bước 3: Nhân viên CSKH của
+                                                Parfumerie.vn sẽ liên hệ Quý
+                                                Khách Hàng để xác nhận thanh
+                                                toán và xử lý đơn hàng.
+                                            </Text>
+                                        </Paper>
+                                    </Accordion.Panel>
+                                </Accordion.Item>
+
+                                <Accordion.Item value="focus-ring">
+                                    <Accordion.Control>
+                                        <Radio
+                                            value="offline"
+                                            label="Thanh toán khi nhận hàng"
+                                        />
+                                    </Accordion.Control>
+                                    <Accordion.Panel>
+                                        <Paper shadow="xs" p="md">
+                                            <Text>
+                                                Bước 1: Quý Khách Hàng vui lòng
+                                                chọn hình thức Thanh toán qua
+                                                VNPay-QR và Bấm Đặt hàng.
+                                                <br />
+                                                Bước 2: Quý Khách Hàng làm theo
+                                                hướng dẫn để sử dụng mã QR thanh
+                                                toán.
+                                                <br />
+                                                Bước 3: Nhân viên CSKH của
+                                                Parfumerie.vn sẽ liên hệ Quý
+                                                Khách Hàng để xác nhận thanh
+                                                toán và xử lý đơn hàng.
+                                            </Text>
+                                        </Paper>
+                                    </Accordion.Panel>
+                                </Accordion.Item>
+                            </Radio.Group>
+                        </Accordion>
+                    </Stack>
+                </Stack>
+            </Container>
+
+            <Stack w={700} spacing={6}>
+                <Text size={24} fw={500}>
                     Đơn hàng
                 </Text>
-                <Text size={20}>
-                    {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                        maximumFractionDigits: 9,
-                    }).format(
-                        cartUser.reduce(
-                            (acc, curr) =>
-                                acc +
-                                curr.quantity *
-                                    curr.price *
-                                    (1 - curr.discount * 0.01),
-                            0
-                        )
-                    )}
-                </Text>
-            </Group>
-            <Group position="apart">
-                <Text size={20} fw={500}>
-                    Phí vận chuyển
-                </Text>
-                <Text size={20}>
-                    {new Intl.NumberFormat("vi-VN", {
-                        style: "currency",
-                        currency: "VND",
-                        maximumFractionDigits: 9,
-                    }).format(0)}
-                </Text>
-            </Group>
-            <Group position="apart">
-                <Text size={20} fw={500}>
-                    Giảm giá
-                </Text>
-                <Text size={20}>0vnđ</Text>
-            </Group>
-            <Group spacing={0}>
-                <TextInput placeholder="Mã giảm giá" size="md"></TextInput>
-                <Button>Áp dụng</Button>
-            </Group>
-            <Divider variant="dashed" mt={10}></Divider>
-            <Group position="apart">
-                <Text size={20} fw={500}>
-                    Tổng tiền
-                </Text>
-                <Text size={20}>8.900.000vnđ</Text>
-            </Group>
-            <Group position="apart">
-                <Link to="/cart">
-                    <Group spacing={0}>
-                        <IconChevronLeft />
-                        <Text color="gray">Quay về giỏ hàng</Text>
-                    </Group>
-                </Link>
-                <Button size="lg" onClick={() => handleCheckout()}>
-                    Hoàn tất đặt hàng
-                </Button>
-            </Group>
-            <LoadingOverlay
-                sx={{ height: "120vh" }}
-                loaderProps={{ size: "sm", color: "pink", variant: "bars" }}
-                overlayOpacity={0.3}
-                overlayColor="#c5c5c5"
-                visible={loading}
-            />
-        </Stack>
+                <Divider></Divider>
+                {cartUser.length > 0 &&
+                    cartUser.map((item) => (
+                        <Group
+                            spacing={30}
+                            position="apart"
+                            key={item.product_id}
+                        >
+                            <Stack spacing={0}>
+                                <Text size={20} fw={500}>
+                                    {item.title}
+                                </Text>
+                                <Group>
+                                    <Text color="gray">
+                                        {item.brand} / {item.volume}ml
+                                    </Text>
+                                </Group>
+                            </Stack>
+                            <Text size={20} color="gray">
+                                x{item.quantity}
+                            </Text>
+                            <Stack spacing={0}>
+                                <Text size={20} color="gray">
+                                    {new Intl.NumberFormat("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                        maximumFractionDigits: 9,
+                                    }).format(
+                                        item.price * (1 - item.discount / 100)
+                                    )}
+                                </Text>
+                                <Text td="line-through" color="gray">
+                                    {new Intl.NumberFormat("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                        maximumFractionDigits: 9,
+                                    }).format(
+                                        item.price * (item.discount / 100)
+                                    )}
+                                </Text>
+                            </Stack>
+                        </Group>
+                    ))}
+                <Divider my="lg" variant="dashed"></Divider>
+                <Group position="apart">
+                    <Text size={20} fw={500}>
+                        Đơn hàng
+                    </Text>
+                    <Text size={20}>
+                        {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                            maximumFractionDigits: 9,
+                        }).format(
+                            cartUser.reduce(
+                                (acc, curr) =>
+                                    acc +
+                                    curr.quantity *
+                                        curr.price *
+                                        (1 - curr.discount * 0.01),
+                                0
+                            )
+                        )}
+                    </Text>
+                </Group>
+                <Group position="apart">
+                    <Text size={20} fw={500}>
+                        Phí vận chuyển
+                    </Text>
+                    <Text size={20}>
+                        {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                            maximumFractionDigits: 9,
+                        }).format(0)}
+                    </Text>
+                </Group>
+                <Group position="apart">
+                    <Text size={20} fw={500}>
+                        Giảm giá
+                    </Text>
+                    <Text size={20}>0vnđ</Text>
+                </Group>
+                <Group spacing={0}>
+                    <TextInput placeholder="Mã giảm giá" size="md"></TextInput>
+                    <Button>Áp dụng</Button>
+                </Group>
+                <Divider variant="dashed" mt={10}></Divider>
+                <Group position="apart">
+                    <Text size={20} fw={500}>
+                        Tổng tiền
+                    </Text>
+                    <Text size={20}>
+                        {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                            maximumFractionDigits: 9,
+                        }).format(
+                            cartUser.reduce(
+                                (acc, curr) =>
+                                    acc +
+                                    curr.quantity *
+                                        curr.price *
+                                        (1 - curr.discount * 0.01),
+                                0
+                            )
+                        )}
+                    </Text>
+                </Group>
+                <Group position="apart">
+                    <Link to="/cart">
+                        <Group spacing={0}>
+                            <IconChevronLeft />
+                            <Text color="gray">Quay về giỏ hàng</Text>
+                        </Group>
+                    </Link>
+                    <Button size="lg" onClick={() => handleCheckout()}>
+                        Hoàn tất đặt hàng
+                    </Button>
+                </Group>
+                <LoadingOverlay
+                    sx={{ height: "120vh" }}
+                    loaderProps={{ size: "sm", color: "pink", variant: "bars" }}
+                    overlayOpacity={0.3}
+                    overlayColor="#c5c5c5"
+                    visible={loading}
+                />
+            </Stack>
+        </Center>
     );
 }
