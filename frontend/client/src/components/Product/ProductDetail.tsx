@@ -27,8 +27,11 @@ import { productService } from "../../services/product.service";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { feedbackService } from "../../services/feedback.service";
 import { StarRating } from "../StarRating/StarRating";
+import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 
 interface FeedbackType {
+    customer_id: number;
     fullname: string;
     stars: number;
     updated_at: string;
@@ -47,12 +50,11 @@ export function ProductDetail() {
     const [page, setPage] = useState(1);
 
     const [feedbacks, setFeedbacks] = useState<FeedbackType[]>([]);
-    const [myFeedback, setMyFeedback] = useState({
-        content: "",
-        stars: 0,
-    });
+    const [myFeedback, setMyFeedback] = useState("");
+    const [rating, setRating] = useState(0);
 
     const { addCartItem } = useContext(CartContext);
+    const { profile } = useContext(AuthContext);
 
     const handleAddToCart = (product: ProductType) => {
         const { product_id, title, price, discount, brand, volume } = product;
@@ -93,16 +95,47 @@ export function ProductDetail() {
         setFeedbacks(res.data.feedbackList);
     };
 
+    const handleCreateFeedback = async () => {
+        if (!getItemLocalStorage("isAuthenticated")) {
+            notifications.show({
+                message: "Bạn hãy đăng nhập để đánh giá nhé!",
+            });
+        }
+
+        const res = await feedbackService.createFeedback(
+            Number(product_id),
+            rating,
+            myFeedback
+        );
+
+        notifications.show({
+            message: res.message,
+        });
+    };
+
+    const handleRemoveFeedback = async () => {
+        if (!getItemLocalStorage("isAuthenticated")) {
+            notifications.show({
+                message: "Bạn hãy đăng nhập để đánh giá nhé!",
+            });
+        }
+
+        const res = await feedbackService.removeFeedback(Number(product_id));
+
+        notifications.show({
+            message: res.message,
+        });
+    };
+
     useEffect(() => {
         handleGetProductPhotos();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         handleGetFeedback();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page]);
+    }, [page, handleCreateFeedback, handleRemoveFeedback]);
 
     return (
         <Stack>
@@ -275,25 +308,26 @@ export function ProductDetail() {
                         <Group>
                             <Text>Đánh giá của bạn về sản phẩm: </Text>
                             <Text color="yellow">
-                                <StarRating />
+                                <StarRating
+                                    rating={rating}
+                                    setRating={setRating}
+                                />
                             </Text>
                         </Group>
                         <Textarea
                             placeholder="Nhập nội dung đánh giá của bạn về sản phẩm này"
-                            value={myFeedback.content}
+                            value={myFeedback}
                             onChange={(e) => {
-                                setMyFeedback((prev) => {
-                                    return {
-                                        ...prev,
-                                        content: e.target.value,
-                                    };
-                                });
+                                setMyFeedback(e.target.value);
                             }}
                             autosize
                             minRows={2}
                             maxRows={4}
                         />
-                        <Button disabled={!myFeedback.content}>
+                        <Button
+                            disabled={!myFeedback}
+                            onClick={() => handleCreateFeedback()}
+                        >
                             Gửi đánh giá
                         </Button>
                     </Stack>
@@ -302,7 +336,11 @@ export function ProductDetail() {
                         {feedbacks.length > 0 &&
                             feedbacks.map((feedback) => (
                                 <Paper shadow="xs" p="md">
-                                    <Text fw={500}>{feedback.fullname}</Text>
+                                    <Text fw={500}>
+                                        {feedback.fullname} &nbsp;
+                                        {feedback.customer_id ===
+                                            profile.customer_id && "(Bạn)"}
+                                    </Text>
                                     <Text color="yellow">
                                         {Array(feedback.stars)
                                             .fill("a")
@@ -319,6 +357,16 @@ export function ProductDetail() {
                                         {feedback.updated_at}
                                     </Text>
                                     <Text>{feedback.content}</Text>
+                                    {feedback.customer_id ===
+                                        profile.customer_id && (
+                                        <Button
+                                            onClick={() =>
+                                                handleRemoveFeedback()
+                                            }
+                                        >
+                                            Xóa
+                                        </Button>
+                                    )}
                                 </Paper>
                             ))}
 

@@ -119,7 +119,7 @@ export function LoginAuth() {
 
         let timer: ReturnType<typeof setTimeout> | null = null;
         const newWindow = window.open(
-            "http://localhost:4000/api/v1/auth/google/login",
+            "http://localhost:8888/api/v1/auth/google/login",
             "_blank",
             "width=500, height=600"
         );

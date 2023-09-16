@@ -12,18 +12,18 @@ feedbackRoutes.post(
     feedbackController.createFeedback
 );
 
-// update feedback
-feedbackRoutes.patch(
-    "/feedback/update",
-    userAuthMiddleware,
-    feedbackController.updateFeedback
-);
+// // update feedback
+// feedbackRoutes.patch(
+//     "/feedback/update",
+//     userAuthMiddleware,
+//     feedbackController.updateFeedback
+// );
 
 // delete feedback
 feedbackRoutes.delete(
-    "/feedback/customer/:customer_id/product/:product_id",
+    "/feedback/product/:product_id/delete",
     userAuthMiddleware,
-    feedbackController.updateFeedback
+    feedbackController.removeFeedback
 );
 
 // get feedback with paging

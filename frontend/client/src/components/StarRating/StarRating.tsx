@@ -1,9 +1,15 @@
 import { useState } from "react";
 import "./StarRating.css";
 
-export const StarRating = () => {
-    const [rating, setRating] = useState(0);
+export const StarRating = ({
+    rating,
+    setRating,
+}: {
+    rating: number;
+    setRating: (rating: number) => void;
+}) => {
     const [hover, setHover] = useState(0);
+
     return (
         <div className="star-rating">
             {[...Array(5)].map((_, index) => {
