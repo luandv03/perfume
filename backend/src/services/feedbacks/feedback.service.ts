@@ -118,7 +118,9 @@ class FeedbackService {
         const offset = (page - 1) * limit;
 
         const feedbacks = await query(
-            `SELECT * FROM feedbacks WHERE product_id = $1 OFFSET $2 LIMIT $3`,
+            `SELECT f.*, c.fullname FROM feedbacks f
+            JOIN customers c USING(customer_id)
+             WHERE product_id = $1 OFFSET $2 LIMIT $3`,
             [product_id, offset, limit]
         );
         //VD: limit = 5, page = 1
