@@ -19,13 +19,14 @@ import { IconStar, IconStarFilled } from "@tabler/icons-react";
 import { useLocation, useParams } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import { ProductType } from "../../types/products.type";
 import { ProductPhoto } from "../../types/products.type";
 import { productService } from "../../services/product.service";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { feedbackService } from "../../services/feedback.service";
+import { StarRating } from "../StarRating/StarRating";
 
 interface FeedbackType {
     fullname: string;
@@ -46,6 +47,11 @@ export function ProductDetail() {
     const [page, setPage] = useState(1);
 
     const [feedbacks, setFeedbacks] = useState<FeedbackType[]>([]);
+    const [myFeedback, setMyFeedback] = useState({
+        content: "",
+        stars: 0,
+    });
+
     const { addCartItem } = useContext(CartContext);
 
     const handleAddToCart = (product: ProductType) => {
@@ -247,40 +253,49 @@ export function ProductDetail() {
                     sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
                     p={10}
                 >
-                    <Center>
-                        <Stack>
-                            <Text>
-                                Hiện tại sản phẩm này chưa có đánh giá nào, Bạn
-                                hãy trở thành người đầu tiên đánh giá cho sản
-                                phẩm này
-                            </Text>
-                            <div>
-                                <Center>
-                                    <Button size="sm">
-                                        Gửi đánh giá của bạn
-                                    </Button>
-                                </Center>
-                            </div>
-                        </Stack>
-                    </Center>
+                    {!feedbacks.length && (
+                        <Center>
+                            <Stack>
+                                <Text>
+                                    Hiện tại sản phẩm này chưa có đánh giá nào,
+                                    Bạn hãy trở thành người đầu tiên đánh giá
+                                    cho sản phẩm này
+                                </Text>
+                                <div>
+                                    <Center>
+                                        <Button size="sm">
+                                            Gửi đánh giá của bạn
+                                        </Button>
+                                    </Center>
+                                </div>
+                            </Stack>
+                        </Center>
+                    )}
                     <Stack>
                         <Group>
                             <Text>Đánh giá của bạn về sản phẩm: </Text>
                             <Text color="yellow">
-                                <IconStar />
-                                <IconStar />
-                                <IconStar />
-                                <IconStar />
-                                <IconStar />
+                                <StarRating />
                             </Text>
                         </Group>
                         <Textarea
                             placeholder="Nhập nội dung đánh giá của bạn về sản phẩm này"
+                            value={myFeedback.content}
+                            onChange={(e) => {
+                                setMyFeedback((prev) => {
+                                    return {
+                                        ...prev,
+                                        content: e.target.value,
+                                    };
+                                });
+                            }}
                             autosize
                             minRows={2}
                             maxRows={4}
                         />
-                        <Button disabled>Gửi đánh giá</Button>
+                        <Button disabled={!myFeedback.content}>
+                            Gửi đánh giá
+                        </Button>
                     </Stack>
 
                     <Stack spacing={0}>
