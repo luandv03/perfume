@@ -1,5 +1,14 @@
-import { createContext, useEffect, useReducer, ReactNode } from "react";
-import { reducer } from "../../reducers/cartReducer";
+import React, {
+    useState,
+    createContext,
+    useEffect,
+    useContext,
+    ReactNode,
+} from "react";
+
+import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
+import { cartService } from "../../services/cart.service";
+import { AuthContext } from "../AuthProvider/AuthProvider";
 
 interface CartItem {
     product_id: number;
@@ -9,69 +18,138 @@ interface CartItem {
     volume: number;
     discount: number;
     quantity: number;
-    number_add_item: number;
+    number_add_item?: number;
 }
 
-const getLocalCart = (): CartItem[] => {
-    const newCartData = JSON.parse(localStorage.getItem("cart") as string);
+interface CartContextType {
+    cartUser: CartItem[] | [];
+    setCartUser: React.Dispatch<React.SetStateAction<CartItem[]> | []>;
+    addCartItem: (product: CartItem) => void;
+    removeCartItem: (product: CartItem) => void;
+}
 
-    if (!newCartData) {
-        return [];
-    } else {
-        return newCartData;
-    }
-};
-
-const initialState = {
-    cart: getLocalCart(),
-};
-
-export const CartContext = createContext();
+export const CartContext = createContext<CartContextType>({
+    cartUser: [],
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setCartUser: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    addCartItem: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    removeCartItem: () => {},
+});
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [cartUser, setCartUser] = useState<CartItem[] | []>(
+        getItemLocalStorage("cart")
+    );
 
-    const addToCart = (cartItem: CartItem) => {
-        dispatch({ type: "ADD_TO_CART", payload: cartItem });
+    const { profile } = useContext(AuthContext);
+
+    const addCartItem = async (product: CartItem) => {
+        if (getItemLocalStorage("isAuthenticated")) {
+            const res = await cartService.addCartItem(
+                product.product_id,
+                product.quantity
+            );
+
+            if (res.statusCode === 200) {
+                setCartUser((prev: CartItem[]) => {
+                    const exist = prev.find(
+                        (item: CartItem) =>
+                            item.product_id === res.data.product_id
+                    );
+
+                    if (exist) {
+                        return prev.map((item: CartItem) =>
+                            item.product_id === res.data.product_id
+                                ? {
+                                      ...item,
+                                      quantity: res.data.quantity,
+                                  }
+                                : item
+                        );
+                    } else {
+                        return [
+                            ...prev,
+                            { ...product, quantity: res.data.quantity },
+                        ];
+                    }
+                });
+            }
+        } else {
+            setCartUser((prev: CartItem[]) => {
+                const exist = prev.find(
+                    (item: CartItem) => item.product_id === product.product_id
+                );
+
+                if (exist) {
+                    const cart = prev.map((item: CartItem) =>
+                        item.product_id === product.product_id
+                            ? {
+                                  ...item,
+                                  quantity: item.quantity + product.quantity,
+                              }
+                            : item
+                    );
+
+                    localStorage.setItem("cart", JSON.stringify(cart));
+
+                    return cart;
+                } else {
+                    const cart = [...prev, { ...product, quantity: 1 }];
+
+                    localStorage.setItem("cart", JSON.stringify(cart));
+
+                    return cart;
+                }
+            });
+        }
     };
 
-    const removeItem = (product_id: number) => {
-        dispatch({ type: "REMOVE_ITEM", payload: { product_id } });
+    const removeCartItem = async (product: CartItem) => {
+        if (getItemLocalStorage("isAuthenticated")) {
+            const res = await cartService.deleteCartItem(product.product_id);
+
+            if (res.statusCode === 200) {
+                setCartUser((prev: CartItem[]) => {
+                    return prev.filter(
+                        (item: CartItem) =>
+                            item.product_id !== res.data.product_id
+                    );
+                });
+            }
+        } else {
+            setCartUser((prev: CartItem[]) => {
+                const cart = prev.filter(
+                    (item: CartItem) => item.product_id !== product.product_id
+                );
+
+                localStorage.setItem("cart", JSON.stringify(cart));
+
+                return cart;
+            });
+        }
     };
 
-    const upQuantityItem = (product_id: number) => {
-        dispatch({ type: "UP_QUANTITY_ITEM", payload: { product_id } });
-    };
+    const handleGetCartByUser = async () => {
+        const res = await cartService.getCartList();
 
-    const downQuantityItem = (product_id: number) => {
-        dispatch({ type: "DOWN_QUANTITY_ITEM", payload: { product_id } });
+        if (res.statusCode === 200) return setCartUser(res.data.cart_list);
     };
-
-    const updateQuantityItem = (product_id: number, quantity: number) => {
-        dispatch({
-            type: "UPDATE_QUANTITY_ITEM",
-            payload: { product_id, quantity },
-        });
-    };
-
-    // const handleGetCartByUser = async () => {
-    //     const res = await
-    // };
 
     useEffect(() => {
-        // check not authenticated
-        localStorage.setItem("cart", JSON.stringify(state.cart));
-    }, [state.cart]);
+        if (getItemLocalStorage("isAuthenticated")) handleGetCartByUser();
+        else localStorage.setItem("cart", JSON.stringify(cartUser));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [profile]);
 
     return (
         <CartContext.Provider
             value={{
-                ...state,
-                addToCart,
-                removeItem,
-                upQuantityItem,
-                downQuantityItem,
-                updateQuantityItem,
+                cartUser,
+                setCartUser,
+                addCartItem,
+                removeCartItem,
             }}
         >
             {children}

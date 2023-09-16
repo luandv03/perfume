@@ -4,10 +4,10 @@ import { cartService } from "../../services/carts/cart.service";
 export class CartController {
     async addCartItemIntoCart(req: Request, res: Response): Promise<any> {
         try {
-            const { cart_id, product_id, quantity } = req.body;
+            const { product_id, quantity } = req.body;
+            const { customer_id } = res.locals.data;
 
-            const data = await cartService.addCartItemIntoCart({
-                cart_id,
+            const data = await cartService.addCartItemIntoCart(customer_id, {
                 product_id,
                 quantity,
             });
@@ -24,10 +24,10 @@ export class CartController {
 
     async updateCartItem(req: Request, res: Response): Promise<any> {
         try {
-            const { cart_id, product_id, quantity } = req.body;
+            const { product_id, quantity } = req.body;
+            const { customer_id } = res.locals.data;
 
-            const data = await cartService.updateCartItem({
-                cart_id,
+            const data = await cartService.updateCartItem(customer_id, {
                 product_id,
                 quantity,
             });
@@ -44,12 +44,13 @@ export class CartController {
 
     async removeCartItem(req: Request, res: Response) {
         try {
-            const { cart_id, product_id } = req.params;
+            const { product_id } = req.params;
+            const { customer_id } = res.locals.data;
 
-            const data = await cartService.removeCartItem({
-                cart_id,
-                product_id,
-            });
+            const data = await cartService.removeCartItem(
+                Number(customer_id),
+                Number(product_id)
+            );
 
             res.status(data.statusCode).json(data);
         } catch (error) {

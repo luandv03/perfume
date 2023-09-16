@@ -28,10 +28,11 @@ import { useState, useEffect, useContext, KeyboardEvent } from "react";
 
 import { CategoryType } from "../../types/category.type";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
+import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { categoryService } from "../../services/category.service";
 import { productService } from "../../services/product.service";
-import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { authService } from "../../services/auth.service";
+import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -114,7 +115,7 @@ export function HeaderApp() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
         useDisclosure(false);
     const { classes, theme } = useStyles();
-    const { cart } = useContext(CartContext);
+    const { cartUser, setCartUser } = useContext(CartContext);
     const { profile, setProfile } = useContext(AuthContext);
 
     const [categories, setCategories] = useState<CategoryType[]>([
@@ -149,7 +150,10 @@ export function HeaderApp() {
                 phone_number: "",
                 dob: "",
             });
+            setCartUser(getItemLocalStorage("cart"));
+
             localStorage.removeItem("isAuthenticated");
+
             notifications.show({
                 message: res.message,
             });
@@ -243,8 +247,8 @@ export function HeaderApp() {
                                     top: "-6px",
                                 }}
                             >
-                                {cart.length > 0
-                                    ? cart.reduce(
+                                {cartUser.length > 0
+                                    ? cartUser.reduce(
                                           (acc, curr) => acc + curr.quantity,
                                           0
                                       )

@@ -3,7 +3,6 @@ import { ResponseType } from "../../types/response.type";
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 
 interface CartItem {
-    cart_id: string;
     product_id: string;
     quantity: number;
 }
@@ -29,9 +28,19 @@ class CartService {
         };
     }
 
-    async addCartItemIntoCart(cartItem: CartItem): Promise<ResponseType<any>> {
+    async addCartItemIntoCart(
+        customer_id: number,
+        cartItem: CartItem
+    ): Promise<ResponseType<any>> {
         try {
-            const { cart_id, product_id, quantity } = cartItem;
+            const { product_id, quantity } = cartItem;
+            const cartResuslt = await query(
+                `SELECT cart_id from carts WHERE customer_id = $1`,
+                [customer_id]
+            );
+
+            const cart_id = cartResuslt.rows[0].cart_id;
+
             // kiem tra trong cart co product_id nay chua
             const cartItemExist = await query(
                 `SELECT product_id FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
@@ -67,9 +76,19 @@ class CartService {
     }
 
     // update cart item: API này dùng để update số lượng cart item trực tiếp trong giỏ hàng
-    async updateCartItem(cartItem: CartItem): Promise<ResponseType<any>> {
+    async updateCartItem(
+        customer_id: number,
+        cartItem: CartItem
+    ): Promise<ResponseType<any>> {
         try {
-            const { cart_id, product_id, quantity } = cartItem;
+            const { product_id, quantity } = cartItem;
+
+            const cartResuslt = await query(
+                `SELECT cart_id from carts WHERE customer_id = $1`,
+                [customer_id]
+            );
+
+            const cart_id = cartResuslt.rows[0].cart_id;
 
             const cartItemExist = await query(
                 `SELECT product_id FROM cart_items WHERE cart_id = $1 AND product_id = $2`,
@@ -110,17 +129,21 @@ class CartService {
         }
     }
 
-    async removeCartItem({
-        cart_id,
-        product_id,
-    }: {
-        cart_id: string;
-        product_id: string;
-    }): Promise<ResponseType<any>> {
+    async removeCartItem(
+        customer_id: number,
+        product_id: number
+    ): Promise<ResponseType<any>> {
         try {
+            const cartResuslt = await query(
+                `SELECT cart_id FROM carts WHERE customer_id = $1`,
+                [customer_id]
+            );
+
+            const cart_id = cartResuslt.rows[0].cart_id;
+
             const results = await query(
                 `DELETE FROM cart_items WHERE cart_id = $1 AND product_id = $2 RETURNING *`,
-                [Number(cart_id), Number(product_id)]
+                [cart_id, product_id]
             );
 
             if (!results.rowCount) {
@@ -158,7 +181,10 @@ class CartService {
         }
 
         const cartList = await query(
-            `SELECT product_id, quantity FROM cart_items WHERE cart_id = $1`,
+            `SELECT product_id, title, brand, volume, discount, price, ci.quantity 
+            FROM cart_items ci
+            JOIN products p USING(product_id)
+            WHERE cart_id = $1`,
             [results.rows[0].cart_id]
         );
 

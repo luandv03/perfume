@@ -20,20 +20,19 @@ import { useState, useEffect, useContext } from "react";
 import { Carousel } from "react-responsive-carousel";
 
 import { ProductType } from "../../types/products.type";
-// import { Product } from "../Product/Product";
 import { ProductPhoto } from "../../types/products.type";
 import { productService } from "../../services/product.service";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export function ProductDetail() {
-    const [numberAddItem, setNumberAddItem] = useState<number | "">(1);
+    const [numberAddItem, setNumberAddItem] = useState<number>(1);
     const [opened, { toggle }] = useDisclosure(false);
     const { state } = useLocation();
     const [photos, setPhotos] = useState<ProductPhoto[]>([
         { product_photo_id: 0, product_photo_url: "" },
     ]);
-    const { addToCart } = useContext(CartContext);
+    const { addCartItem } = useContext(CartContext);
 
     const handleAddToCart = (product: ProductType) => {
         const { product_id, title, price, discount, brand, volume } = product;
@@ -44,9 +43,9 @@ export function ProductDetail() {
             discount,
             brand,
             volume,
-            number_add_item: numberAddItem,
+            quantity: numberAddItem,
         };
-        addToCart(cartItem);
+        addCartItem(cartItem);
         notifications.show({
             title: "Thành công",
             message: "Bạn đã thêm thành công sản phẩm :>",
@@ -189,7 +188,9 @@ export function ProductDetail() {
                             min={1}
                             max={100}
                             value={numberAddItem}
-                            onChange={(value) => setNumberAddItem(value)}
+                            onChange={(value) =>
+                                setNumberAddItem(value as number)
+                            }
                             label="Số lượng"
                             w={100}
                         />

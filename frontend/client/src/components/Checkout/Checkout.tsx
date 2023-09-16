@@ -37,12 +37,12 @@ type Product = {
 
 export function Checkout() {
     const [loading, setLoading] = useState(false);
-    const { cart } = useContext(CartContext);
+    const { cartUser } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
 
     const handleCheckout = async () => {
         setLoading(true);
-        const orderList: OrderItem[] = cart.map((item: Product) => {
+        const orderList: OrderItem[] = cartUser.map((item: Product) => {
             return {
                 product_id: item.product_id,
                 quantity: item.quantity,
@@ -87,8 +87,8 @@ export function Checkout() {
                 Đơn hàng
             </Text>
             <Divider></Divider>
-            {cart.length > 0 &&
-                cart.map((item) => (
+            {cartUser.length > 0 &&
+                cartUser.map((item) => (
                     <Group spacing={30} position="apart" key={item.product_id}>
                         <Stack spacing={0}>
                             <Text size={20} fw={500}>
@@ -134,7 +134,7 @@ export function Checkout() {
                         currency: "VND",
                         maximumFractionDigits: 9,
                     }).format(
-                        cart.reduce(
+                        cartUser.reduce(
                             (acc, curr) =>
                                 acc +
                                 curr.quantity *

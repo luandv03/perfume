@@ -21,7 +21,7 @@ cartRoutes.patch(
 
 //remove cart item
 cartRoutes.delete(
-    "/cart/:cart_id/product/:product_id/delete",
+    "/cart/product/:product_id/delete",
     userAuthMiddleware,
     cartController.removeCartItem
 );

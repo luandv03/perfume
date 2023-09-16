@@ -10,11 +10,11 @@ import {
     Badge,
     ActionIcon,
     NumberInput,
-    NumberInputHandlers,
+    // NumberInputHandlers,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { IconTrash } from "@tabler/icons-react";
-import { useState, useRef, useContext } from "react";
+import { useContext } from "react";
 
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { ProductAvatar } from "../Product/ProductAvatar";
@@ -30,25 +30,33 @@ interface CartItem {
 }
 
 export function Cart() {
-    const [value, setValue] = useState<number | "">(0);
-    const handlers = useRef<NumberInputHandlers>();
+    // const [value, setValue] = useState<number | "">(0);
+    // const handlers = useRef<NumberInputHandlers>();
 
-    const { cart, removeItem, upQuantityItem, downQuantityItem } =
-        useContext(CartContext);
+    const { cartUser, addCartItem, removeCartItem } = useContext(CartContext);
 
-    const handleRemoveCartItem = (product_id: number) => {
-        removeItem(product_id);
+    const handleRemoveCartItem = (item: CartItem) => {
+        removeCartItem(item);
     };
 
-    const handleDownItem = (qty: number, product_id: number) => {
+    const handleDownItem = (product: CartItem, qty: number) => {
+        const cartDown = {
+            ...product,
+            quantity: -1,
+        };
         if (qty > 1) {
-            downQuantityItem(product_id);
+            addCartItem(cartDown);
         }
     };
 
-    const handleUpItem = (qty: number, product_id: number) => {
+    const handleUpItem = (product: CartItem, qty: number) => {
+        const cartUp = {
+            ...product,
+            quantity: 1,
+        };
+
         if (qty < 100) {
-            upQuantityItem(product_id);
+            addCartItem(cartUp);
         }
     };
 
@@ -66,13 +74,14 @@ export function Cart() {
                         Giỏ Hàng
                     </Text>
                     <span style={{ fontSize: "18px", fontWeight: 500 }}>
-                        ({cart.reduce((acc, curr) => acc + curr.quantity, 0)}{" "}
+                        (
+                        {cartUser.reduce((acc, curr) => acc + curr.quantity, 0)}{" "}
                         sản phẩm)
                     </span>
                 </Group>
             </div>
 
-            {cart.length <= 0 ? (
+            {cartUser.length <= 0 ? (
                 <>
                     <div>
                         <Image
@@ -92,7 +101,7 @@ export function Cart() {
                 <Grid gutter={20}>
                     <Grid.Col span={9}>
                         <Grid>
-                            {cart.map((item: CartItem) => (
+                            {cartUser.map((item: CartItem) => (
                                 <>
                                     <Grid.Col span={12} key={item.product_id}>
                                         <Group>
@@ -201,7 +210,7 @@ export function Cart() {
                                                     <ActionIcon
                                                         onClick={() =>
                                                             handleRemoveCartItem(
-                                                                item.product_id
+                                                                item
                                                             )
                                                         }
                                                     >
@@ -218,8 +227,8 @@ export function Cart() {
                                                             variant="default"
                                                             onClick={() =>
                                                                 handleDownItem(
-                                                                    item.quantity,
-                                                                    item.product_id
+                                                                    item,
+                                                                    item.quantity
                                                                 )
                                                             }
                                                         >
@@ -248,8 +257,8 @@ export function Cart() {
                                                             variant="default"
                                                             onClick={() =>
                                                                 handleUpItem(
-                                                                    item.quantity,
-                                                                    item.product_id
+                                                                    item,
+                                                                    item.quantity
                                                                 )
                                                             }
                                                         >
@@ -278,7 +287,7 @@ export function Cart() {
                                         currency: "VND",
                                         maximumFractionDigits: 9,
                                     }).format(
-                                        cart.reduce(
+                                        cartUser.reduce(
                                             (acc, curr) =>
                                                 acc +
                                                 curr.quantity * curr.price,
@@ -299,7 +308,7 @@ export function Cart() {
                                         currency: "VND",
                                         maximumFractionDigits: 9,
                                     }).format(
-                                        cart.reduce(
+                                        cartUser.reduce(
                                             (acc, curr) =>
                                                 acc +
                                                 curr.price *
@@ -322,7 +331,7 @@ export function Cart() {
                                         currency: "VND",
                                         maximumFractionDigits: 9,
                                     }).format(
-                                        cart.reduce(
+                                        cartUser.reduce(
                                             (acc, curr) =>
                                                 acc +
                                                 curr.quantity *

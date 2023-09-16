@@ -33,7 +33,7 @@ const useStyles = createStyles(() => ({
 
 export function CharmCate({ category }: { category: CategoryType }) {
     const { classes } = useStyles();
-    const { addToCart } = useContext(CartContext);
+    const { addCartItem } = useContext(CartContext);
 
     const [products, setProducts] = useState<ProductType[]>([ProductConstant]);
 
@@ -46,7 +46,7 @@ export function CharmCate({ category }: { category: CategoryType }) {
         setProducts(resProduct.data.products);
     };
 
-    const handleAddToCart = (product: ProductType) => {
+    const handleAddToCart = async (product: ProductType) => {
         const { product_id, title, price, discount, brand, volume } = product;
         const cartItem = {
             product_id,
@@ -55,9 +55,10 @@ export function CharmCate({ category }: { category: CategoryType }) {
             discount,
             brand,
             volume,
-            number_add_item: 1,
+            quantity: 1,
         };
-        addToCart(cartItem);
+        addCartItem(cartItem);
+
         notifications.show({
             title: "Thành công",
             message: "Bạn đã thêm thành công sản phẩm :>",
