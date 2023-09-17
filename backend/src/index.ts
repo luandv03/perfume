@@ -65,6 +65,10 @@ app.get("/products", async (req: Request, res: Response) => {
     }
 });
 
+app.get("/order_mail", async (req: Request, res: Response) => {
+    res.render("order_confirm");
+});
+
 app.use("/", router);
 app.use("/", paymentRoutes);
 

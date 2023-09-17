@@ -20,6 +20,7 @@ import { useContext, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { orderService } from "../../services/order.service";
+import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
 
 type OrderItem = {
     product_id: number;
@@ -49,15 +50,20 @@ export function Checkout() {
 
     const navigate = useNavigate();
 
-    const handlePayment = async (amount: number) => {
+    const handlePayment = async (amount: number, order_id: number) => {
         window.open(
-            `http://localhost:8888/payment/create_payment_url?amount=${amount}`,
+            `http://localhost:8888/payment/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
             "width=500, height=600"
         );
     };
 
     const handleCheckout = async () => {
+        if (!getItemLocalStorage("isAuthenticated"))
+            return showNotification({
+                message: "Hãy đăng nhập để mua hàng nhé",
+            });
+
         setLoading(true);
         const orderList: OrderItem[] = cartUser.map((item: Product) => {
             return {
@@ -85,14 +91,19 @@ export function Checkout() {
                 setLoading(false);
 
                 /// vn pay
-                const amount = cartUser.reduce(
-                    (acc, curr) =>
-                        acc +
-                        curr.quantity * curr.price * (1 - curr.discount * 0.01),
-                    0
+                const amount = Math.ceil(
+                    cartUser.reduce(
+                        (acc, curr) =>
+                            acc +
+                            curr.quantity *
+                                curr.price *
+                                (1 - curr.discount * 0.01),
+                        0
+                    )
                 );
 
-                if (methodPayment === "vnpay") handlePayment(amount);
+                if (methodPayment === "vnpay")
+                    await handlePayment(amount, resData.data.order_id);
 
                 navigate(`/checkout/thankyou/${resData.data.order_id}`);
 
@@ -105,7 +116,7 @@ export function Checkout() {
             setLoading(false);
         } catch (error: any) {
             showNotification({
-                title: "that bai",
+                title: "Đặt hàng thất bại",
                 message: error.message,
             });
             setLoading(false);

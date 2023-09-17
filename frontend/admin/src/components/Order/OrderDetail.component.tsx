@@ -7,7 +7,7 @@ import {
     Button,
     Flex,
 } from "@mantine/core";
-import { IconDeviceFloppy, IconTrash } from "@tabler/icons-react";
+import { IconTrash } from "@tabler/icons-react";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -143,6 +143,41 @@ export const OrderDetail = () => {
                     status: "accepted",
                 },
             }));
+
+            // send mail to customer
+            // const data = {
+            //     orderlines: [
+            //         {
+            //             orderline_id: 0,
+            //             order_id: 0,
+            //             product_id: 0,
+            //             quantity: 0,
+            //             net_price: 0,
+            //             title: "",
+            //         },
+            //     ],
+            //     order: {
+            //         order_id: 0,
+            //         order_date: "",
+            //         tax: 0,
+            //         delivery_cost: 0,
+            //         discount:
+            //             orderDetail.coupons.length > 0
+            //                 ? orderDetail.coupons.map((coupon: CouponType) => (
+            //                       <span key={coupon.coupon_id}>
+            //                           {coupon.coupon_discount}%
+            //                       </span>
+            //                   ))
+            //                 : 0,
+            //         amount: new Intl.NumberFormat("vi-VN").format(
+            //             handleTotalMoney()
+            //         ),
+            //     },
+            // };
+
+            // const to = orderDetail.order.email
+
+            // const res = await sendmail(to, data);
         }
     };
 

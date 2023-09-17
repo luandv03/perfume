@@ -7,6 +7,9 @@ block content
     div.table-responsive
         form#createOrder(action='create_payment_url', method='POST')
             div.form-group
+                label Mã đơn hàng
+                input.form-control#amount(name='order_id', placeholder='Đơn hàng', value=order_id)
+            div.form-group
                 label Số tiền
                 input.form-control#amount(name='amount', placeholder='Số tiền', value=amount)
 

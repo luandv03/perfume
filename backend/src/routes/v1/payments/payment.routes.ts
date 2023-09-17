@@ -10,6 +10,7 @@ paymentRoutes.get("/payment/create_payment_url", function (req, res, next) {
     res.render("order", {
         title: "Tạo mới đơn hàng",
         amount: Number(req.query.amount),
+        order_id: req.query.order_id,
     });
 });
 
@@ -25,7 +26,7 @@ paymentRoutes.post("/payment/create_payment_url", function (req, res, next) {
     let secretKey = vnpayConfig["vnp_HashSecret"];
     let vnpUrl = vnpayConfig["vnp_Url"];
     let returnUrl = vnpayConfig["vnp_ReturnUrl"];
-    let orderId = moment(date).format("DDHHmmss");
+    let orderId = req.body.order_id;
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;
 

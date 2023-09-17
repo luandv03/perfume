@@ -10,6 +10,7 @@ import uploadRoutes from "./uploadFileToCloud/uploadFileToCloud.routes";
 import cartRoutes from "./carts/cart.routes";
 import feedbackRoutes from "./feedbacks/feedback.routes";
 // import paymentRoutes from "./payments/payment.routes";
+import mailerRoutes from "./mailers/mailer.routes";
 
 routerV1.use("/v1", adminRoutes);
 routerV1.use("/v1", categoryRoutes);
@@ -19,6 +20,8 @@ routerV1.use("/v1", userRoutes);
 routerV1.use("/v1", uploadRoutes);
 routerV1.use("/v1", cartRoutes);
 routerV1.use("/v1", feedbackRoutes);
+routerV1.use("/v1", mailerRoutes);
+
 // routerV1.use("/v1", paymentRoutes);
 
 export default routerV1;
