@@ -7,7 +7,6 @@ import {
     Stack,
     Group,
     Flex,
-    NavLink,
     Box,
     Pagination,
     ActionIcon,
@@ -20,6 +19,7 @@ import { IconDownload, IconEye } from "@tabler/icons-react";
 import { SearchBar } from "../SearchBar/SearchBar.component";
 import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helpter";
+import { ExportCSV } from "../ExportCsv/ExportCsv";
 
 const useStyles = createStyles((theme) => ({
     rowSelected: {
@@ -30,19 +30,19 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
+interface OrderType {
+    order_id: number;
+    customer_id: number;
+    n_item: number;
+    tax: number;
+    delivery_cost: number;
+    tong_giam_gia: number;
+    order_date: string;
+    tong_hoa_don: number;
+}
+
 export function OrderList() {
-    const [orders, setOrders] = useState([
-        {
-            order_id: 0,
-            customer_id: 0,
-            n_item: 0,
-            tax: 0,
-            delivery_cost: 0,
-            tong_giam_gia: 0,
-            order_date: "",
-            tong_hoa_don: 0,
-        },
-    ]);
+    const [orders, setOrders] = useState<OrderType[] | []>([]);
     const [totalPage, setTotalPage] = useState(0);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState<string>("10");
@@ -164,13 +164,17 @@ export function OrderList() {
                         />
 
                         <Box>
-                            <NavLink
+                            {/* <NavLink
                                 label="EXPORT"
                                 icon={<IconDownload size="1.4rem" />}
                                 sx={{
                                     color: "blue",
                                     fontWeight: "500",
                                 }}
+                            /> */}
+                            <ExportCSV
+                                csvData={orders}
+                                fileName={`Thông-tin-đơn-hàng ${new Date()}`}
                             />
                         </Box>
                     </Group>

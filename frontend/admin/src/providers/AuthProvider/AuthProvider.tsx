@@ -42,8 +42,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handleGetProfile = async () => {
         const data = await authService.getProfile();
 
-        console.log(data);
-
         if (data.statusCode !== 200) {
             navigate("/login");
             return localStorage.setItem("isAuthenticated", "false");

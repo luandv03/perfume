@@ -15,10 +15,11 @@ import {
     Select,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconPlus, IconDownload, IconEye } from "@tabler/icons-react";
+import { IconPlus, IconEye } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { SearchBar } from "../SearchBar/SearchBar.component";
 import { productService } from "../../services/product.service";
+import { ExportCSV } from "../ExportCsv/ExportCsv";
 
 const useStyles = createStyles((theme) => ({
     rowSelected: {
@@ -34,7 +35,6 @@ export function ProductList() {
         {
             product_id: 0,
             category_name: "",
-            avatar: "",
             title: "",
             brand: "",
             year_publish: 0,
@@ -157,13 +157,9 @@ export function ProductList() {
                             />
                         </Box>
                         <Box>
-                            <NavLink
-                                label="EXPORT"
-                                icon={<IconDownload size="1.4rem" />}
-                                sx={{
-                                    color: "blue",
-                                    fontWeight: "500",
-                                }}
+                            <ExportCSV
+                                csvData={products}
+                                fileName={`Thông-tin-sản-phẩm ${new Date()}`}
                             />
                         </Box>
                     </Group>

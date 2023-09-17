@@ -17,6 +17,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { SearchBar } from "../SearchBar/SearchBar.component";
 import { customerService } from "../../services/customer.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helpter";
+import { ExportCSV } from "../ExportCsv/ExportCsv";
 
 interface CustomerType {
     customer_id: number;
@@ -128,13 +129,9 @@ export function CustomerList() {
                         />
 
                         <Box>
-                            <NavLink
-                                label="EXPORT"
-                                icon={<IconDownload size="1.4rem" />}
-                                sx={{
-                                    color: "blue",
-                                    fontWeight: "500",
-                                }}
+                            <ExportCSV
+                                csvData={customers}
+                                fileName={`Thông-tin-khách-hàng-${new Date()}`}
                             />
                         </Box>
                     </Group>
