@@ -151,7 +151,7 @@ export const OrderDetail = () => {
                 orderlines: orderDetail.orderlines,
                 order: {
                     order_id: orderDetail.order.order_id,
-                    order_date: orderDetail.order.order_date,
+                    order_date: handleOrderDate(orderDetail.order.order_date),
                     tax: orderDetail.order.tax,
                     delivery_cost: orderDetail.order.delivery_cost,
                     tmp_amount: handleSumAmount(orderDetail.orderlines),
