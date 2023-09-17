@@ -1,50 +1,47 @@
 import nodemailer from "nodemailer";
+import fs from "fs";
+import path from "path";
+import jade from "jade";
 
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 import { ResponseType } from "../../types/response.type";
+import { configService } from "../../configs/configService.config";
 
 interface MailerType {
     from: string;
     to: string;
     text: string;
     subject: string;
-    html: string;
 }
 
 class MailerService {
     private transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
+        host: configService.getMailHost(),
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-            user: "dinhvanluan2k3@gmail.com",
-            pass: "milyuglwcxbmsgoq",
+            user: configService.getMailUser(),
+            pass: configService.getMailPassword(),
         },
     });
 
-    // const info = await transporter.sendMail({
-    //     from: '"Fred Foo 👻" <foo@example.com>', // sender address
-    //     to: "bar@example.com, baz@example.com", // list of receivers
-    //     subject: "Hello ✔", // Subject line
-    //     text: "Hello world?", // plain text body
-    //     html: "<b>Hello world?</b>", // html body
-    //   });
+    public async sendMail(
+        { from, to, text, subject }: MailerType,
+        data: any
+    ): Promise<ResponseType<any>> {
+        const __dirname = path.resolve();
+        const filePath = path.join(__dirname, "/src/views/order_confirm.jade");
+        const source = fs.readFileSync(filePath, "utf-8").toString();
+        const template = jade.compile(source);
+        const htmlToSend = template({ data });
 
-    public async sendMail({
-        from,
-        to,
-        text,
-        subject,
-        html,
-    }: MailerType): Promise<ResponseType<any>> {
         return await this.transporter
             .sendMail({
                 from,
                 to,
                 text,
                 subject,
-                html,
+                html: htmlToSend,
             })
             .then((response) => ({
                 statusCode: HttpStatusCode.OK,

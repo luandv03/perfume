@@ -5,6 +5,8 @@ html
     link(rel='stylesheet', href='/stylesheets/jumbotron-narrow.css')
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
   body
+    h1='Mã đơn hàng: ' + data.order.order_id
+    h2='Ngày đặt hàng: ' + data.order.order_date
     table.table
       thead
         tr
@@ -14,45 +16,34 @@ html
           th(scope='col') Số lượng
           th(scope='col') Tổng tiền
       tbody
-        tr
-          th(scope='row') 1
-          td Mark
-          td Otto
-          td @mdo
-          td @mdo
-        tr
-          th(scope='row') 2
-          td Jacob
-          td Thornton
-          td @fat
-          td @fat
-        tr
-          th(scope='row') 3
-          td Larry the Bird
-          td @twitter
-          td @twitter
-          td @twitter
+        each item in data.orderlines 
+          tr
+            th(scope='row')=item.product_id 
+            td=item.title 
+            td=new Intl.NumberFormat("vi-VN").format(item.net_price)
+            td=item.quantity 
+            td=new Intl.NumberFormat("vi-VN").format(item.net_price*item.quantity)
     table.table
         tbody
             tr
             th(scope='row') Tạm tính
-            td 100.000vnd
+            td=new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 9}).format(data.order.tmp_amount)
          tbody
             tr
             th(scope='row') Giảm giá
-            td 100.000vnd
+            td=-data.order.discount + "%"
          tbody
             tr
             th(scope='row') Thuế (%)
-            td 100.000vnd
+            td=data.order.tax
          tbody
             tr
             th(scope='row') Phí vận chuyển
-            td 100.000vnd
+            td=new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 9}).format(data.order.delivery_cost)
          tbody
             tr
             th(scope='row') Tổng tiền
-            td 100.000vnd
+            td=new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 9}).format(data.order.amount)
             
 
    

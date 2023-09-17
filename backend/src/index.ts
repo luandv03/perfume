@@ -66,7 +66,45 @@ app.get("/products", async (req: Request, res: Response) => {
 });
 
 app.get("/order_mail", async (req: Request, res: Response) => {
-    res.render("order_confirm");
+    const data = {
+        orderlines: [
+            {
+                orderline_id: 1,
+                order_id: 123,
+                product_id: 12,
+                quantity: 1,
+                net_price: 280000,
+                title: "Dior Sauvage",
+            },
+            {
+                orderline_id: 2,
+                order_id: 123,
+                product_id: 13,
+                quantity: 1,
+                net_price: 400000,
+                title: "Channel X-V",
+            },
+            {
+                orderline_id: 3,
+                order_id: 123,
+                product_id: 18,
+                quantity: 1,
+                net_price: 378000,
+                title: "Gucci G&D",
+            },
+        ],
+        order: {
+            order_id: 123,
+            order_date: "17/09/2023",
+            tax: 0,
+            delivery_cost: 29000,
+            discount: 10,
+            tmp_amount: 290000,
+            amount: 400000,
+        },
+    };
+
+    res.render("order_confirm", { data });
 });
 
 app.use("/", router);

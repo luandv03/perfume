@@ -13,6 +13,8 @@ import { useState, useEffect } from "react";
 
 import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helpter";
+import { mailerService } from "../../services/mailer.service";
+import { notifications } from "@mantine/notifications";
 
 // "orders": {
 //     "order_id": 108,
@@ -145,39 +147,34 @@ export const OrderDetail = () => {
             }));
 
             // send mail to customer
-            // const data = {
-            //     orderlines: [
-            //         {
-            //             orderline_id: 0,
-            //             order_id: 0,
-            //             product_id: 0,
-            //             quantity: 0,
-            //             net_price: 0,
-            //             title: "",
-            //         },
-            //     ],
-            //     order: {
-            //         order_id: 0,
-            //         order_date: "",
-            //         tax: 0,
-            //         delivery_cost: 0,
-            //         discount:
-            //             orderDetail.coupons.length > 0
-            //                 ? orderDetail.coupons.map((coupon: CouponType) => (
-            //                       <span key={coupon.coupon_id}>
-            //                           {coupon.coupon_discount}%
-            //                       </span>
-            //                   ))
-            //                 : 0,
-            //         amount: new Intl.NumberFormat("vi-VN").format(
-            //             handleTotalMoney()
-            //         ),
-            //     },
-            // };
+            const data = {
+                orderlines: orderDetail.orderlines,
+                order: {
+                    order_id: orderDetail.order.order_id,
+                    order_date: orderDetail.order.order_date,
+                    tax: orderDetail.order.tax,
+                    delivery_cost: orderDetail.order.delivery_cost,
+                    tmp_amount: handleSumAmount(orderDetail.orderlines),
+                    discount:
+                        orderDetail.coupons.length > 0
+                            ? orderDetail.coupons.reduce(
+                                  (acc: number, curr: CouponType) =>
+                                      acc + curr.coupon_discount,
+                                  0
+                              )
+                            : 0,
+                    amount: handleTotalMoney(),
+                },
+            };
 
-            // const to = orderDetail.order.email
+            const to = orderDetail.order.email;
 
-            // const res = await sendmail(to, data);
+            const res = await mailerService.sendMail(to, data);
+
+            notifications.show({
+                title: res.statusCode,
+                message: res.message,
+            });
         }
     };
 

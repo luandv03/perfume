@@ -76,6 +76,19 @@ export class ConfigService {
     public getCloudFolder(): string {
         return this.env.CLOUD_FOLDER as string;
     }
+
+    // mailer
+    public getMailUser(): string {
+        return this.env.MAIL_USER as string;
+    }
+
+    public getMailPassword(): string {
+        return this.env.MAIL_PASSWORD as string;
+    }
+
+    public getMailHost(): string {
+        return this.env.MAIL_HOST as string;
+    }
 }
 
 export const configService = new ConfigService();
