@@ -27,7 +27,7 @@ class OrderService {
             await query("BEGIN");
 
             const results_1 = await query(
-                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date) VALUES($1, $2, 'Đang chờ xác nhận', $3, NOW()::DATE) RETURNING *`,
+                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date) VALUES($1, $2, 'ordered', $3, NOW()::DATE) RETURNING *`,
                 [customer_id, tax, delivery_cost]
             );
 
@@ -78,6 +78,7 @@ class OrderService {
             return {
                 statusCode: HttpStatusCode.OK,
                 message: "Đặt hàng thành công",
+                data: results_1.rows[0],
             };
         } catch (error) {
             await query(`ROLLBACK`);

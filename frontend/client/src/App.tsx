@@ -8,6 +8,7 @@ import Customer from "./components/Customer/Customer.component";
 import { OrderCustomer, OrderDetail } from "./components/Order";
 import { Profile } from "./components/Profile/Proifle";
 import { Checkout } from "./components/Checkout/Checkout";
+import { Thankyou } from "./components/Thankyou/Thankyou";
 import { SearchResult } from "./components/SearchResult/SearchResult";
 import { PrivateRoute } from "./routes";
 import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
@@ -46,6 +47,10 @@ function App() {
                         />
                     </Route>
                     <Route path="/checkout" element={<Checkout />} />
+                    <Route
+                        path="/checkout/thankyou/:order_id"
+                        element={<Thankyou />}
+                    />
                     <Route path="/search" element={<SearchResult />} />
                 </Route>
 

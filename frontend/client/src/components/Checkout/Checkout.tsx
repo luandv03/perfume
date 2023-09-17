@@ -12,7 +12,7 @@ import {
     Accordion,
     Radio,
 } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { useContext, useState } from "react";
@@ -46,6 +46,8 @@ export function Checkout() {
     const { cartUser } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
     const [methodPayment, setMethodPayment] = useState("offline");
+
+    const navigate = useNavigate();
 
     const handlePayment = async (amount: number) => {
         window.open(
@@ -91,6 +93,8 @@ export function Checkout() {
                 );
 
                 if (methodPayment === "vnpay") handlePayment(amount);
+
+                navigate(`/checkout/thankyou/${resData.data.order_id}`);
 
                 return;
             }
