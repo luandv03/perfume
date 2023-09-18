@@ -20,11 +20,7 @@ userRoutes.post("/auth/customer/register", userController.register);
 userRoutes.post("/auth/customer/login", userController.login);
 
 //refresh token user
-userRoutes.get(
-    "/auth/customer/refresh_token",
-    userAuthMiddleware,
-    userController.refreshToken
-);
+userRoutes.get("/auth/customer/refresh_token", userController.refreshToken);
 
 //get profile
 userRoutes.get(

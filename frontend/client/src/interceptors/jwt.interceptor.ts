@@ -14,7 +14,7 @@ jwtInterceptor.interceptors.response.use(
         if (error.response.status === 401) {
             await axios
                 .get(
-                    "http://localhost:4000/api/v1/auth/customer/refresh_token",
+                    "http://localhost:8888/api/v1/auth/customer/refresh_token",
                     {
                         withCredentials: true,
                     }

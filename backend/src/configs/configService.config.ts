@@ -17,7 +17,7 @@ export class ConfigService {
     private SECRET_KEY_ACCESS_TOKEN: string = this.env
         .SECRET_KEY_ACCESS_TOKEN as string;
 
-    private EXPIRES_ACCESS_TOKEN: number = 60 * 60 * 3; //3h
+    private EXPIRES_ACCESS_TOKEN: number = 60 * 60 * 3; //3h // 60 60 3
 
     private EXPIRES_REFRESH_TOKEN: number = 60 * 60 * 24 * 3;
 

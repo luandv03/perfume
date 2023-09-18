@@ -1,14 +1,14 @@
 import {
     Stack,
-    Center,
-    Text,
+    // Center,
+    // Text,
     // Card,
     // Image,
     // Group,
     // SimpleGrid,
-    createStyles,
+    // createStyles,
 } from "@mantine/core";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import { CategoryType } from "../../types/category.type";
@@ -26,6 +26,7 @@ import { CharmCate } from "../CharmCate/CharmCate";
 
 export function Home() {
     // const { classes } = useStyles();
+    // const [title, setTitle] = useState<string>(document.title);
 
     const [categories, setCategories] = useState<CategoryType[]>([
         {

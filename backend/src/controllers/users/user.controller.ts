@@ -88,20 +88,20 @@ export class UserController {
     }
 
     refreshToken(req: Request, res: Response) {
-        const refresh_token = req.cookies.refresh_token_user;
-
-        if (!refresh_token) {
-            res.status(403).json({
-                statusCode: 403,
-                message: "Refresh token not valid",
-            });
-        }
-
         try {
+            const refresh_token = req.cookies.refresh_token_user;
+
+            if (!refresh_token) {
+                return res.status(403).json({
+                    statusCode: 403,
+                    message: "Refresh token not valid",
+                });
+            }
+
             const data = userService.refreshTokenService(refresh_token);
 
             data.statusCode === 201 &&
-                res.cookie("access_token", data.data.access_token, {
+                res.cookie("access_token_user", data.data.access_token, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 3hrs
                 });

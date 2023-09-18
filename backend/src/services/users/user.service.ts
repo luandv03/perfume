@@ -142,9 +142,9 @@ class UserService {
             };
         }
 
-        const access_token = createToken<{ admin_id: string; role: string }>(
+        const access_token = createToken<{ customer_id: string; role: string }>(
             {
-                admin_id: decoded.admin_id,
+                customer_id: decoded.customer_id,
                 role: decoded.role,
             },
             configService.getSecretKeyAccessToken(),

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+
 import LayoutApp from "./pages/layout.page";
 import { Home } from "./components/Home/Home";
 import { ProductDetail } from "./components/Product";
@@ -12,13 +13,21 @@ import { Thankyou } from "./components/Thankyou/Thankyou";
 import { SearchResult } from "./components/SearchResult/SearchResult";
 import { PrivateRoute } from "./routes";
 import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
+import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper";
 
 function App() {
     return (
         <>
             <Routes>
                 <Route path="/" element={<LayoutApp />}>
-                    <Route path="/" element={<Home />} />
+                    <Route
+                        path="/"
+                        element={
+                            <TitlePageWrapper title="Trang chủ | Perfume LDA">
+                                <Home />
+                            </TitlePageWrapper>
+                        }
+                    />
                     <Route
                         path="/product/:product_id/detail"
                         element={<ProductDetail />}
@@ -27,7 +36,14 @@ function App() {
                         path="/product/:category_id/filter"
                         element={<FilterProduct />}
                     />
-                    <Route path="/cart" element={<Cart />} />
+                    <Route
+                        path="/cart"
+                        element={
+                            <TitlePageWrapper title="Giỏ hàng | Perfume LDA">
+                                <Cart />
+                            </TitlePageWrapper>
+                        }
+                    />
                     <Route
                         path="/customer"
                         element={
@@ -36,25 +52,54 @@ function App() {
                             </PrivateRoute>
                         }
                     >
-                        <Route path="/customer" element={<Profile />} />
+                        <Route
+                            path="/customer"
+                            element={
+                                <TitlePageWrapper title="Trang khách hàng | Perfume LDA">
+                                    <Profile />
+                                </TitlePageWrapper>
+                            }
+                        />
                         <Route
                             path="/customer/orders"
-                            element={<OrderCustomer />}
+                            element={
+                                <TitlePageWrapper title="Trang đơn hàng | Perfume LDA">
+                                    <OrderCustomer />
+                                </TitlePageWrapper>
+                            }
                         />
                         <Route
                             path="/customer/order/detail/:order_id"
                             element={<OrderDetail />}
                         />
                     </Route>
-                    <Route path="/checkout" element={<Checkout />} />
+                    <Route
+                        path="/checkout"
+                        element={
+                            <TitlePageWrapper title="Trang thanh toán | Perfume LDA">
+                                <Checkout />
+                            </TitlePageWrapper>
+                        }
+                    />
                     <Route
                         path="/checkout/thankyou/:order_id"
-                        element={<Thankyou />}
+                        element={
+                            <TitlePageWrapper title="Trang cảm ơn | Perfume LDA">
+                                <Thankyou />
+                            </TitlePageWrapper>
+                        }
                     />
                     <Route path="/search" element={<SearchResult />} />
                 </Route>
 
-                <Route path="/login" element={<LoginAuth />} />
+                <Route
+                    path="/login"
+                    element={
+                        <TitlePageWrapper title="Đăng nhập | Perfume LDA">
+                            <LoginAuth />
+                        </TitlePageWrapper>
+                    }
+                />
                 <Route path="/login/success" element={<LoginGoogleSuccess />} />
             </Routes>
         </>
