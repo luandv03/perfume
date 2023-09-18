@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import LayoutApp from "./pages/layout.page";
 import { Home } from "./components/Home/Home";
 import { ProductDetail } from "./components/Product";
-import { FilterProduct } from "./components/FilterProduct/FilterProduct";
+import { FilterProduct } from "./components/Filter";
 import { Cart } from "./components/Cart/Cart";
 import Customer from "./components/Customer/Customer.component";
 import { OrderCustomer, OrderDetail } from "./components/Order";
@@ -14,6 +14,7 @@ import { SearchResult } from "./components/SearchResult/SearchResult";
 import { PrivateRoute } from "./routes";
 import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
 import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper";
+import { About } from "./components/About/About";
 
 function App() {
     return (
@@ -25,6 +26,14 @@ function App() {
                         element={
                             <TitlePageWrapper title="Trang chủ | Perfume LDA">
                                 <Home />
+                            </TitlePageWrapper>
+                        }
+                    />
+                    <Route
+                        path="/about"
+                        element={
+                            <TitlePageWrapper title="Giới thiệu | Perfume LDA">
+                                <About />
                             </TitlePageWrapper>
                         }
                     />

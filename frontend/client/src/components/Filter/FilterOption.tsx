@@ -8,8 +8,23 @@ import {
     Checkbox,
 } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
+import { useState, useEffect } from "react";
+
+import { productService } from "../../services/product.service";
 
 export function FilterOption() {
+    const [brands, setBrands] = useState<{ brand: string }[]>([]);
+
+    const handleGetAllBrand = async () => {
+        const res = await productService.getAllBrand();
+
+        setBrands(res.data);
+    };
+
+    useEffect(() => {
+        handleGetAllBrand();
+    }, []);
+
     return (
         <Stack
             sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
@@ -36,12 +51,10 @@ export function FilterOption() {
                 />
                 <ScrollArea h={150} scrollbarSize="5px">
                     <Stack>
-                        <Checkbox label="Dior" />
-                        <Checkbox label="Gucci" />
-                        <Checkbox label="Channel" />
-                        <Checkbox label="Versace" />
-                        <Checkbox label="Luis vutton" />
-                        <Checkbox label="D&G" />
+                        {brands.length > 0 &&
+                            brands.map((item: { brand: string }) => (
+                                <Checkbox label={item.brand} />
+                            ))}
                     </Stack>
                 </ScrollArea>
             </Stack>
@@ -53,12 +66,10 @@ export function FilterOption() {
                 </Text>
                 <ScrollArea h={150} scrollbarSize="5px">
                     <Stack>
-                        <Checkbox label="Giá dưới 100.0000" />
-                        <Checkbox label="200.000đ - 300.000đ" />
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
-                        <Checkbox label="I agree to sell my privacy" />
+                        <Checkbox label="Giá dưới 500.0000" />
+                        <Checkbox label="500.000đ - 1.000.000đ" />
+                        <Checkbox label="1.000.000đ - 5.000.000đ" />
+                        <Checkbox label="Giá trên 10.000.000đ" />
                     </Stack>
                 </ScrollArea>
             </Stack>

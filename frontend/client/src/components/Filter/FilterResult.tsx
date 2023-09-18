@@ -18,6 +18,7 @@ import { productService } from "../../services/product.service";
 
 export function FilterResult() {
     const [products, setProducts] = useState<ProductType[]>([ProductConstant]);
+    const [sort, setSort] = useState<string>("");
     const { category_id } = useParams();
 
     const [totalPage, setTotalPage] = useState(0);
@@ -35,6 +36,30 @@ export function FilterResult() {
         setProducts(res.data.products);
     };
 
+    const handleSortByPrice = () => {
+        console.log(sort);
+        if (sort === "asc") {
+            setProducts((prev) => {
+                const list = prev.sort((a, b) => b.price - a.price);
+
+                return list;
+            });
+        }
+
+        if (sort === "desc") {
+            setProducts((prev) => {
+                const list = prev.sort((a, b) => a.price - b.price);
+
+                return list;
+            });
+        }
+    };
+
+    useEffect(() => {
+        handleSortByPrice();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sort, page]);
+
     useEffect(() => {
         handleGetProduct();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,11 +76,10 @@ export function FilterResult() {
             </Text>
             <Group align="center">
                 <Text fw={500}>Xếp theo: </Text>
-                <Radio.Group>
+                <Radio.Group value={sort} onChange={setSort}>
                     <Group mt="xs">
-                        <Radio value="react" label="Hàng mới" />
-                        <Radio value="ng" label="Giá từ thấp đến cao" />
-                        <Radio value="svelte" label="Giá từ cao xuống thấp" />
+                        <Radio value="asc" label="Giá từ thấp đến cao" />
+                        <Radio value="desc" label="Giá từ cao xuống thấp" />
                     </Group>
                 </Radio.Group>
             </Group>

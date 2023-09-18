@@ -185,38 +185,64 @@ class ProductService {
         };
     }
 
+    // "Giá dưới 500.0000"; 0 - 500.000
+    // "500.000đ - 1.000.000đ";
+    // "1.000.000đ - 5.000.000đ";
+    // "Giá trên 10.000.000đ";
     async getProductByFilter(
         brand: string[],
         price: number[],
-        page: number
-    ): Promise<ResponseType<ProductType[]>> {
+        page: number,
+        limit: number
+    ): Promise<ResponseType<any>> {
         // dòng đầu tmp để lưu xâu định dạng: ["'a'", "'b'"]
         // vì khi vào cái rest dưới nếu để là ["a","b"] => se thanh (a,b) trong câu query
         const tmp = brand.map((item) => `'${item}'`);
         const brand_filter = brand.length <= 0 ? "" : `(${[...tmp]})`;
 
-        const prices =
-            price.length <= 0 ? [] : [Math.min(...price), Math.max(...price)];
+        const prices = price.length <= 0 ? [] : price;
 
-        const price_filter = !prices.length
-            ? ""
-            : `BETWEEN ${prices[0]} AND ${price[1]}`;
+        let priceArr: string[] = [];
+        price.map((item: any) => {
+            // 0 - 5.000.000 : tức là không có cận dưới (<=)
+            if (!item[0]) {
+                return priceArr.push(`(price <= ${item[1]})`);
+            }
 
-        let paginate = `OFFSET ${9 * (page - 1)} FETCH FIRST 9 ROWS ONLY`;
+            // 5.000.000 - 0 : tức là không có cận trên (>=)
+            if (!item[1]) {
+                return priceArr.push(`(price >= ${item[0]})`);
+            }
+            return priceArr.push(
+                `(price >= ${item[0]} and price <= ${item[1]})`
+            );
+        });
+
+        const price_filter = !prices.length ? "" : `(${priceArr.join(" OR ")})`;
 
         let query_filter: string = "";
+        let count_filter: string = "";
+
+        const offset = (page - 1) * limit;
 
         if (!brand_filter.length && !price_filter.length) {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products`;
+            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products`;
         } else if (!brand_filter.length) {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE price ${price_filter}`;
+            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products WHERE  ${price_filter} `;
         } else if (!price_filter.length) {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE brand IN ${brand_filter}`;
+            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE brand IN ${brand_filter} OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products WHERE brand IN ${brand_filter} `;
         } else {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE brand IN ${brand_filter} and price ${price_filter}`;
+            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE brand IN ${brand_filter} and ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products WHERE brand IN ${brand_filter} and  ${price_filter} `;
         }
 
+        console.log(query_filter);
+
         const results = await query(query_filter);
+        const resCountFilter = await query(count_filter);
 
         if (!results.rows.length) {
             return {
@@ -228,7 +254,13 @@ class ProductService {
         return {
             statusCode: HttpStatusCode.OK,
             message: "Get products success",
-            data: results.rows,
+            data: {
+                products: results.rows,
+                page: page,
+                total: limit,
+                totalPage: Math.ceil(resCountFilter.rows[0].n_product / limit),
+                totalProduct: Number(resCountFilter.rows[0].n_product),
+            },
         };
     }
 

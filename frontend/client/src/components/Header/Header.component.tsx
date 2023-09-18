@@ -273,7 +273,7 @@ export function HeaderApp() {
                             Trang chủ
                         </Text>
                     </Link>
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to="/about" style={{ textDecoration: "none" }}>
                         <Text size="20px" fw={500} color="black">
                             Giới thiệu
                         </Text>
