@@ -142,10 +142,9 @@ class UserService {
             };
         }
 
-        const access_token = createToken<{ customer_id: string; role: string }>(
+        const access_token_user = createToken<{ customer_id: string }>(
             {
                 customer_id: decoded.customer_id,
-                role: decoded.role,
             },
             configService.getSecretKeyAccessToken(),
             {
@@ -157,7 +156,7 @@ class UserService {
             statusCode: 201,
             message: "refesh token successfull",
             data: {
-                access_token,
+                access_token_user,
                 EXPIRES_ACCESS_TOKEN: configService.getExpiresInAccessToken(),
             },
         };

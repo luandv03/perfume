@@ -82,10 +82,12 @@ export class AdminController {
                 res.cookie("access_token", data.data.access_token, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
+                    domain: "http://localhost:3000",
                 }) &&
                 res.cookie("refresh_token", data.data.refresh_token, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
+                    domain: "http://localhost:3000",
                 });
 
             return res.status(data.statusCode).json(data);

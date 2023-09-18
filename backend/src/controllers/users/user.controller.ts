@@ -74,10 +74,12 @@ export class UserController {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
+                    domain: "http://localhost:5173",
                 }) &&
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
+                    domain: "http://localhost:5173",
                 });
 
             return res.status(data.statusCode).json(data);
@@ -101,7 +103,7 @@ export class UserController {
             const data = userService.refreshTokenService(refresh_token);
 
             data.statusCode === 201 &&
-                res.cookie("access_token_user", data.data.access_token, {
+                res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 3hrs
                 });
