@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 
 import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helper";
+import { notifications } from "@mantine/notifications";
 
 interface CouponType {
     coupon_id: number;
@@ -103,6 +104,23 @@ export const OrderDetail = () => {
         return total;
     };
 
+    const handleCancelOrderById = async () => {
+        const res = await orderService.cancelOrder(Number(order_id));
+
+        if (res.statusCode === 200) {
+            setOrderDetail((prev) => ({
+                ...prev,
+                order: {
+                    ...prev.order,
+                    status: res.data.status,
+                },
+            }));
+        }
+        notifications.show({
+            message: res.message,
+        });
+    };
+
     useEffect(() => {
         handleGetOrderById();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,7 +191,7 @@ export const OrderDetail = () => {
                     </Stack>
                     <Button
                         disabled={orderDetail.order.status !== "ordered"}
-                        onClick={() => alert("Cancel Order")}
+                        onClick={() => handleCancelOrderById()}
                     >
                         Hủy
                     </Button>

@@ -269,7 +269,7 @@ class OrderService {
             };
         }
 
-        if (results.rows[0].status !== "Đang chờ xác nhận") {
+        if (results.rows[0].status !== "ordered") {
             return {
                 statusCode: HttpStatusCode.NOT_ACCEPTABLE,
                 message:
@@ -277,14 +277,15 @@ class OrderService {
             };
         }
 
-        await query(
-            `UPDATE orders SET status = 'canceled' WHERE order_id = $1`,
+        const resData = await query(
+            `UPDATE orders SET status = 'canceled' WHERE order_id = $1 RETURNING *`,
             [Number(order_id)]
         );
 
         return {
             statusCode: HttpStatusCode.OK,
             message: "Cancel order successfully!",
+            data: resData.rows[0],
         };
     }
 

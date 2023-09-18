@@ -50,6 +50,18 @@ class OrderService extends BaseService {
             return error;
         }
     }
+
+    async cancelOrder(order_id: number) {
+        try {
+            const res = await this.httpClientPrivate.patch(
+                `/order/cancel/${order_id}`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const orderService: OrderService = new OrderService();
