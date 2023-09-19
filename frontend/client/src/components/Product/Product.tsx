@@ -72,7 +72,9 @@ export function Product({ data }: { data: ProductType }) {
                 </Link>
 
                 <Group>
-                    <Text>Gucci / 100ml</Text>
+                    <Text>
+                        {data.brand} / {data.volume}ml
+                    </Text>
                 </Group>
 
                 <Group>

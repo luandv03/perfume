@@ -190,6 +190,7 @@ class ProductService {
     // "1.000.000đ - 5.000.000đ";
     // "Giá trên 10.000.000đ";
     async getProductByFilter(
+        category_id: number,
         brand: string[],
         price: number[],
         page: number,
@@ -226,30 +227,21 @@ class ProductService {
         const offset = (page - 1) * limit;
 
         if (!brand_filter.length && !price_filter.length) {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products OFFSET ${offset} LIMIT ${limit}`;
-            count_filter = `SELECT count(*) n_product FROM products`;
+            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id = ${category_id} OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products WHERE category_id = ${category_id}`;
         } else if (!brand_filter.length) {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
-            count_filter = `SELECT count(*) n_product FROM products WHERE  ${price_filter} `;
+            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id = ${category_id} AND ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products WHERE category_id=${category_id} AND ${price_filter} `;
         } else if (!price_filter.length) {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE brand IN ${brand_filter} OFFSET ${offset} LIMIT ${limit}`;
-            count_filter = `SELECT count(*) n_product FROM products WHERE brand IN ${brand_filter} `;
+            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} `;
         } else {
-            query_filter = `SELECT product_id, title, price, quantity, created_at FROM products WHERE brand IN ${brand_filter} and ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
-            count_filter = `SELECT count(*) n_product FROM products WHERE brand IN ${brand_filter} and  ${price_filter} `;
+            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} and ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
+            count_filter = `SELECT count(*) n_product FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} and ${price_filter} `;
         }
-
-        console.log(query_filter);
 
         const results = await query(query_filter);
         const resCountFilter = await query(count_filter);
-
-        if (!results.rows.length) {
-            return {
-                statusCode: HttpStatusCode.NOT_FOUND,
-                message: "Not results",
-            };
-        }
 
         return {
             statusCode: HttpStatusCode.OK,

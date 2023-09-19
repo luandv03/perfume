@@ -7,6 +7,8 @@ import {
     SimpleGrid,
     Pagination,
     Center,
+    Alert,
+    LoadingOverlay,
 } from "@mantine/core";
 import { useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -16,7 +18,14 @@ import { ProductConstant } from "../../types/products.type";
 import { ProductType } from "../../types/products.type";
 import { productService } from "../../services/product.service";
 
-export function FilterResult() {
+export function FilterResult({
+    prices,
+    filterBrand,
+}: {
+    prices: string[];
+    filterBrand: string[];
+}) {
+    const [loading, setLoading] = useState<boolean>(false);
     const [products, setProducts] = useState<ProductType[]>([ProductConstant]);
     const [sort, setSort] = useState<string>("");
     const { category_id } = useParams();
@@ -25,19 +34,29 @@ export function FilterResult() {
     const [page, setPage] = useState(1);
     const { state } = useLocation();
 
-    const handleGetProduct = async () => {
-        const res = await productService.getProductByCateId(
+    const handleGetProductByFilter = async () => {
+        setLoading(true);
+        const filterPrice: number[][] = [];
+
+        prices.map((item: string) => {
+            filterPrice.push(item.split(",").map((i) => Number(i)));
+        });
+
+        const res = await productService.getProductByFilter(
             Number(category_id),
+            filterBrand,
+            filterPrice,
             page,
             12
         );
+
+        setLoading(false);
 
         setTotalPage(res.data.totalPage);
         setProducts(res.data.products);
     };
 
     const handleSortByPrice = () => {
-        console.log(sort);
         if (sort === "asc") {
             setProducts((prev) => {
                 const list = prev.sort((a, b) => b.price - a.price);
@@ -61,20 +80,24 @@ export function FilterResult() {
     }, [sort, page]);
 
     useEffect(() => {
-        handleGetProduct();
+        handleGetProductByFilter();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, window.location.pathname]);
+    }, [page, window.location.pathname, filterBrand, prices]);
 
     return (
         <Stack
-            sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
+            sx={{
+                border: "1px solid #f0e7e7",
+                borderRadius: "4px",
+                width: "100%",
+            }}
             spacing={10}
             p={10}
         >
             <Text size="24px" fw={500}>
                 {state.category_name}
             </Text>
-            <Group align="center">
+            <Group align="center" style={{ width: "100%" }}>
                 <Text fw={500}>Xếp theo: </Text>
                 <Radio.Group value={sort} onChange={setSort}>
                     <Group mt="xs">
@@ -84,12 +107,27 @@ export function FilterResult() {
                 </Radio.Group>
             </Group>
             <Divider my="xs"></Divider>
-            <SimpleGrid cols={4} spacing={0}>
-                {products.length > 0 &&
-                    products.map((item: ProductType) => (
+            {products.length > 0 ? (
+                <SimpleGrid cols={4} spacing={0}>
+                    {products.map((item: ProductType) => (
                         <Product data={item} />
                     ))}
-            </SimpleGrid>
+                </SimpleGrid>
+            ) : (
+                <Alert title="Bummer!" color="red">
+                    <Text fw={700}>
+                        Không có sản phẩm nào trong danh mục này
+                    </Text>
+                </Alert>
+            )}
+            <LoadingOverlay
+                sx={{ position: "fixed", height: "100%" }}
+                loaderProps={{ size: "sm", color: "pink", variant: "oval" }}
+                overlayOpacity={0.3}
+                overlayColor="#c5c5c5"
+                visible={loading}
+            />
+
             <Center mt={50}>
                 <Pagination value={page} onChange={setPage} total={totalPage} />
             </Center>

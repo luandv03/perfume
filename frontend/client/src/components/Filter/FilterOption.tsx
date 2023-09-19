@@ -6,19 +6,78 @@ import {
     Button,
     ScrollArea,
     Checkbox,
+    Flex,
+    Group,
 } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
-import { useState, useEffect } from "react";
+import { IconSearch, IconX } from "@tabler/icons-react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 import { productService } from "../../services/product.service";
 
-export function FilterOption() {
+export function FilterOption({
+    prices,
+    setPrices,
+    filterBrand,
+    setFilterBrand,
+}: {
+    prices: string[];
+    setPrices: Dispatch<SetStateAction<string[]>>;
+    filterBrand: string[];
+    setFilterBrand: Dispatch<SetStateAction<string[]>>;
+}) {
     const [brands, setBrands] = useState<{ brand: string }[]>([]);
+
+    useEffect(() => {
+        localStorage.setItem("brand", JSON.stringify(filterBrand));
+    }, [filterBrand]);
+
+    useEffect(() => {
+        localStorage.setItem("price", JSON.stringify(prices));
+    }, [prices]);
 
     const handleGetAllBrand = async () => {
         const res = await productService.getAllBrand();
 
         setBrands(res.data);
+    };
+
+    const handleRemoveBrandChecked = (brand: string) => {
+        setFilterBrand((prev: string[]) =>
+            prev.filter((item: string) => item !== brand)
+        );
+    };
+
+    const handleRemovePriceChecked = (price: string) => {
+        setPrices((prev: string[]) =>
+            prev.filter((item: string) => item !== price)
+        );
+    };
+
+    const handleConvertFilterPrice = (price: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+        let result: string = "";
+        switch (price) {
+            case "0,500000":
+                result = "Giá dưới 500.0000";
+                break;
+            case "500000,1000000":
+                result = "500.000đ - 1.000.000đ";
+                break;
+            case "1000000,5000000":
+                result = "1.000.000đ - 5.000.000đ";
+                break;
+            case "5000000,0":
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                result = "Giá trên 5.000.000đ";
+                break;
+        }
+
+        return result;
+    };
+
+    const handleRemoveAllFilter = () => {
+        setPrices([]);
+        setFilterBrand([]);
     };
 
     useEffect(() => {
@@ -34,8 +93,72 @@ export function FilterOption() {
                 <Text size="16px" fw={500}>
                     Bộ lọc
                 </Text>
+
                 <Text>Giúp lọc nhanh sản phẩm tìm kiếm</Text>
             </div>
+            {filterBrand.length + prices.length > 0 ? (
+                <>
+                    <Divider my="xs"></Divider>
+                    <Stack p="10px">
+                        <Flex justify="space-between">
+                            <Text size="16px" fw={500}>
+                                Bạn chọn
+                            </Text>
+
+                            <Text
+                                style={{ cursor: "pointer" }}
+                                onClick={() => handleRemoveAllFilter()}
+                            >
+                                Bỏ hết
+                            </Text>
+                        </Flex>
+
+                        <Stack>
+                            {filterBrand.length > 0 &&
+                                filterBrand.map(
+                                    (item: string, index: number) => (
+                                        <Group spacing={0} key={index}>
+                                            <IconX
+                                                color="red"
+                                                size={20}
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() =>
+                                                    handleRemoveBrandChecked(
+                                                        item
+                                                    )
+                                                }
+                                            />
+                                            <Text>{item}</Text>
+                                        </Group>
+                                    )
+                                )}
+                            {prices.length > 0 &&
+                                prices.map((item: string, index: number) => {
+                                    return (
+                                        <Group spacing={0} key={index}>
+                                            <IconX
+                                                color="red"
+                                                size={20}
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() =>
+                                                    handleRemovePriceChecked(
+                                                        item
+                                                    )
+                                                }
+                                            />
+                                            <Text>
+                                                {handleConvertFilterPrice(item)}
+                                            </Text>
+                                        </Group>
+                                    );
+                                })}
+                        </Stack>
+                    </Stack>
+                </>
+            ) : (
+                ""
+            )}
+
             <Divider my="xs"></Divider>
             <Stack p="10px">
                 <Text size="16px" fw={500}>
@@ -50,12 +173,20 @@ export function FilterOption() {
                     }
                 />
                 <ScrollArea h={150} scrollbarSize="5px">
-                    <Stack>
-                        {brands.length > 0 &&
-                            brands.map((item: { brand: string }) => (
-                                <Checkbox label={item.brand} />
-                            ))}
-                    </Stack>
+                    <Checkbox.Group
+                        value={filterBrand}
+                        onChange={setFilterBrand}
+                    >
+                        <Stack>
+                            {brands.length > 0 &&
+                                brands.map((item: { brand: string }) => (
+                                    <Checkbox
+                                        value={item.brand}
+                                        label={item.brand}
+                                    />
+                                ))}
+                        </Stack>
+                    </Checkbox.Group>
                 </ScrollArea>
             </Stack>
 
@@ -65,12 +196,26 @@ export function FilterOption() {
                     Giá sản phẩm
                 </Text>
                 <ScrollArea h={150} scrollbarSize="5px">
-                    <Stack>
-                        <Checkbox label="Giá dưới 500.0000" />
-                        <Checkbox label="500.000đ - 1.000.000đ" />
-                        <Checkbox label="1.000.000đ - 5.000.000đ" />
-                        <Checkbox label="Giá trên 10.000.000đ" />
-                    </Stack>
+                    <Checkbox.Group value={prices} onChange={setPrices}>
+                        <Stack>
+                            <Checkbox
+                                value={`${[0, 500000]}`}
+                                label="Giá dưới 500.0000"
+                            />
+                            <Checkbox
+                                value={`${[500000, 1000000]}`}
+                                label="500.000đ - 1.000.000đ"
+                            />
+                            <Checkbox
+                                value={`${[1000000, 5000000]}`}
+                                label="1.000.000đ - 5.000.000đ"
+                            />
+                            <Checkbox
+                                value={`${[5000000, 0]}`}
+                                label="Giá trên 5.000.000đ"
+                            />
+                        </Stack>
+                    </Checkbox.Group>
                 </ScrollArea>
             </Stack>
         </Stack>

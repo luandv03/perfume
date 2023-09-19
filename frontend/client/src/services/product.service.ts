@@ -50,6 +50,29 @@ class ProductService extends BaseService {
             return error;
         }
     }
+
+    // /product/view/filter?category_id=5&brand=["Dior"]&price=[[0, 5000000], [5000000,0]]&page=1&limit=10
+    async getProductByFilter(
+        category_id: number,
+        brand: string[],
+        price: number[][],
+        page: number,
+        limit: number
+    ) {
+        try {
+            const res = await this.httpClientPublic.post(
+                `/product/view/filter?category_id=${category_id}&page=${page}&limit=${limit}`,
+                {
+                    brand,
+                    price,
+                }
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const productService: ProductService = new ProductService();

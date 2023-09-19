@@ -123,11 +123,15 @@ export class ProductController {
 
     async getProductByFilter(req: Request, res: Response): Promise<any> {
         try {
-            const { brand, price, page, limit } = req.query;
+            const { category_id, page, limit } = req.query;
+            const { price, brand } = req.body;
 
+            // JSON.parse(brand as string) as string[],
+            // JSON.parse(price as string) as number[],
             const data = await productService.getProductByFilter(
-                JSON.parse(brand as string) as string[],
-                JSON.parse(price as string) as number[],
+                Number(category_id),
+                brand,
+                price,
                 Number(page),
                 Number(limit)
             );

@@ -34,7 +34,10 @@ productRoutes.get("/product/search", productController.getProductByTitle);
 
 // get products by filter: ?brand=["A","B","C"]&price=[1,2,3]
 // brand=["Dior"]&price=[[0, 5000000], [5000000,0]]&page=1&limit=10
-productRoutes.get("/product/view/filter", productController.getProductByFilter);
+productRoutes.post(
+    "/product/view/filter",
+    productController.getProductByFilter
+);
 
 // create product
 productRoutes.post(

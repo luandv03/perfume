@@ -114,6 +114,7 @@ export function Checkout() {
                 message: resData.message,
             });
             setLoading(false);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             showNotification({
                 title: "Đặt hàng thất bại",
@@ -352,7 +353,7 @@ export function Checkout() {
                     </Button>
                 </Group>
                 <LoadingOverlay
-                    sx={{ height: "120vh" }}
+                    sx={{ position: "fixed", height: "100%" }}
                     loaderProps={{ size: "sm", color: "pink", variant: "bars" }}
                     overlayOpacity={0.3}
                     overlayColor="#c5c5c5"
