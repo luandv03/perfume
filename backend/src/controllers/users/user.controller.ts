@@ -5,6 +5,7 @@ import { userService } from "../../services/users/user.service";
 import { handleErrorDto } from "../../utils/handle_error_dto.util";
 import { ResponseType } from "../../types/response.type";
 import { LoginUserAccountDto } from "../../dtos/users/user.dto";
+import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 
 export class UserController {
     async register(req: Request, res: Response): Promise<any> {
@@ -46,6 +47,7 @@ export class UserController {
             return res.status(data.statusCode).json(data);
         } catch (err) {
             return res.status(500).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
                 message: "Internal Server Error",
                 err,
             });
@@ -70,17 +72,17 @@ export class UserController {
                 email,
                 password,
             });
-            data.statusCode === 200 &&
+            if (data.statusCode === 200) {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
-                    domain: "http://localhost:5173",
-                }) &&
+                });
+
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
-                    domain: "http://localhost:5173",
                 });
+            }
 
             return res.status(data.statusCode).json(data);
         } catch (err) {

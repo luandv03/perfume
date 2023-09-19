@@ -103,9 +103,11 @@ class UserService {
 
             const hashPassword: string = await bcrypt.hash(password, 10);
 
+            await query(`BEGIN`);
+
             const customer = await query(
                 `INSERT INTO customers( email, fullname, phone_number, dob, address, auth_method) 
-            VALUES ($1, $2, $3, $4, $5, $6, 'system') RETURNING customer_id`,
+            VALUES ($1, $2, $3, $4, $5, 'system') RETURNING customer_id`,
                 [email, fullname, phone_number, dob, address]
             );
 
@@ -116,11 +118,14 @@ class UserService {
 
             await cartService.createCart(customer.rows[0].customer_id);
 
+            await query(`COMMIT`);
+
             return {
                 statusCode: HttpStatusCode.OK,
                 message: "You have registed successfully",
             };
         } catch (error) {
+            await query(`ROLLBACK`);
             return {
                 statusCode: HttpStatusCode.BAD_REQUEST,
                 message: "Have error user",

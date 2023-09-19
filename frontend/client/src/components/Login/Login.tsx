@@ -181,11 +181,6 @@ export function LoginAuth() {
 
     return (
         <>
-            <LoadingOverlay
-                visible={loading}
-                overlayBlur={0.1}
-                transitionDuration={200}
-            />
             <Link to="/">
                 <Group spacing={0}>
                     <IconChevronLeft />
@@ -204,25 +199,19 @@ export function LoginAuth() {
                         PERFUME & LDA!
                     </Title>
                     <Text color="dimmed" size="sm" align="center" mt={5}>
-                        Do not have an account yet?{" "}
-                        <Anchor<"a"> href="/auth/register" size="sm">
-                            Create account
-                        </Anchor>
+                        Bạn đã có tài khoản chưa?{" "}
+                        <Link to="/register" style={{ color: "blue" }}>
+                            Đăng ký
+                        </Link>
                     </Text>
 
-                    <Flex style={{ width: "100%" }} justify="center" gap="md">
+                    <Flex
+                        style={{ width: "100%" }}
+                        justify="center"
+                        gap="md"
+                        mt={10}
+                    >
                         <Group>
-                            {/* <form
-                                action="http://localhost:4000/api/v1/auth/facebook/login"
-                                method="get"
-                            >
-                                <Button type="submit">
-                                    <IconBrandFacebook />
-                                    &nbsp;
-                                    <Text>FACEBOOK</Text>
-                                </Button>
-                            </form> */}
-
                             <Button onClick={() => handleLoginWithFacebook()}>
                                 <IconBrandFacebook />
                                 &nbsp;
@@ -290,12 +279,28 @@ export function LoginAuth() {
                                     href="#"
                                     size="sm"
                                 >
-                                    Forgot password?
+                                    Quên mật khẩu?
                                 </Anchor>
                             </Group>
-                            <Button fullWidth mt="xl" type="submit">
-                                Sign in
+                            <Button
+                                fullWidth
+                                mt="xl"
+                                type="submit"
+                                disabled={loading}
+                            >
+                                Đăng nhập
                             </Button>
+                            <LoadingOverlay
+                                sx={{ position: "fixed", height: "100%" }}
+                                loaderProps={{
+                                    size: "sm",
+                                    color: "pink",
+                                    variant: "oval",
+                                }}
+                                overlayOpacity={0.3}
+                                overlayColor="#c5c5c5"
+                                visible={loading}
+                            />
                         </form>
                     </Paper>
                 </Container>

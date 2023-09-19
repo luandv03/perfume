@@ -1,6 +1,42 @@
 import { BaseService } from "./base.service";
 
+interface RegisterAccount {
+    fullname: string;
+    password: string;
+    phone_number: string;
+    address: string;
+    email: string;
+    dob: string;
+}
+
 class AuthService extends BaseService {
+    async register({
+        fullname,
+        password,
+        phone_number,
+        address,
+        email,
+        dob,
+    }: RegisterAccount) {
+        try {
+            const res = await this.httpClientPublic.post(
+                "/auth/customer/register",
+                {
+                    fullname,
+                    password,
+                    phone_number,
+                    address,
+                    email,
+                    dob,
+                }
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
     async login({ email, password }: { email: string; password: string }) {
         try {
             const res = await this.httpClientPublic.post(

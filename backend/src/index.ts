@@ -47,64 +47,9 @@ app.use(
     })
 );
 
-app.get("/", (req: Request, res: Response) => {
-    res.json({
-        name: "Luan Dinh",
-        age: 20,
-        address: "Ha nam",
-    });
-});
-
-app.get("/products", async (req: Request, res: Response) => {
-    try {
-        const result: QueryResult<any> = await query(`SELECT * FROM products`);
-
-        res.status(200).json(result.rows);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-});
-
-app.get("/order_mail", async (req: Request, res: Response) => {
-    const data = {
-        orderlines: [
-            {
-                orderline_id: 1,
-                order_id: 123,
-                product_id: 12,
-                quantity: 1,
-                net_price: 280000,
-                title: "Dior Sauvage",
-            },
-            {
-                orderline_id: 2,
-                order_id: 123,
-                product_id: 13,
-                quantity: 1,
-                net_price: 400000,
-                title: "Channel X-V",
-            },
-            {
-                orderline_id: 3,
-                order_id: 123,
-                product_id: 18,
-                quantity: 1,
-                net_price: 378000,
-                title: "Gucci G&D",
-            },
-        ],
-        order: {
-            order_id: 123,
-            order_date: "17/09/2023",
-            tax: 0,
-            delivery_cost: 29000,
-            discount: 10,
-            tmp_amount: 290000,
-            amount: 400000,
-        },
-    };
-
-    res.render("order_confirm", { data });
+app.get("/token", (req, res) => {
+    console.log(req.cookies.refresh_token_user);
+    res.send(req.cookies.refresh_token_user);
 });
 
 app.use("/", router);

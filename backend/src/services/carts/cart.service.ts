@@ -10,7 +10,7 @@ interface CartItem {
 class CartService {
     async createCart(customer_id: number): Promise<ResponseType<any>> {
         const results = await query(
-            `INSERT INTO carts (DEFAULT, $1) RETURNING *`,
+            `INSERT INTO carts VALUES (DEFAULT, $1) RETURNING *`,
             [customer_id]
         );
 

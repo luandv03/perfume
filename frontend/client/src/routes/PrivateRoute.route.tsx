@@ -4,7 +4,6 @@ import { IconAlertCircle } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
 export const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-    console.log(JSON.parse(localStorage.getItem("isAuthenticated") as string));
     if (!JSON.parse(localStorage.getItem("isAuthenticated") as string))
         return (
             <Alert

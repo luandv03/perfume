@@ -450,6 +450,13 @@
     react-remove-scroll "^2.5.5"
     react-textarea-autosize "8.3.4"
 
+"@mantine/dates@^6.0.21":
+  version "6.0.21"
+  resolved "https://registry.npmjs.org/@mantine/dates/-/dates-6.0.21.tgz"
+  integrity sha512-nSX7MxNkHyyDJqEJOT7Wg930jBfgWz+3pnoWo601cYDvFjh5GgcRz66v36rnMJFK1/56k5G9rWzUOzuM94j6hg==
+  dependencies:
+    "@mantine/utils" "6.0.21"
+
 "@mantine/ds@^6.0.15":
   version "6.0.15"
   resolved "https://registry.npmjs.org/@mantine/ds/-/ds-6.0.15.tgz"
@@ -500,6 +507,11 @@
   version "6.0.16"
   resolved "https://registry.npmjs.org/@mantine/utils/-/utils-6.0.16.tgz"
   integrity sha512-UFel9DbifL3zS8pTJlr6GfwGd6464OWXCJdUq0oLydgimbC1VV2PnptBr6FMwIpPVcxouLOtY1cChzwFH95PSA==
+
+"@mantine/utils@6.0.21":
+  version "6.0.21"
+  resolved "https://registry.npmjs.org/@mantine/utils/-/utils-6.0.21.tgz"
+  integrity sha512-33RVDRop5jiWFao3HKd3Yp7A9mEq4HAJxJPTuYm1NkdqX6aTKOQK7wT8v8itVodBp+sb4cJK6ZVdD1UurK/txQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

@@ -13,6 +13,7 @@ import { Thankyou } from "./components/Thankyou/Thankyou";
 import { SearchResult } from "./components/SearchResult/SearchResult";
 import { PrivateRoute } from "./routes";
 import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
+import { Register } from "./components/Register/Register";
 import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper";
 import { About } from "./components/About/About";
 import { Contact } from "./components/Contact/Contact";
@@ -115,6 +116,15 @@ function App() {
                     element={
                         <TitlePageWrapper title="Đăng nhập | Perfume LDA">
                             <LoginAuth />
+                        </TitlePageWrapper>
+                    }
+                />
+
+                <Route
+                    path="/register"
+                    element={
+                        <TitlePageWrapper title="Đăng ký | Perfume LDA">
+                            <Register />
                         </TitlePageWrapper>
                     }
                 />
