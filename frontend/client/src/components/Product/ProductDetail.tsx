@@ -16,7 +16,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconStar, IconStarFilled } from "@tabler/icons-react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -270,7 +270,9 @@ export function ProductDetail() {
                                 w={100}
                             />
                             <Group>
-                                <Button size="md">Mua ngay</Button>
+                                <Link to="/checkout">
+                                    <Button size="md">Mua ngay</Button>
+                                </Link>
                                 <Button
                                     size="md"
                                     onClick={() => {

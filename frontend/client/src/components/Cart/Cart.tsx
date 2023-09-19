@@ -30,9 +30,6 @@ interface CartItem {
 }
 
 export function Cart() {
-    // const [value, setValue] = useState<number | "">(0);
-    // const handlers = useRef<NumberInputHandlers>();
-
     const { cartUser, addCartItem, removeCartItem } = useContext(CartContext);
 
     const handleRemoveCartItem = (item: CartItem) => {
@@ -133,13 +130,22 @@ export function Cart() {
                                             >
                                                 <Group>
                                                     <Stack>
-                                                        <Text
-                                                            size="20px"
-                                                            weight={500}
-                                                            lineClamp={2}
+                                                        <Link
+                                                            to={`/product/${item.product_id}/detail`}
+                                                            style={{
+                                                                textDecoration:
+                                                                    "none",
+                                                                color: "black",
+                                                            }}
                                                         >
-                                                            {item.title}
-                                                        </Text>
+                                                            <Text
+                                                                size="20px"
+                                                                weight={500}
+                                                                lineClamp={2}
+                                                            >
+                                                                {item.title}
+                                                            </Text>
+                                                        </Link>
 
                                                         <Group>
                                                             <Text

@@ -2,14 +2,17 @@ import {
     Stack,
     Text,
     Divider,
-    TextInput,
-    Button,
+    // TextInput,
+    // Button,
     ScrollArea,
     Checkbox,
     Flex,
     Group,
 } from "@mantine/core";
-import { IconSearch, IconX } from "@tabler/icons-react";
+import {
+    // IconSearch,
+    IconX,
+} from "@tabler/icons-react";
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 import { productService } from "../../services/product.service";
@@ -164,14 +167,14 @@ export function FilterOption({
                 <Text size="16px" fw={500}>
                     Thương hiệu
                 </Text>
-                <TextInput
+                {/* <TextInput
                     placeholder="Tìm thương hiệu"
                     rightSection={
                         <Button size="sm" radius={0}>
                             <IconSearch size="18px" />
                         </Button>
                     }
-                />
+                />  */}
                 <ScrollArea h={150} scrollbarSize="5px">
                     <Checkbox.Group
                         value={filterBrand}

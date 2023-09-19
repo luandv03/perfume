@@ -114,7 +114,7 @@ export function FilterResult({
                     ))}
                 </SimpleGrid>
             ) : (
-                <Alert title="Bummer!" color="red">
+                <Alert title="Tiếc quá!" color="red">
                     <Text fw={700}>
                         Không có sản phẩm nào trong danh mục này
                     </Text>

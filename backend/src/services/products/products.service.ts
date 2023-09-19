@@ -227,16 +227,16 @@ class ProductService {
         const offset = (page - 1) * limit;
 
         if (!brand_filter.length && !price_filter.length) {
-            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id = ${category_id} OFFSET ${offset} LIMIT ${limit}`;
+            query_filter = `SELECT product_id, title, description, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id = ${category_id} OFFSET ${offset} LIMIT ${limit}`;
             count_filter = `SELECT count(*) n_product FROM products WHERE category_id = ${category_id}`;
         } else if (!brand_filter.length) {
-            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id = ${category_id} AND ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
+            query_filter = `SELECT product_id, title, description, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id = ${category_id} AND ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
             count_filter = `SELECT count(*) n_product FROM products WHERE category_id=${category_id} AND ${price_filter} `;
         } else if (!price_filter.length) {
-            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} OFFSET ${offset} LIMIT ${limit}`;
+            query_filter = `SELECT product_id, title, description, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} OFFSET ${offset} LIMIT ${limit}`;
             count_filter = `SELECT count(*) n_product FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} `;
         } else {
-            query_filter = `SELECT product_id, title, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} and ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
+            query_filter = `SELECT product_id, title, description, cast(price as int), cast(discount as int), volume, brand, quantity, created_at FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} and ${price_filter} OFFSET ${offset} LIMIT ${limit}`;
             count_filter = `SELECT count(*) n_product FROM products WHERE category_id=${category_id} AND brand IN ${brand_filter} and ${price_filter} `;
         }
 

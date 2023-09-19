@@ -15,6 +15,7 @@ import { PrivateRoute } from "./routes";
 import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
 import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper";
 import { About } from "./components/About/About";
+import { Contact } from "./components/Contact/Contact";
 
 function App() {
     return (
@@ -34,6 +35,14 @@ function App() {
                         element={
                             <TitlePageWrapper title="Giới thiệu | Perfume LDA">
                                 <About />
+                            </TitlePageWrapper>
+                        }
+                    />
+                    <Route
+                        path="/contact"
+                        element={
+                            <TitlePageWrapper title="Liên hệ | Perfume LDA">
+                                <Contact />
                             </TitlePageWrapper>
                         }
                     />

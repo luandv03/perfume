@@ -18,7 +18,6 @@ interface CartItem {
     volume: number;
     discount: number;
     quantity: number;
-    number_add_item?: number;
 }
 
 interface CartContextType {

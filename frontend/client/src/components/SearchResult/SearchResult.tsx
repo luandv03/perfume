@@ -9,6 +9,7 @@ import {
     Button,
     Badge,
     Pagination,
+    LoadingOverlay,
 } from "@mantine/core";
 
 import { useEffect, useState, useContext } from "react";
@@ -32,17 +33,19 @@ const useStyles = createStyles(() => ({
 
 export function SearchResult() {
     const { classes } = useStyles();
-    const { addToCart } = useContext(CartContext);
+    const { addCartItem } = useContext(CartContext);
 
     const [products, setProducts] = useState<ProductType[]>([ProductConstant]);
     const [totalProduct, setTotalProduct] = useState<number>(0);
     const [searchParams] = useSearchParams();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [totalPage, setTotalPage] = useState(0);
     const [page, setPage] = useState(1);
     // const [total, setTotal] = useState<string>("10");
 
     const handleGetProductBySearch = async () => {
+        setLoading(true);
         const resData = await productService.getProductBySearchTitle(
             searchParams.get("title") as string,
             page,
@@ -52,10 +55,12 @@ export function SearchResult() {
         setTotalProduct(resData.data.totalProducts);
         setTotalPage(resData.data.totalPage);
         setProducts(resData.data.products);
+        setLoading(false);
     };
 
     const handleAddToCart = (product: ProductType) => {
         const { product_id, title, price, discount, brand, volume } = product;
+
         const cartItem = {
             product_id,
             title,
@@ -63,9 +68,9 @@ export function SearchResult() {
             discount,
             brand,
             volume,
-            number_add_item: 1,
+            quantity: 1,
         };
-        addToCart(cartItem);
+        addCartItem(cartItem);
         notifications.show({
             title: "Thành công",
             message: "Bạn đã thêm thành công sản phẩm :>",
@@ -177,6 +182,13 @@ export function SearchResult() {
             <Center mt={50}>
                 <Pagination value={page} onChange={setPage} total={totalPage} />
             </Center>
+            <LoadingOverlay
+                sx={{ position: "fixed", height: "100%" }}
+                loaderProps={{ size: "sm", color: "pink", variant: "oval" }}
+                overlayOpacity={0.3}
+                overlayColor="#c5c5c5"
+                visible={loading}
+            />
         </Stack>
     );
 }

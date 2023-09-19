@@ -161,9 +161,9 @@ export function Checkout() {
                                                 toán.
                                                 <br />
                                                 Bước 3: Nhân viên CSKH của
-                                                Parfumerie.vn sẽ liên hệ Quý
-                                                Khách Hàng để xác nhận thanh
-                                                toán và xử lý đơn hàng.
+                                                Perfume LDA sẽ liên hệ Quý Khách
+                                                Hàng để xác nhận thanh toán và
+                                                xử lý đơn hàng.
                                             </Text>
                                         </Paper>
                                     </Accordion.Panel>
@@ -188,9 +188,9 @@ export function Checkout() {
                                                 toán.
                                                 <br />
                                                 Bước 3: Nhân viên CSKH của
-                                                Parfumerie.vn sẽ liên hệ Quý
-                                                Khách Hàng để xác nhận thanh
-                                                toán và xử lý đơn hàng.
+                                                Perfume LDA sẽ liên hệ Quý Khách
+                                                Hàng để xác nhận thanh toán và
+                                                xử lý đơn hàng.
                                             </Text>
                                         </Paper>
                                     </Accordion.Panel>
@@ -200,24 +200,23 @@ export function Checkout() {
                                     <Accordion.Control>
                                         <Radio
                                             value="offline"
-                                            label="Thanh toán khi nhận hàng"
+                                            label="Thanh toán khi giao hàng (COD)"
                                         />
                                     </Accordion.Control>
                                     <Accordion.Panel>
                                         <Paper shadow="xs" p="md">
                                             <Text>
                                                 Bước 1: Quý Khách Hàng vui lòng
-                                                chọn hình thức Thanh toán qua
-                                                VNPay-QR và Bấm Đặt hàng.
+                                                chọn hình thức Thanh toán khi
+                                                giao hàng (COD) và Bấm Đặt hàng.
                                                 <br />
-                                                Bước 2: Quý Khách Hàng làm theo
-                                                hướng dẫn để sử dụng mã QR thanh
-                                                toán.
+                                                Bước 2: Nhân viên CSKH của
+                                                Perfume LDA sẽ liên hệ với Quý
+                                                Khách Hàng để xác nhận và xử lý
+                                                đơn hàng.
                                                 <br />
-                                                Bước 3: Nhân viên CSKH của
-                                                Parfumerie.vn sẽ liên hệ Quý
-                                                Khách Hàng để xác nhận thanh
-                                                toán và xử lý đơn hàng.
+                                                Bước 3: Quý Khách Hàng chỉ phải
+                                                thanh toán khi nhận được hàng.
                                             </Text>
                                         </Paper>
                                     </Accordion.Panel>

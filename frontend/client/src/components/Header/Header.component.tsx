@@ -9,12 +9,13 @@ import {
     Drawer,
     ScrollArea,
     rem,
-    SimpleGrid,
+    // SimpleGrid,
     HoverCard,
     Stack,
     TextInput,
     Divider,
     Badge,
+    Flex,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -30,7 +31,6 @@ import { CategoryType } from "../../types/category.type";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { categoryService } from "../../services/category.service";
-import { productService } from "../../services/product.service";
 import { authService } from "../../services/auth.service";
 import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
 
@@ -125,18 +125,14 @@ export function HeaderApp() {
         },
     ]);
 
-    const [brands, setBrands] = useState<[{ brand: string }]>([{ brand: "" }]);
+    // const [brands, setBrands] = useState<[{ brand: string }]>([{ brand: "" }]);
     const [searchValue, setSearchValue] = useState("");
     const navigate = useNavigate();
 
     const handleGetAllCategories = async () => {
-        const [resCategories, resBrands] = await Promise.all([
-            categoryService.getAllCategory(),
-            productService.getAllBrand(),
-        ]);
+        const resCategories = await categoryService.getAllCategory();
 
         setCategories(resCategories.data);
-        setBrands(resBrands.data);
     };
 
     const handleLogout = async () => {
@@ -280,12 +276,12 @@ export function HeaderApp() {
                     </Link>
                     <HoverCard width={200} shadow="md">
                         <HoverCard.Target>
-                            <Group>
+                            <Flex gap={0} align="center">
                                 <Text size="20px" fw={500} color="black">
                                     Danh mục
                                 </Text>
                                 <IconChevronDown />
-                            </Group>
+                            </Flex>
                         </HoverCard.Target>
                         <HoverCard.Dropdown>
                             <Stack>
@@ -312,7 +308,7 @@ export function HeaderApp() {
                         </HoverCard.Dropdown>
                     </HoverCard>
 
-                    <HoverCard width={300} shadow="md">
+                    {/* <HoverCard width={300} shadow="md">
                         <HoverCard.Target>
                             <Group>
                                 <Text size="18px" fw={500} color="black">
@@ -344,12 +340,12 @@ export function HeaderApp() {
                                     )}
                             </SimpleGrid>
                         </HoverCard.Dropdown>
-                    </HoverCard>
-                    {/* <Link to="/" style={{ textDecoration: "none" }}>
+                    </HoverCard> */}
+                    <Link to="/contact" style={{ textDecoration: "none" }}>
                         <Text size="20px" fw={500} color="black">
-                            Blog
+                            Liên hệ
                         </Text>
-                    </Link> */}
+                    </Link>
                 </Group>
             </Header>
 
