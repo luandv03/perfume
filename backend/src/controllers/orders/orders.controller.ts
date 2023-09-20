@@ -86,6 +86,34 @@ export class OrderController {
         }
     }
 
+    async createCoupon(req: Request, res: Response): Promise<any> {
+        try {
+            const {
+                coupon_name,
+                coupon_code,
+                coupon_discount,
+                condition,
+                quantity,
+                start_time,
+                end_time,
+            } = req.body;
+
+            const data = await orderService.createCoupon({
+                coupon_name,
+                coupon_code,
+                coupon_discount,
+                condition,
+                quantity,
+                start_time,
+                end_time,
+            });
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({ message: error });
+        }
+    }
+
     async acceptOrderByOrderId(req: Request, res: Response): Promise<any> {
         try {
             const order_id = req.params.order_id;

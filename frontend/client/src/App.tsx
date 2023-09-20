@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 
 import LayoutApp from "./pages/layout.page";
 import { Home } from "./components/Home/Home";
@@ -19,6 +19,8 @@ import { About } from "./components/About/About";
 import { Contact } from "./components/Contact/Contact";
 
 function App() {
+    const [searchParams] = useSearchParams();
+
     return (
         <>
             <Routes>
@@ -108,7 +110,18 @@ function App() {
                             </TitlePageWrapper>
                         }
                     />
-                    <Route path="/search" element={<SearchResult />} />
+                    <Route
+                        path="/search"
+                        element={
+                            <TitlePageWrapper
+                                title={`${searchParams.get(
+                                    "title"
+                                )} | Perfume LDA`}
+                            >
+                                <SearchResult />
+                            </TitlePageWrapper>
+                        }
+                    />
                 </Route>
 
                 <Route

@@ -48,8 +48,9 @@ app.use(
 );
 
 app.get("/token", (req, res) => {
-    console.log(req.cookies.refresh_token_user);
-    res.send(req.cookies.refresh_token_user);
+    query(`SELECT * FROM coupons`).then((resulst) => {
+        res.json(resulst.rows);
+    });
 });
 
 app.use("/", router);

@@ -62,6 +62,18 @@ class OrderService extends BaseService {
             return error;
         }
     }
+
+    getCouponByCode = async (coupon_code: string) => {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/coupon/${coupon_code}/view`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    };
 }
 
 export const orderService: OrderService = new OrderService();

@@ -46,7 +46,13 @@ orderRoutes.patch(
     orderController.cancelOrder
 );
 
-//use coupon
-orderRoutes.get("/coupon/:coupon_code", orderController.getValidCouponByCode);
+//get coupon
+orderRoutes.get(
+    "/coupon/:coupon_code/view",
+    orderController.getValidCouponByCode
+);
+
+//create coupon
+orderRoutes.post("/coupon/create", orderController.createCoupon);
 
 export default orderRoutes;

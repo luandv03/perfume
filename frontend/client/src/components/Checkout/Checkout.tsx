@@ -48,6 +48,9 @@ export function Checkout() {
     const { cartUser } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
     const [methodPayment, setMethodPayment] = useState("offline");
+    const [couponError, setCouponError] = useState<string>("");
+    const [couponCode, setCouponCode] = useState("");
+    const [loadingCoupon, setLoadingCoupon] = useState(false);
 
     const navigate = useNavigate();
 
@@ -123,6 +126,20 @@ export function Checkout() {
                 message: error.message,
             });
             setLoading(false);
+        }
+    };
+
+    const handleGetCoupon = async () => {
+        setCouponError("");
+
+        if (!couponCode) return setCouponError("Mời bạn nhập mã giảm giá");
+
+        setLoadingCoupon(true);
+        const res = await orderService.getCouponByCode(couponCode);
+        setLoadingCoupon(false);
+
+        if (res.statusCode !== 200) {
+            return setCouponError(res.response.data.message);
         }
     };
 
@@ -317,9 +334,21 @@ export function Checkout() {
                     <Text size={20}>0vnđ</Text>
                 </Group>
                 <Group spacing={0}>
-                    <TextInput placeholder="Mã giảm giá" size="md"></TextInput>
-                    <Button>Áp dụng</Button>
+                    <TextInput
+                        placeholder="Nhập mã giảm giá"
+                        size="md"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                    ></TextInput>
+                    <Button
+                        h={42}
+                        onClick={() => handleGetCoupon()}
+                        disabled={loadingCoupon}
+                    >
+                        Áp dụng
+                    </Button>
                 </Group>
+                {!!couponError && <Text color="red">{couponError}</Text>}
                 <Divider variant="dashed" mt={10}></Divider>
                 <Group position="apart">
                     <Text size={20} fw={500}>

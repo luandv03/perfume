@@ -2,8 +2,10 @@ import { Router } from "express";
 import moment from "moment";
 
 import { vnpayConfig } from "../../../configs/vnpay.config";
+import { PaymentController } from "../../../controllers/payments/payment.controller";
 
 const paymentRoutes: Router = Router();
+const paymentController = new PaymentController();
 
 // vn pay
 paymentRoutes.get("/payment/create_payment_url", function (req, res, next) {
@@ -180,5 +182,14 @@ function sortObject(obj: any) {
     }
     return sorted;
 }
+
+// momo wallet
+paymentRoutes.get("/payment/momo", paymentController.createPaymentWithMomo);
+
+// momo pay url
+paymentRoutes.get(
+    "/payment/momo/return_url",
+    paymentController.paymentWithMomoReturn
+);
 
 export default paymentRoutes;

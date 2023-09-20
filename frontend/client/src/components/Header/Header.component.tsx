@@ -9,13 +9,13 @@ import {
     Drawer,
     ScrollArea,
     rem,
-    // SimpleGrid,
     HoverCard,
     Stack,
     TextInput,
     Divider,
     Badge,
     Flex,
+    LoadingOverlay,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -117,6 +117,7 @@ export function HeaderApp() {
     const { classes, theme } = useStyles();
     const { cartUser, setCartUser } = useContext(CartContext);
     const { profile, setProfile } = useContext(AuthContext);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const [categories, setCategories] = useState<CategoryType[]>([
         {
@@ -136,7 +137,9 @@ export function HeaderApp() {
     };
 
     const handleLogout = async () => {
+        setLoading(true);
         const res = await authService.logout();
+        setLoading(false);
         if (res.statusCode === 200) {
             setProfile({
                 customer_id: 0,
@@ -280,7 +283,14 @@ export function HeaderApp() {
                                 <Text size="20px" fw={500} color="black">
                                     Danh mục
                                 </Text>
-                                <IconChevronDown />
+                                <Flex
+                                    style={{
+                                        height: "31px",
+                                    }}
+                                    align="center"
+                                >
+                                    <IconChevronDown height={31} stroke={1} />
+                                </Flex>
                             </Flex>
                         </HoverCard.Target>
                         <HoverCard.Dropdown>
@@ -308,39 +318,6 @@ export function HeaderApp() {
                         </HoverCard.Dropdown>
                     </HoverCard>
 
-                    {/* <HoverCard width={300} shadow="md">
-                        <HoverCard.Target>
-                            <Group>
-                                <Text size="18px" fw={500} color="black">
-                                    Thương hiệu
-                                </Text>
-                                <IconChevronDown />
-                            </Group>
-                        </HoverCard.Target>
-                        <HoverCard.Dropdown>
-                            <SimpleGrid cols={3} h={100} w={300}>
-                                {brands.length > 0 &&
-                                    brands.map(
-                                        (
-                                            brand: { brand: string },
-                                            index: number
-                                        ) => (
-                                            <Link
-                                                to={`/product/${brand.brand}/filter`}
-                                                style={{
-                                                    textDecoration: "none",
-                                                }}
-                                                key={index}
-                                            >
-                                                <Text color="black">
-                                                    {brand.brand}
-                                                </Text>
-                                            </Link>
-                                        )
-                                    )}
-                            </SimpleGrid>
-                        </HoverCard.Dropdown>
-                    </HoverCard> */}
                     <Link to="/contact" style={{ textDecoration: "none" }}>
                         <Text size="20px" fw={500} color="black">
                             Liên hệ
@@ -378,6 +355,13 @@ export function HeaderApp() {
                     </Group>
                 </ScrollArea>
             </Drawer>
+            <LoadingOverlay
+                sx={{ position: "fixed", height: "100%" }}
+                loaderProps={{ size: "sm", color: "pink", variant: "oval" }}
+                overlayOpacity={0.3}
+                overlayColor="#c5c5c5"
+                visible={loading}
+            />
         </Box>
     );
 }

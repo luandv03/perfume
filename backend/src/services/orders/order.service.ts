@@ -318,7 +318,7 @@ class OrderService {
         if (!results.rows[0]) {
             return {
                 statusCode: HttpStatusCode.NOT_FOUND,
-                message: "Coupon code not exist",
+                message: "Mã giảm giá không tồn tại",
             };
         }
 
@@ -326,7 +326,7 @@ class OrderService {
         if (results.rows[0].quantity <= 0) {
             return {
                 statusCode: HttpStatusCode.ACCEPTED,
-                message: "Coupon này đã hết",
+                message: "Mã giảm giá này đã hết",
             };
         }
 
@@ -337,8 +337,8 @@ class OrderService {
 
         if (startTimeCoupon > currentTime || endTimeCoupon < currentTime) {
             return {
-                statusCode: 400,
-                message: "Coupon expired",
+                statusCode: HttpStatusCode.NOT_ACCEPTABLE,
+                message: "Mã giảm giá đã hết hạn",
             };
         }
 
@@ -347,6 +347,55 @@ class OrderService {
             statusCode: HttpStatusCode.OK,
             message: "COUPON OK",
             data: results.rows[0],
+        };
+    }
+
+    async createCoupon({
+        coupon_name,
+        coupon_code,
+        coupon_discount,
+        condition,
+        quantity,
+        start_time,
+        end_time,
+    }: any): Promise<ResponseType<any>> {
+        const results = await query(
+            `SELECT * FROM coupons WHERE coupon_code = $1`,
+            [coupon_code]
+        );
+
+        if (!!results.rows[0]) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Mã giảm giá đã tồn tại",
+            };
+        }
+
+        const resCoupon = await query(
+            `INSERT INTO coupons(coupon_name, coupon_code, coupon_discount, condition, quantity, start_time, end_time)  
+             VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [
+                coupon_name,
+                coupon_code,
+                coupon_discount,
+                condition,
+                quantity,
+                start_time,
+                end_time,
+            ]
+        );
+
+        if (!resCoupon.rowCount) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Tạo mã giảm giá thất bại",
+            };
+        }
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "COUPON OK",
+            data: resCoupon.rows[0],
         };
     }
 
