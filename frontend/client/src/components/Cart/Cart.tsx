@@ -10,7 +10,6 @@ import {
     Badge,
     ActionIcon,
     NumberInput,
-    // NumberInputHandlers,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { IconTrash } from "@tabler/icons-react";

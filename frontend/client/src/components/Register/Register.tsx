@@ -176,14 +176,7 @@ export function Register() {
                                 {...form.getInputProps("address")}
                             />
 
-                            <Menu
-                                // form.setValues({
-                                //     ...form.values,
-                                //     dob: `${value}`,
-                                // });
-                                opened={opened}
-                                onChange={setOpened}
-                            >
+                            <Menu opened={opened} onChange={setOpened}>
                                 <Menu.Target>
                                     <TextInput
                                         label="Ngày sinh"

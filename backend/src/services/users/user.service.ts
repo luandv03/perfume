@@ -510,6 +510,40 @@ class UserService {
 
         return Number(results?.rows[0].n_customers);
     }
+
+    async updateProfileCustomer(
+        customer_id: number,
+        {
+            fullname,
+            dob,
+            address,
+            phone_number,
+        }: {
+            fullname: string;
+            dob: string;
+            address: string;
+            phone_number: string;
+        }
+    ): Promise<ResponseType<any>> {
+        if (!fullname || !dob || !phone_number || !address) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Please fill in all field",
+            };
+        }
+
+        const result = await query(
+            `UPDATE customers SET fullname = $1, dob = $2, address = $3, phone_number = $4 
+             WHERE customer_id = $5 RETURNING *`,
+            [fullname, dob, address, phone_number, customer_id]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Update profile successfull",
+            data: result.rows[0],
+        };
+    }
 }
 
 export const userService = new UserService();

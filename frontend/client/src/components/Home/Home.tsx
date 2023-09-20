@@ -1,5 +1,6 @@
 import {
     Stack,
+    LoadingOverlay,
     // Center,
     // Text,
     // Card,
@@ -26,7 +27,6 @@ import { CharmCate } from "../CharmCate/CharmCate";
 
 export function Home() {
     // const { classes } = useStyles();
-    // const [title, setTitle] = useState<string>(document.title);
 
     const [categories, setCategories] = useState<CategoryType[]>([
         {
@@ -34,11 +34,14 @@ export function Home() {
             category_name: "",
         },
     ]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleGetAllCategories = async () => {
+        setLoading(true);
         const resCategories = await categoryService.getAllCategory();
 
         setCategories(resCategories.data);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -52,6 +55,13 @@ export function Home() {
                 categories.map((category: CategoryType) => (
                     <CharmCate category={category} />
                 ))}
+            <LoadingOverlay
+                sx={{ position: "fixed", height: "100%" }}
+                loaderProps={{ size: "sm", color: "pink", variant: "oval" }}
+                overlayOpacity={0.3}
+                overlayColor="#c5c5c5"
+                visible={loading}
+            />
         </Stack>
     );
 }

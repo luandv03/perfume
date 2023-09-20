@@ -121,4 +121,11 @@ userRoutes.get("/customer/view", userController.getCustomers);
 // get customer by id: role admin
 userRoutes.get("/customer/detail/:customer_id", userController.getCustomerById);
 
+//update profile
+userRoutes.patch(
+    "/customer/profile/update",
+    userAuthMiddleware,
+    userController.updateProfile
+);
+
 export default userRoutes;

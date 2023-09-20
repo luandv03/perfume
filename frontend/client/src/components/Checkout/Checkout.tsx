@@ -21,6 +21,7 @@ import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { orderService } from "../../services/order.service";
 import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
+import { createWindow } from "../../helpers/createWindow.helper";
 
 type OrderItem = {
     product_id: number;
@@ -51,10 +52,11 @@ export function Checkout() {
     const navigate = useNavigate();
 
     const handlePayment = async (amount: number, order_id: number) => {
-        window.open(
+        createWindow(
             `http://localhost:8888/payment/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
-            "width=500, height=600"
+            800,
+            600
         );
     };
 
@@ -353,7 +355,7 @@ export function Checkout() {
                 </Group>
                 <LoadingOverlay
                     sx={{ position: "fixed", height: "100%" }}
-                    loaderProps={{ size: "sm", color: "pink", variant: "bars" }}
+                    loaderProps={{ size: "sm", color: "pink", variant: "oval" }}
                     overlayOpacity={0.3}
                     overlayColor="#c5c5c5"
                     visible={loading}

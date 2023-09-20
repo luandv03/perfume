@@ -250,4 +250,26 @@ export class UserController {
             });
         }
     }
+
+    async updateProfile(req: Request, res: Response): Promise<any> {
+        try {
+            const { customer_id } = res.locals.data;
+            const { fullname, dob, address, phone_number } = req.body;
+
+            const data = await userService.updateProfileCustomer(customer_id, {
+                fullname,
+                dob,
+                address,
+                phone_number,
+            });
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Internal server error",
+                error: error,
+            });
+        }
+    }
 }

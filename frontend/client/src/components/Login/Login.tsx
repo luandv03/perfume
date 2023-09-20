@@ -30,6 +30,7 @@ import { useState, useContext, useEffect } from "react";
 
 import { authService } from "../../services/auth.service";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
+import { createWindow } from "../../helpers/createWindow.helper";
 
 export function LoginAuth() {
     const [loading, setLoading] = useState(false);
@@ -118,10 +119,12 @@ export function LoginAuth() {
         }));
 
         let timer: ReturnType<typeof setTimeout> | null = null;
-        const newWindow = window.open(
+
+        const newWindow = createWindow(
             "http://localhost:8888/api/v1/auth/google/login",
             "_blank",
-            "width=500, height=600"
+            800,
+            600
         );
 
         if (newWindow) {
@@ -149,10 +152,11 @@ export function LoginAuth() {
         }));
 
         let timer: ReturnType<typeof setTimeout> | null = null;
-        const newWindow = window.open(
+        const newWindow = createWindow(
             "http://localhost:8888/api/v1/auth/facebook/login",
             "_blank",
-            "width=500, height=600"
+            800,
+            600
         );
 
         if (newWindow) {

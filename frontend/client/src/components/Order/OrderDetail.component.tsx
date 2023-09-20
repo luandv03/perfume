@@ -10,10 +10,10 @@ import {
 import { IconTrash } from "@tabler/icons-react";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { notifications } from "@mantine/notifications";
 
 import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helper";
-import { notifications } from "@mantine/notifications";
 
 interface CouponType {
     coupon_id: number;

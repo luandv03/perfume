@@ -96,6 +96,29 @@ class AuthService extends BaseService {
             return error;
         }
     }
+
+    async updateProfile({
+        fullname,
+        phone_number,
+        address,
+        dob,
+    }: {
+        fullname: string;
+        phone_number: string;
+        address: string;
+        dob: string;
+    }) {
+        try {
+            const res = await this.httpClientPrivate.patch(
+                "/customer/profile/update",
+                { fullname, phone_number, address, dob }
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const authService: AuthService = new AuthService();
