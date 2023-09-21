@@ -54,9 +54,13 @@ export function Checkout() {
 
     const navigate = useNavigate();
 
-    const handlePayment = async (amount: number, order_id: number) => {
+    const handlePayment = async (
+        methodPayment: string,
+        amount: number,
+        order_id: number
+    ) => {
         createWindow(
-            `http://localhost:8888/payment/create_payment_url?amount=${amount}&order_id=${order_id}`,
+            `http://localhost:8888/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
             800,
             600
@@ -107,8 +111,12 @@ export function Checkout() {
                     )
                 );
 
-                if (methodPayment === "vnpay")
-                    await handlePayment(amount, resData.data.order_id);
+                if (methodPayment !== "offline")
+                    await handlePayment(
+                        methodPayment,
+                        amount,
+                        resData.data.order_id
+                    );
 
                 navigate(`/checkout/thankyou/${resData.data.order_id}`);
 

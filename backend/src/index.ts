@@ -54,7 +54,6 @@ app.get("/token", (req, res) => {
 });
 
 app.use("/", router);
-app.use("/", paymentRoutes);
 
 app.listen(PORT, () => {
     console.log("server is listening on port " + PORT);

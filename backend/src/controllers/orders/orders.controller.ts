@@ -4,8 +4,14 @@ import { orderService } from "../../services/orders/order.service";
 export class OrderController {
     async createOrder(req: Request, res: Response): Promise<any> {
         try {
-            const { customer_id, tax, delivery_cost, coupon_id, orderList } =
-                req.body;
+            const {
+                customer_id,
+                tax,
+                delivery_cost,
+                coupon_id,
+                payment_type,
+                orderList,
+            } = req.body;
 
             const data = await orderService.createOrder({
                 customer_id,
@@ -13,6 +19,7 @@ export class OrderController {
                 delivery_cost,
                 orderList,
                 coupon_id, // have or no
+                payment_type,
             });
             return res.status(data.statusCode).json(data);
         } catch (err) {

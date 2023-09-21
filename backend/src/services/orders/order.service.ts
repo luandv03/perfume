@@ -15,20 +15,27 @@ type Order = {
     tax: number;
     delivery_cost: number;
     orderList: OrderLine[];
+    payment_type: string;
     coupon_id?: string;
 };
 
 class OrderService {
     async createOrder(order: Order): Promise<any> {
         try {
-            const { customer_id, tax, delivery_cost, coupon_id, orderList } =
-                order;
+            const {
+                customer_id,
+                tax,
+                delivery_cost,
+                coupon_id,
+                orderList,
+                payment_type,
+            } = order;
 
             await query("BEGIN");
 
             const results_1 = await query(
-                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date) VALUES($1, $2, 'ordered', $3, NOW()::DATE) RETURNING *`,
-                [customer_id, tax, delivery_cost]
+                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date, payment_type) VALUES($1, $2, 'ordered', $3, NOW()::DATE, $4) RETURNING *`,
+                [customer_id, tax, delivery_cost, payment_type]
             );
 
             const order_id = results_1.rows[0].order_id;
@@ -104,18 +111,21 @@ class OrderService {
             results = await query(
                 `with tmp_2 as (
                     with tmp as (
-                    select order_id, customer_id, cast(count(orderline_id) as int) n_item , tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date 
+                    select order_id, customer_id, cast(count(orderline_id) as int) n_item , tax, 
+                    delivery_cost, sum(quantity*net_price) tam_tinh , order_date, payment_type 
                     from orders
                     join orderlines using(order_id)
                     group by order_id
                 )
-                select tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+                select tmp.order_id, customer_id, n_item, tax, delivery_cost,
+                tam_tinh, sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date, payment_type
                 from tmp
                 left join coupon_orders cpo on tmp.order_id = cpo. order_id
                 left join coupons cp on cp.coupon_id = cpo.coupon_id
-                group by tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, order_date
+                group by tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, order_date, payment_type
                 )
-                select order_id, customer_id, n_item, tax, delivery_cost, cast(tong_giam_gia as int), order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost   as tong_hoa_don
+                select order_id, customer_id, n_item, tax, delivery_cost, cast(tong_giam_gia as int), 
+                order_date, payment_type, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost as tong_hoa_don
                 from tmp_2 ORDER BY order_id
                 OFFSET $1 LIMIT $2 `,
                 [offset, limit]
@@ -124,19 +134,19 @@ class OrderService {
             results = await query(
                 `with tmp_2 as (
                     with tmp as (
-                    select order_id, customer_id, cast(count(orderline_id) as int) n_item , tax , delivery_cost, sum(quantity*net_price) tam_tinh , order_date 
+                    select order_id, customer_id, cast(count(orderline_id) as int) n_item , tax , delivery_cost, sum(quantity*net_price) tam_tinh , order_date, payment_type 
                     from orders
                     join orderlines using(order_id)
                     WHERE status = $1 
                     group by order_id
                 )
-                select tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+                select tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date, payment_type
                 from tmp
                 left join coupon_orders cpo on tmp.order_id = cpo. order_id
                 left join coupons cp on cp.coupon_id = cpo.coupon_id
-                group by tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, order_date
+                group by tmp.order_id, customer_id, n_item, tax, delivery_cost, tam_tinh, order_date, payment_type
                 )
-                select order_id, customer_id, n_item, tax, delivery_cost, cast(tong_giam_gia as int), order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost   as tong_hoa_don
+                select order_id, customer_id, n_item, tax, delivery_cost, cast(tong_giam_gia as int), order_date, payment_type, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost   as tong_hoa_don
                 from tmp_2 ORDER BY order_id
                 OFFSET $2 LIMIT $3 `,
                 [status, offset, limit]
@@ -204,18 +214,18 @@ class OrderService {
             const results = await query(
                 `with tmp_2 as (
                 with tmp as (
-                select order_id,cast(count(orderline_id) as int) n_item, status, tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date from orders
+                select order_id,cast(count(orderline_id) as int) n_item, status, tax, delivery_cost, sum(quantity*net_price) tam_tinh , order_date, payment_type from orders
                 join orderlines using(order_id)
                 where customer_id = $1
                 group by order_id
             )
-            select tmp.order_id, n_item, status, tax, delivery_cost, tam_tinh,   sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date
+            select tmp.order_id, n_item, status, tax, delivery_cost, tam_tinh,   sum(COALESCE(cp.coupon_discount,0)) as tong_giam_gia, order_date, payment_type
             from tmp
             left join coupon_orders cpo on tmp.order_id = cpo. order_id
             left join coupons cp on cp.coupon_id = cpo.coupon_id
-            group by tmp.order_id, n_item, status, tax, delivery_cost, tam_tinh, order_date
+            group by tmp.order_id, n_item, status, tax, delivery_cost, tam_tinh, order_date, payment_type
         )
-        select order_id, n_item, status, tax, delivery_cost, tong_giam_gia, order_date, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost as tong_hoa_don
+        select order_id, n_item, status, tax, delivery_cost, tong_giam_gia, order_date, payment_type, tam_tinh*(1-(tong_giam_gia::float)/100)*(1 + (tax::float)/100) + delivery_cost as tong_hoa_don
         from tmp_2 order by order_id OFFSET $2 LIMIT $3`,
                 [customer_id, offset, limit]
             );
