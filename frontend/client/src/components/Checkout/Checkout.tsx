@@ -118,9 +118,7 @@ export function Checkout() {
                         resData.data.order_id
                     );
 
-                navigate(`/checkout/thankyou/${resData.data.order_id}`);
-
-                return;
+                return navigate(`/checkout/thankyou/${resData.data.order_id}`);
             }
             showNotification({
                 title: "Đặt hàng thất bại",

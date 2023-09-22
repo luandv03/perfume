@@ -128,4 +128,16 @@ userRoutes.patch(
     userController.updateProfile
 );
 
+//send otp to email
+userRoutes.post(
+    "/customer/forgot_password/otp/send",
+    userController.sendOtpToEmail
+);
+
+//confirm otp and reset password
+userRoutes.post(
+    "/customer/forgot_password/otp/confirm",
+    userController.confirmOtpAndSendNewPassword
+);
+
 export default userRoutes;

@@ -10,8 +10,9 @@ import { configService } from "../../configs/configService.config";
 interface MailerType {
     from: string;
     to: string;
-    text: string;
-    subject: string;
+    text?: string;
+    subject?: string;
+    html: string;
 }
 
 class MailerService {
@@ -26,11 +27,11 @@ class MailerService {
     });
 
     public async sendMail(
-        { from, to, text, subject }: MailerType,
+        { from, to, text, subject, html }: MailerType,
         data: any
     ): Promise<ResponseType<any>> {
         const __dirname = path.resolve();
-        const filePath = path.join(__dirname, "/src/views/order_confirm.jade");
+        const filePath = path.join(__dirname, `/src/views/${html}.jade`);
         const source = fs.readFileSync(filePath, "utf-8").toString();
         const template = jade.compile(source);
         const htmlToSend = template({ data });

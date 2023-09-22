@@ -1,7 +1,6 @@
 import {
     TextInput,
     PasswordInput,
-    Anchor,
     Paper,
     Title,
     Text,
@@ -55,10 +54,10 @@ export function Register() {
             phone_number: hasLength({ min: 1 }, "Không được để trống"),
             address: hasLength({ min: 1 }, "Không được để trống"),
             dob: hasLength({ min: 1 }, "Không được để trống"),
-            email: isEmail("Invalid email"),
+            email: isEmail("Email không hợp lệ"),
             password: hasLength(
-                { min: 8, max: 20 },
-                "Value must have 8 or more characters"
+                { min: 8, max: 30 },
+                "Mật khẩu phải có tối thiểu 8 hoặc tối đa 30 ký tự"
             ),
         },
     });
@@ -220,15 +219,7 @@ export function Register() {
                                 mt="md"
                                 {...form.getInputProps("password")}
                             />
-                            <Group position="apart" mt="lg">
-                                <Anchor<"a">
-                                    onClick={(event) => event.preventDefault()}
-                                    href="#"
-                                    size="sm"
-                                >
-                                    Quên mật khẩu
-                                </Anchor>
-                            </Group>
+
                             <Button
                                 fullWidth
                                 mt="xl"

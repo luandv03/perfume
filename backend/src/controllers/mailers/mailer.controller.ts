@@ -14,6 +14,7 @@ export class MailerController {
                     subject: "Đặt hàng thành công",
                     to,
                     text: "Hello world?", // plain text body
+                    html: "order_confirm",
                 },
                 dataOrder
             );

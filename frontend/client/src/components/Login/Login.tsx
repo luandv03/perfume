@@ -1,8 +1,6 @@
 import {
     TextInput,
     PasswordInput,
-    Checkbox,
-    Anchor,
     Paper,
     Title,
     Text,
@@ -274,17 +272,12 @@ export function LoginAuth() {
                                 {...form.getInputProps("password")}
                             />
                             <Group position="apart" mt="lg">
-                                <Checkbox
-                                    label="Remember me"
-                                    sx={{ lineHeight: 1 }}
-                                />
-                                <Anchor<"a">
-                                    onClick={(event) => event.preventDefault()}
-                                    href="#"
-                                    size="sm"
+                                <Link
+                                    to="/forgot_password"
+                                    style={{ color: "blue" }}
                                 >
-                                    Quên mật khẩu?
-                                </Anchor>
+                                    Quên mật khẩu ?
+                                </Link>
                             </Group>
                             <Button
                                 fullWidth

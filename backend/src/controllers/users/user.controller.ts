@@ -272,4 +272,42 @@ export class UserController {
             });
         }
     }
+
+    async sendOtpToEmail(req: Request, res: Response): Promise<any> {
+        try {
+            const { email } = req.body;
+
+            const data = await userService.sendOtpToEmail(email);
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Internal server error",
+                error: error,
+            });
+        }
+    }
+
+    async confirmOtpAndSendNewPassword(
+        req: Request,
+        res: Response
+    ): Promise<any> {
+        try {
+            const { email, otp } = req.body;
+
+            const data = await userService.confirmOtpAndSendNewPassword(
+                email,
+                otp
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Internal server error",
+                error: error,
+            });
+        }
+    }
 }

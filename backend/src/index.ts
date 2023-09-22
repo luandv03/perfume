@@ -47,9 +47,23 @@ app.use(
     })
 );
 
-app.get("/token", (req, res) => {
-    query(`SELECT * FROM coupons`).then((resulst) => {
+app.get("/payments/momo", (req, res) => {
+    query(`SELECT * FROM momo_wallet`).then((resulst) => {
         res.json(resulst.rows);
+    });
+});
+
+app.get("/payments/vnpay", (req, res) => {
+    query(`SELECT * FROM vnpay_wallet`).then((resulst) => {
+        res.json(resulst.rows);
+    });
+});
+
+app.get("/token", (req, res) => {
+    res.render("reset_password", {
+        data: {
+            newPassword: 123456,
+        },
     });
 });
 

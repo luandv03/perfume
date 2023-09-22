@@ -119,6 +119,35 @@ class AuthService extends BaseService {
             return error;
         }
     }
+
+    // post("/customer/forgot_password/otp/send",
+    async sendOtpToEmail(email: string) {
+        try {
+            const res = await this.httpClientPublic.post(
+                "/customer/forgot_password/otp/send",
+                { email }
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    // confirm otp and reset password
+    // post("/customer/forgot_password/otp/confirm",
+    async confirmOtpAndSendNewPassword(email: string, otp: string) {
+        try {
+            const res = await this.httpClientPublic.post(
+                "/customer/forgot_password/otp/confirm",
+                { email, otp }
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const authService: AuthService = new AuthService();

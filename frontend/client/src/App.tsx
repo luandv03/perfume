@@ -14,6 +14,7 @@ import { SearchResult } from "./components/SearchResult/SearchResult";
 import { PrivateRoute } from "./routes";
 import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
 import { Register } from "./components/Register/Register";
+import { ForgotPassword } from "./components/ForgotPassword/ForgotPassword";
 import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper";
 import { About } from "./components/About/About";
 import { Contact } from "./components/Contact/Contact";
@@ -142,6 +143,14 @@ function App() {
                     }
                 />
                 <Route path="/login/success" element={<LoginGoogleSuccess />} />
+                <Route
+                    path="/forgot_password"
+                    element={
+                        <TitlePageWrapper title="Quên mật khẩu | Perfume LDA">
+                            <ForgotPassword />
+                        </TitlePageWrapper>
+                    }
+                />
             </Routes>
         </>
     );

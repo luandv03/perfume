@@ -47,6 +47,20 @@ class PaymentService {
             vnp_SecureHash,
         } = vnpayData;
 
+        //check trans of this order_id existed ?
+        const checkExist = await query(
+            `SELECT * FROM vnpay_wallet WHERE vnp_TxnRef = $1`,
+            [vnp_TxnRef]
+        );
+
+        if (!checkExist.rowCount) {
+            return {
+                statusCode: HttpStatusCode.OK,
+                message: "Thông tin giao dịch của đơn hàng:::" + vnp_TxnRef,
+                data: checkExist.rows[0],
+            };
+        }
+
         const result = await query(
             `INSERT INTO vnpay_wallet VALUES(DEFAULT, $1, $2, $3, 
             $4, $5, $6, $7, $8, 
@@ -88,6 +102,20 @@ class PaymentService {
             payType,
             signature,
         } = momoData;
+
+        //check trans of this order_id existed ?
+        const checkExist = await query(
+            `SELECT * FROM vnpay_wallet WHERE orderId = $1`,
+            [orderId]
+        );
+
+        if (!checkExist.rowCount) {
+            return {
+                statusCode: HttpStatusCode.OK,
+                message: "Thông tin giao dịch của đơn hàng:::" + orderId,
+                data: checkExist.rows[0],
+            };
+        }
 
         const result = await query(
             `INSERT INTO momo_wallet VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,

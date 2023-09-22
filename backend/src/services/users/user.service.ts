@@ -1,6 +1,7 @@
 import { QueryResult } from "pg";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { randomBytes } from "crypto";
 
 import { query } from "../../db/index.db";
 import { ITokenUser } from "../../types/users/user.type";
@@ -12,6 +13,8 @@ import { ILoginUser } from "../../types/users/user.type";
 import { IRegisterUser } from "../../types/users/user.type";
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 import { cartService } from "../carts/cart.service";
+import { mailerService } from "../mailers/mailer.service";
+import { generatePasswordRandom } from "../../utils/generatePasswordRandom.util";
 
 const configService = new ConfigService();
 
@@ -542,6 +545,139 @@ class UserService {
             statusCode: HttpStatusCode.OK,
             message: "Update profile successfull",
             data: result.rows[0],
+        };
+    }
+
+    async sendOtpToEmail(email: string): Promise<ResponseType<any>> {
+        const checkUser = await query(
+            `SELECT customer_id FROM system_account WHERE email = $1`,
+            [email]
+        );
+
+        if (!checkUser.rowCount) {
+            return {
+                statusCode: HttpStatusCode.NOT_FOUND,
+                message: "User not exists",
+            };
+        }
+
+        const checkOtp = await query(
+            `SELECT * FROM otp WHERE customer_id = $1`,
+            [checkUser.rows[0].customer_id]
+        );
+
+        if (checkOtp.rowCount) {
+            await query(`DELETE FROM otp WHERE otp_id = $1`, [
+                checkOtp.rows[0].otp_id,
+            ]);
+        }
+
+        // create new otp
+        const newOtp = randomBytes(32).toString("hex");
+        const hash = await bcrypt.hash(newOtp, 10);
+
+        const result = await query(
+            `INSERT INTO otp VALUES(DEFAULT, $1, $2, $3) RETURNING *`,
+            [checkUser.rows[0].customer_id, hash, Date.now() + 30 * 60 * 1000] // 30 minutes
+        );
+
+        if (!result.rowCount) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Create otp failed",
+            };
+        }
+
+        const data = await mailerService.sendMail(
+            {
+                from: "<No reply> dinhvanluan2k3@gmail.com",
+                subject: "Yêu cầu khôi phục mật khẩu PERFUME LDA",
+                to: email,
+                text: "Hello world?", // plain text body
+                html: "otp",
+            },
+            { otp: newOtp }
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Send otp success",
+            data: data,
+        };
+    }
+
+    async confirmOtpAndSendNewPassword(
+        email: string,
+        otp: string
+    ): Promise<ResponseType<any>> {
+        const checkUser = await query(
+            `SELECT customer_id FROM system_account WHERE email = $1`,
+            [email]
+        );
+
+        if (!checkUser.rowCount) {
+            return {
+                statusCode: HttpStatusCode.NOT_FOUND,
+                message: "User not exists",
+            };
+        }
+
+        const checkOtp = await query(
+            `SELECT * FROM otp WHERE customer_id = $1`,
+            [checkUser.rows[0].customer_id]
+        );
+
+        if (!checkOtp.rowCount) {
+            return {
+                statusCode: HttpStatusCode.NOT_FOUND,
+                message: "OTP not exist",
+            };
+        }
+
+        const isValid: boolean = await bcrypt.compare(
+            otp,
+            checkOtp.rows[0].otp_code
+        );
+
+        if (!isValid) {
+            return {
+                statusCode: HttpStatusCode.NOT_ACCEPTABLE,
+                message: "Invalid OTP",
+            };
+        }
+
+        if (checkOtp.rows[0].expired < Date.now()) {
+            return {
+                statusCode: HttpStatusCode.NOT_ACCEPTABLE,
+                message: "OTP expired",
+            };
+        }
+
+        // check all condition ok -> reset password
+        const newPassword = generatePasswordRandom(10);
+
+        const hashNewPassword = await bcrypt.hash(newPassword, 10);
+
+        await query(
+            `UPDATE system_account SET password = $1 WHERE customer_id = $2`,
+            [hashNewPassword, checkUser.rows[0].customer_id]
+        );
+
+        const data = await mailerService.sendMail(
+            {
+                from: "<No reply> dinhvanluan2k3@gmail.com",
+                subject: "Yêu cầu đổi mật khẩu PERFUME LDA",
+                to: email,
+                text: "Hello world?", // plain text body
+                html: "reset_password",
+            },
+            { newPassword: hashNewPassword }
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Reset password success",
+            data: data,
         };
     }
 }
