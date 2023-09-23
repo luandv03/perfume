@@ -310,4 +310,26 @@ export class UserController {
             });
         }
     }
+
+    async resetPassword(req: Request, res: Response): Promise<any> {
+        try {
+            const { customer_id } = res.locals.data;
+            const { password, newPassword, confirmNewPassword } = req.body;
+
+            const data = await userService.resetPassword(
+                customer_id,
+                password,
+                newPassword,
+                confirmNewPassword
+            );
+
+            return res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+                statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
+                message: "Internal server error",
+                error: error,
+            });
+        }
+    }
 }

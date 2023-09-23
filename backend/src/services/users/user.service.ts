@@ -681,6 +681,49 @@ class UserService {
             data: data,
         };
     }
+
+    async resetPassword(
+        customer_id: number,
+        password: string,
+        newPassword: string,
+        confirmNewPassword: string
+    ): Promise<ResponseType<any>> {
+        const checkPassword = await query(
+            `SELECT password FROM system_account WHERE customer_id = $1`,
+            [customer_id]
+        );
+
+        const isMatch = await bcrypt.compare(
+            password,
+            checkPassword.rows[0].password
+        );
+
+        if (!isMatch) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "Current password not match",
+            };
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            return {
+                statusCode: HttpStatusCode.BAD_REQUEST,
+                message: "New password not match with confirm password",
+            };
+        }
+
+        const hashNewPassword = await bcrypt.hash(newPassword, 10);
+
+        await query(
+            `UPDATE system_account SET password = $1 WHERE customer_id = $2`,
+            [hashNewPassword, customer_id]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Reset password success",
+        };
+    }
 }
 
 export const userService = new UserService();

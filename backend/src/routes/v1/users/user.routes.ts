@@ -140,4 +140,11 @@ userRoutes.post(
     userController.confirmOtpAndSendNewPassword
 );
 
+// reset new password
+userRoutes.patch(
+    "/customer/password/reset",
+    userAuthMiddleware,
+    userController.resetPassword
+);
+
 export default userRoutes;

@@ -15,6 +15,7 @@ import { PrivateRoute } from "./routes";
 import { LoginGoogleSuccess, LoginAuth } from "./components/Login";
 import { Register } from "./components/Register/Register";
 import { ForgotPassword } from "./components/ForgotPassword/ForgotPassword";
+import { ResetPassword } from "./components/ResetPassword/ResetPassword";
 import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper";
 import { About } from "./components/About/About";
 import { Contact } from "./components/Contact/Contact";
@@ -79,6 +80,14 @@ function App() {
                             element={
                                 <TitlePageWrapper title="Trang khách hàng | Perfume LDA">
                                     <Profile />
+                                </TitlePageWrapper>
+                            }
+                        />
+                        <Route
+                            path="/customer/reset_password"
+                            element={
+                                <TitlePageWrapper title="Đổi mật khẩu | Perfume LDA">
+                                    <ResetPassword />
                                 </TitlePageWrapper>
                             }
                         />

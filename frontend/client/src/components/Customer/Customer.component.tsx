@@ -32,6 +32,18 @@ export default function Customer() {
                             Đơn hàng của bạn
                         </Text>
                     </Link>
+
+                    <Link to="/customer/reset_password">
+                        <Text
+                            color={
+                                location.pathname === "/customer/reset_password"
+                                    ? "red"
+                                    : "black"
+                            }
+                        >
+                            Đổi mật khẩu
+                        </Text>
+                    </Link>
                 </Stack>
                 <div style={{ paddingLeft: "20px" }}>
                     <Outlet />

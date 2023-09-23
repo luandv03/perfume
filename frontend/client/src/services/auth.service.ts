@@ -148,6 +148,23 @@ class AuthService extends BaseService {
             return error;
         }
     }
+
+    async resetPassword(
+        password: string,
+        newPassword: string,
+        confirmNewPassword: string
+    ) {
+        try {
+            const res = await this.httpClientPrivate.patch(
+                "/customer/password/reset",
+                { password, newPassword, confirmNewPassword }
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const authService: AuthService = new AuthService();
