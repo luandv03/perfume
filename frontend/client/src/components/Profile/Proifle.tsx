@@ -45,7 +45,7 @@ export function Profile() {
             <TextInput
                 label="Họ và tên"
                 withAsterisk
-                miw={400}
+                maw={400}
                 value={updateProfile.fullname}
                 onChange={(e) =>
                     setUpdateProfile((prev) => {
@@ -59,7 +59,7 @@ export function Profile() {
             <TextInput
                 label="Địa chỉ"
                 withAsterisk
-                miw={300}
+                maw={400}
                 value={updateProfile.address}
                 onChange={(e) =>
                     setUpdateProfile((prev) => {
@@ -73,7 +73,7 @@ export function Profile() {
             <TextInput
                 label="Số điện thoại"
                 withAsterisk
-                miw={300}
+                maw={400}
                 value={updateProfile.phone_number}
                 onChange={(e) =>
                     setUpdateProfile((prev) => {
@@ -87,7 +87,7 @@ export function Profile() {
             <TextInput
                 label="Ngày sinh"
                 withAsterisk
-                miw={300}
+                maw={400}
                 value={handleOrderDate(updateProfile.dob)}
                 onChange={(e) =>
                     setUpdateProfile((prev) => {

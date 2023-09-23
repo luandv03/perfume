@@ -95,7 +95,7 @@ export function Cart() {
                 </>
             ) : (
                 <Grid gutter={20}>
-                    <Grid.Col span={9}>
+                    <Grid.Col md={9} sm={12}>
                         <Grid>
                             {cartUser.map((item: CartItem) => (
                                 <>
@@ -128,7 +128,7 @@ export function Cart() {
                                                 sx={{ flex: "1" }}
                                             >
                                                 <Group>
-                                                    <Stack>
+                                                    <Stack spacing={4}>
                                                         <Link
                                                             to={`/product/${item.product_id}/detail`}
                                                             style={{
@@ -224,9 +224,6 @@ export function Cart() {
 
                                                     {/* Tăng giảm số lượng sản phẩm */}
                                                     <Group spacing={0}>
-                                                        <Text size={18}>
-                                                            Số lượng:
-                                                        </Text>
                                                         <ActionIcon
                                                             size={36}
                                                             variant="default"
@@ -274,13 +271,13 @@ export function Cart() {
                                             </Group>
                                         </Group>
                                     </Grid.Col>
-                                    <Divider></Divider>
                                 </>
                             ))}
                         </Grid>
                     </Grid.Col>
 
-                    <Grid.Col span={3}>
+                    <Divider />
+                    <Grid.Col md={3} sm={0}>
                         <Stack sx={{ width: "100%" }}>
                             <Group position="apart">
                                 <Text size="16px" fw={500} color="gray">

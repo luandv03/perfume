@@ -107,7 +107,7 @@ export function OrderCustomer() {
         });
 
     return (
-        <Stack>
+        <Stack sx={{ width: "100%", overflowX: "scroll" }}>
             <Text size={20}>ĐƠN HÀNG CỦA BẠN</Text>
 
             {orders.length <= 0 ? (
@@ -149,6 +149,7 @@ export function OrderCustomer() {
                             value={page}
                             onChange={setPage}
                             total={totalPage}
+                            w="100%"
                         />
                     </Flex>
                 </>

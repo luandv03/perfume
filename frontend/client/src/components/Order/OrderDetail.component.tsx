@@ -150,11 +150,16 @@ export const OrderDetail = () => {
         ));
 
     return (
-        <Stack>
+        <Stack w="100%">
             <Text fw={700} size="xl" fz="xl">
                 Order
             </Text>
-            <SimpleGrid cols={3} spacing="xl">
+            <SimpleGrid
+                w="100%"
+                cols={3}
+                spacing="xl"
+                breakpoints={[{ maxWidth: "48rem", cols: 2 }]}
+            >
                 <Stack>
                     <Stack spacing={0}>
                         <Text fw={700} fz="xl">
@@ -180,6 +185,7 @@ export const OrderDetail = () => {
                         value={orderDetail.order.status}
                     />
                 </Stack>
+
                 <Stack>
                     <Stack spacing={0}>
                         <Stack>
@@ -196,7 +202,15 @@ export const OrderDetail = () => {
                         Hủy
                     </Button>
                 </Stack>
-                <Stack>
+
+                {/* PC, tablet */}
+                <Stack
+                    sx={{
+                        "@media (max-width: 64em)": {
+                            display: "none",
+                        },
+                    }}
+                >
                     <Stack spacing={0}>
                         <Text fw={700} fz="xl">
                             Khách hàng
@@ -226,6 +240,44 @@ export const OrderDetail = () => {
                         </Text>
                     </Stack>
                 </Stack>
+
+                <Flex
+                    gap={10}
+                    sx={{
+                        "@media (min-width: 64em)": {
+                            display: "none",
+                        },
+                    }}
+                >
+                    <Stack spacing={0}>
+                        <Text fw={700} fz="xl">
+                            Khách hàng
+                        </Text>
+                        <Stack spacing={0}>
+                            <Link
+                                to="/customer/123"
+                                style={{ textDecoration: "none" }}
+                            >
+                                <Text fw={500}>
+                                    {orderDetail.order &&
+                                        orderDetail.order.fullname}
+                                </Text>
+                                <Text fw={400}>
+                                    {orderDetail.order &&
+                                        orderDetail.order.email}
+                                </Text>
+                            </Link>
+                        </Stack>
+                    </Stack>
+                    <Stack spacing={0}>
+                        <Text fw={700} fz="xl">
+                            Địa chỉ
+                        </Text>
+                        <Text>
+                            {orderDetail.order && orderDetail.order.address}
+                        </Text>
+                    </Stack>
+                </Flex>
             </SimpleGrid>
             <Text fw={700} size="xl" fz="xl">
                 Items

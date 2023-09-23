@@ -1,4 +1,3 @@
-// import { useState } from 'react'
 import { Center, Text, Button, Group, Stack } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
 import { Link } from "react-router-dom";

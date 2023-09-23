@@ -11,7 +11,14 @@ export default function Customer() {
 
     return (
         <div style={{ width: "100%" }}>
-            <Flex>
+            <Flex
+                sx={{
+                    width: "100%",
+                    "@media (max-width: 64em)": {
+                        flexDirection: "column",
+                    },
+                }}
+            >
                 <Stack sx={{ height: "100%" }}>
                     <Text size={20}>Trang tài khoản</Text>
                     <Link to="/customer">
@@ -53,9 +60,17 @@ export default function Customer() {
                         </Link>
                     )}
                 </Stack>
-                <div style={{ paddingLeft: "20px" }}>
+                <Flex
+                    sx={{
+                        paddingLeft: "20px",
+                        "@media (max-width: 64em)": {
+                            flexDirection: "column",
+                            paddingLeft: 0,
+                        },
+                    }}
+                >
                     <Outlet />
-                </div>
+                </Flex>
             </Flex>
         </div>
     );

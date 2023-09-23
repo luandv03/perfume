@@ -76,7 +76,18 @@ export function CharmCate({ category }: { category: CategoryType }) {
                 {category.category_name}
             </Text>
 
-            <SimpleGrid cols={4} sx={{ width: "100%" }}>
+            <SimpleGrid
+                cols={4}
+                sx={{
+                    width: "100%",
+                }}
+                breakpoints={[
+                    { maxWidth: "sm", cols: 2 },
+                    { minWidth: "sm", cols: 3 },
+                    { minWidth: "md", cols: 3 },
+                    { minWidth: 1200, cols: 4 },
+                ]}
+            >
                 {products.length > 0 &&
                     products.map((product: ProductType) => (
                         <Card

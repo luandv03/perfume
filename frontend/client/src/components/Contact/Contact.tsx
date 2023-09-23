@@ -6,7 +6,13 @@ export const Contact = () => {
         <Stack>
             <Flex
                 p={10}
-                sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
+                sx={{
+                    border: "1px solid #f0e7e7",
+                    borderRadius: "4px",
+                    "@media (max-width: 48em)": {
+                        flexDirection: "column",
+                    },
+                }}
                 gap={20}
             >
                 <Stack>

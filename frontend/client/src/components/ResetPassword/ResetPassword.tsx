@@ -104,7 +104,15 @@ export const ResetPassword = () => {
                         {...form.getInputProps("confirmNewPassword")}
                         icon={<IconLock size={16} />}
                     />
-                    <Button type="submit" disabled={loading}>
+                    <Button
+                        type="submit"
+                        disabled={
+                            loading ||
+                            !form.values.password ||
+                            !form.values.newPassword ||
+                            !form.values.confirmNewPassword
+                        }
+                    >
                         {loading ? (
                             <IconLoader className={loading ? "spinner" : ""} />
                         ) : (

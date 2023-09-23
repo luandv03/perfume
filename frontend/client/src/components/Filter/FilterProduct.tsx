@@ -24,11 +24,24 @@ export function FilterProduct() {
                     height: "calc(100%-80px)",
                 }}
             >
-                <Flex gap={20} style={{ width: "100%" }}>
-                    <div
-                        style={{
-                            width: "274px",
-                            height: "100%",
+                <Flex
+                    gap={20}
+                    sx={{
+                        width: "100%",
+                        "@media (max-width: 64em)": {
+                            flexDirection: "column",
+                        },
+                    }}
+                >
+                    <Flex
+                        sx={{
+                            "@media (max-width: 64em)": {
+                                width: "100%",
+                            },
+                            "@media (min-width: 64em)": {
+                                width: "274px",
+                                height: "100%",
+                            },
                         }}
                     >
                         <FilterOption
@@ -37,7 +50,7 @@ export function FilterProduct() {
                             filterBrand={filterBrand}
                             setFilterBrand={setFilterBrand}
                         />
-                    </div>
+                    </Flex>
                     <div style={{ flex: 1 }}>
                         <FilterResult
                             prices={prices}

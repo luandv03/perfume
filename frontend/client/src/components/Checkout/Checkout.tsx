@@ -150,10 +150,25 @@ export function Checkout() {
     };
 
     return (
-        <Center>
+        <Center
+            sx={{
+                "@media (max-width: 64em)": {
+                    flexDirection: "column",
+                },
+            }}
+        >
             <Container
                 w={400}
-                sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
+                sx={{
+                    border: "1px solid #f0e7e7",
+                    borderRadius: "4px",
+                    "@media (max-width: 64em)": {
+                        width: "100%",
+                    },
+                    "@media (min-width: 64em)": {
+                        marginRight: "20px",
+                    },
+                }}
                 p={10}
             >
                 <Stack>
@@ -252,7 +267,15 @@ export function Checkout() {
                 </Stack>
             </Container>
 
-            <Stack w={700} spacing={6}>
+            <Stack
+                w={700}
+                spacing={6}
+                sx={{
+                    "@media (max-width: 64em)": {
+                        width: "100%",
+                    },
+                }}
+            >
                 <Text size={24} fw={500}>
                     Đơn hàng
                 </Text>
@@ -339,7 +362,7 @@ export function Checkout() {
                     </Text>
                     <Text size={20}>0vnđ</Text>
                 </Group>
-                <Group spacing={0}>
+                <Group spacing={4}>
                     <TextInput
                         placeholder="Nhập mã giảm giá"
                         size="md"

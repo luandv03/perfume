@@ -16,6 +16,7 @@ import {
     Badge,
     Flex,
     LoadingOverlay,
+    Collapse,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -114,6 +115,7 @@ const useStyles = createStyles((theme) => ({
 export function HeaderApp() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
         useDisclosure(false);
+    const [dropdown, { toggle: toggleDropdown }] = useDisclosure(false);
     const { classes, theme } = useStyles();
     const { cartUser, setCartUser } = useContext(CartContext);
     const { profile, setProfile } = useContext(AuthContext);
@@ -172,7 +174,16 @@ export function HeaderApp() {
 
     return (
         <Box>
-            <Header height={80} px="50px" sx={{ background: "rgb(97 42 42)" }}>
+            <Header
+                height={80}
+                px="50px"
+                sx={{
+                    background: "rgb(97 42 42)",
+                    "@media (max-width: 48em)": {
+                        padding: "0 10px",
+                    },
+                }}
+            >
                 <Group position="apart" sx={{ height: "100%" }}>
                     <TextInput
                         placeholder="Tên sản phẩm...."
@@ -182,11 +193,24 @@ export function HeaderApp() {
                         rightSection={<IconSearch size="18px" color="gray" />}
                     />
 
-                    <Link to="/" style={{ textDecoration: "none" }}>
-                        <Text size={24} fw={700} c="white">
-                            PERFUME&LDA
-                        </Text>
-                    </Link>
+                    <Text
+                        sx={{
+                            "@media (max-width: 48em)": {
+                                display: "none",
+                            },
+                        }}
+                    >
+                        <Link
+                            to="/"
+                            style={{
+                                textDecoration: "none",
+                            }}
+                        >
+                            <Text size={24} fw={700} c="white">
+                                PERFUME&LDA
+                            </Text>
+                        </Link>
+                    </Text>
 
                     <Group className={classes.hiddenMobile} spacing={15}>
                         <Stack sx={{ height: "100%" }} spacing={0}>
@@ -207,7 +231,11 @@ export function HeaderApp() {
                                         </Text>
                                     </Link>
                                     <span style={{ color: "white" }}>|</span>
-                                    <Button onClick={() => handleLogout()}>
+                                    <Button
+                                        onClick={() => {
+                                            handleLogout();
+                                        }}
+                                    >
                                         <Text color="white" fw={500}>
                                             Đăng xuất
                                         </Text>
@@ -255,14 +283,49 @@ export function HeaderApp() {
                             </Badge>
                         </Link>
                     </Group>
-
-                    <Burger
-                        opened={drawerOpened}
-                        onClick={toggleDrawer}
-                        className={classes.hiddenDesktop}
-                    />
+                    <Group
+                        align="center"
+                        sx={{
+                            "@media (min-width: 48em)": {
+                                display: "none",
+                            },
+                        }}
+                    >
+                        <Link to="/cart" style={{ position: "relative" }}>
+                            <IconShoppingCart color="white" />
+                            <Badge
+                                size="sm"
+                                sx={{
+                                    position: "absolute",
+                                    right: "-10px",
+                                    top: "-6px",
+                                }}
+                            >
+                                {cartUser.length > 0
+                                    ? cartUser.reduce(
+                                          (acc, curr) => acc + curr.quantity,
+                                          0
+                                      )
+                                    : 0}
+                            </Badge>
+                        </Link>
+                        <Burger
+                            opened={drawerOpened}
+                            onClick={toggleDrawer}
+                            className={classes.hiddenDesktop}
+                            color="white"
+                        />
+                    </Group>
                 </Group>
-                <Group position="center" spacing={20}>
+                <Group
+                    position="center"
+                    spacing={20}
+                    sx={{
+                        "@media (max-width: 48em)": {
+                            display: "none",
+                        },
+                    }}
+                >
                     <Link
                         to="/"
                         style={{ textDecoration: "none" }}
@@ -326,18 +389,82 @@ export function HeaderApp() {
                 </Group>
             </Header>
 
+            {/* Mobile */}
             <Drawer
                 opened={drawerOpened}
                 onClose={closeDrawer}
-                size="100%"
+                size="60%"
                 padding="md"
-                title="Navigation"
                 className={classes.hiddenDesktop}
                 zIndex={1000000}
             >
-                <ScrollArea h={`calc(100vh - ${rem(60)})`} mx="-md">
+                <ScrollArea
+                    h={`calc(100vh - ${rem(60)})`}
+                    mx="-md"
+                    type="never"
+                    scrollbarSize={8}
+                    scrollHideDelay={2500}
+                >
+                    <Stack
+                        py={10}
+                        sx={{ background: "rgb(97 42 42)" }}
+                        spacing={0}
+                        align="center"
+                    >
+                        <Text color="white">
+                            Xin chào,{" "}
+                            {profile.customer_id
+                                ? profile.fullname
+                                : "Quý khách"}
+                        </Text>
+                        {profile.customer_id ? (
+                            <Group>
+                                <Link
+                                    to="/customer"
+                                    style={{ textDecoration: "none" }}
+                                    onClick={() => closeDrawer()}
+                                >
+                                    <Text color="white" fw={500}>
+                                        Tài khoản
+                                    </Text>
+                                </Link>
+                                <span style={{ color: "white" }}>|</span>
+                                <Button
+                                    onClick={() => {
+                                        closeDrawer();
+                                        handleLogout();
+                                    }}
+                                >
+                                    <Text color="white" fw={500}>
+                                        Đăng xuất
+                                    </Text>
+                                </Button>
+                            </Group>
+                        ) : (
+                            <Group>
+                                <Link
+                                    to="/login"
+                                    style={{ textDecoration: "none" }}
+                                    onClick={() => closeDrawer()}
+                                >
+                                    <Text color="white" fw={500}>
+                                        Đăng nhập
+                                    </Text>
+                                </Link>
+                                <span style={{ color: "white" }}>|</span>
+                                <Link
+                                    to="/register"
+                                    style={{ textDecoration: "none" }}
+                                    onClick={() => closeDrawer()}
+                                >
+                                    <Text color="white" fw={500}>
+                                        Đăng ký
+                                    </Text>
+                                </Link>
+                            </Group>
+                        )}
+                    </Stack>
                     <Divider
-                        my="sm"
                         color={
                             theme.colorScheme === "dark" ? "dark.5" : "gray.1"
                         }
@@ -350,9 +477,121 @@ export function HeaderApp() {
                         }
                     />
 
-                    <Group position="center" grow pb="xl" px="md">
-                        <Button>Luan Dinh</Button>
-                    </Group>
+                    <Stack pl={10}>
+                        <Link
+                            to="/"
+                            style={{ textDecoration: "none" }}
+                            className={classes.hover}
+                            onClick={() => closeDrawer()}
+                        >
+                            <Text size="16px" fw={500} color="black">
+                                Trang chủ
+                            </Text>
+                        </Link>
+                        <Divider
+                            color={
+                                theme.colorScheme === "dark"
+                                    ? "dark.5"
+                                    : "gray.1"
+                            }
+                        />
+                        <Link
+                            to="/about"
+                            style={{ textDecoration: "none" }}
+                            onClick={() => closeDrawer()}
+                        >
+                            <Text size="16px" fw={500} color="black">
+                                Giới thiệu
+                            </Text>
+                        </Link>
+                        <Divider
+                            color={
+                                theme.colorScheme === "dark"
+                                    ? "dark.5"
+                                    : "gray.1"
+                            }
+                        />
+                        <Stack>
+                            <Flex
+                                gap={1}
+                                align="center"
+                                onClick={toggleDropdown}
+                            >
+                                <Text size="16px" fw={500} color="black">
+                                    Danh mục
+                                </Text>
+                                <Flex
+                                    style={{
+                                        height: "31px",
+                                    }}
+                                    align="center"
+                                >
+                                    <IconChevronDown height={31} stroke={1} />
+                                </Flex>
+                            </Flex>
+
+                            <Collapse in={dropdown}>
+                                <Stack>
+                                    {categories.length > 0 &&
+                                        categories.map(
+                                            (category: CategoryType) => (
+                                                <Link
+                                                    to={`/product/${category.category_id}/filter`}
+                                                    state={{
+                                                        category_name:
+                                                            category.category_name,
+                                                    }}
+                                                    style={{
+                                                        textDecoration: "none",
+                                                    }}
+                                                    key={category.category_id}
+                                                    onClick={() =>
+                                                        closeDrawer()
+                                                    }
+                                                >
+                                                    <Text color="black">
+                                                        {category.category_name}
+                                                    </Text>
+
+                                                    <Divider
+                                                        color={
+                                                            theme.colorScheme ===
+                                                            "dark"
+                                                                ? "dark.5"
+                                                                : "gray.1"
+                                                        }
+                                                    />
+                                                </Link>
+                                            )
+                                        )}
+                                </Stack>
+                            </Collapse>
+                        </Stack>
+
+                        <Divider
+                            color={
+                                theme.colorScheme === "dark"
+                                    ? "dark.5"
+                                    : "gray.1"
+                            }
+                        />
+                        <Link
+                            to="/contact"
+                            style={{ textDecoration: "none" }}
+                            onClick={() => closeDrawer()}
+                        >
+                            <Text size="16px" fw={500} color="black">
+                                Liên hệ
+                            </Text>
+                        </Link>
+                        <Divider
+                            color={
+                                theme.colorScheme === "dark"
+                                    ? "dark.5"
+                                    : "gray.1"
+                            }
+                        />
+                    </Stack>
                 </ScrollArea>
             </Drawer>
             <LoadingOverlay

@@ -84,6 +84,10 @@ export function FilterResult({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, window.location.pathname, filterBrand, prices]);
 
+    useEffect(() => {
+        setPage(1);
+    }, [filterBrand, prices]);
+
     return (
         <Stack
             sx={{
@@ -108,7 +112,16 @@ export function FilterResult({
             </Group>
             <Divider my="xs"></Divider>
             {products.length > 0 ? (
-                <SimpleGrid cols={4} spacing={0}>
+                <SimpleGrid
+                    cols={4}
+                    spacing={0}
+                    breakpoints={[
+                        { maxWidth: "sm", cols: 2 },
+                        { minWidth: "sm", cols: 3 },
+                        { minWidth: "md", cols: 3 },
+                        { minWidth: 1200, cols: 4 },
+                    ]}
+                >
                     {products.map((item: ProductType) => (
                         <Product data={item} />
                     ))}
