@@ -7,31 +7,37 @@ import {
     Group,
     Button,
     Center,
-    LoadingOverlay,
 } from "@mantine/core";
 import { useForm, isEmail, hasLength } from "@mantine/form";
-import { IconAt, IconChevronLeft, IconMail } from "@tabler/icons-react";
+import {
+    IconAt,
+    IconChevronLeft,
+    IconMail,
+    IconLoader,
+} from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { showNotification } from "@mantine/notifications";
 
 import { authService } from "../../services/auth.service";
+import "./ForgotPassword.css";
 
 export const ForgotPassword = () => {
     const [counter, setCounter] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [loadingConfirm, setLoadingConfirm] = useState(false);
     const form = useForm({
         initialValues: {
             email: "",
-            token: "",
+            otp: "",
         },
 
-        validateInputOnBlur: true,
+        // validateInputOnBlur: true,
 
         validate: {
             email: isEmail("Email không được để trống"),
-            token: hasLength(
-                { min: 6, max: 20 },
+            otp: hasLength(
+                { min: 1, max: 20 },
                 "Mã xác nhận không được để trống"
             ),
         },
@@ -52,13 +58,44 @@ export const ForgotPassword = () => {
     };
 
     const handleSubmit = (values: typeof form.values): void => {
-        handleValidate(values);
+        handleConfirmOtp(values);
     };
 
     const handleGetToken = async () => {
-        // const res = await getToken
-        console.log(!form.values.email && !form.values.token);
+        if (!form.values.email) {
+            return;
+        }
+        setLoading(true);
+        const res = await authService.sendOtpToEmail(form.values.email);
+        setLoading(false);
         setCounter(60);
+
+        if (res.response.statusCode !== 200)
+            showNotification({
+                message: res.response.data.message,
+            });
+    };
+
+    const handleConfirmOtp = async ({
+        email,
+        otp,
+    }: {
+        email: string;
+        otp: string;
+    }) => {
+        setLoadingConfirm(true);
+        const res = await authService.confirmOtpAndSendNewPassword(email, otp);
+        setLoadingConfirm(false);
+
+        if (res.statusCode !== 200)
+            return showNotification({
+                message: res.response.data.message,
+            });
+
+        showNotification({
+            title: res.message,
+            message: "Chúng tôi đã gửi mật khẩu mới đến email của bạn",
+        });
     };
 
     useEffect(() => {
@@ -113,17 +150,28 @@ export const ForgotPassword = () => {
                                     placeholder="Nhập mã xác nhận"
                                     icon={<IconAt size={16} />}
                                     required
-                                    {...form.getInputProps("token")}
+                                    {...form.getInputProps("otp")}
                                 />
                                 <Button
                                     style={{
                                         position: "absolute",
-                                        right: "0",
-                                        top: "0",
+                                        right: "2px",
+                                        top: "2px",
+                                        border: "0",
                                     }}
+                                    h={32}
                                     onClick={() => handleGetToken()}
-                                    disabled={counter > 0}
+                                    disabled={
+                                        counter > 0 ||
+                                        !form.values.email ||
+                                        loading
+                                    }
                                 >
+                                    {loading && (
+                                        <IconLoader
+                                            className={loading ? "spinner" : ""}
+                                        />
+                                    )}
                                     {counter > 0
                                         ? "Gửi lại mã " + counter
                                         : "Gửi mã"}
@@ -135,22 +183,21 @@ export const ForgotPassword = () => {
                                 mt="xl"
                                 type="submit"
                                 disabled={
-                                    !form.values.email || !form.values.token
+                                    !form.values.email ||
+                                    !form.values.otp ||
+                                    loadingConfirm
                                 }
                             >
-                                Xác nhận
+                                {loadingConfirm ? (
+                                    <IconLoader
+                                        className={
+                                            loadingConfirm ? "spinner" : ""
+                                        }
+                                    />
+                                ) : (
+                                    "Xác nhận"
+                                )}
                             </Button>
-                            <LoadingOverlay
-                                sx={{ position: "fixed", height: "100%" }}
-                                loaderProps={{
-                                    size: "sm",
-                                    color: "pink",
-                                    variant: "oval",
-                                }}
-                                overlayOpacity={0.3}
-                                overlayColor="#c5c5c5"
-                                visible={loading}
-                            />
                         </form>
                     </Paper>
                 </Container>
