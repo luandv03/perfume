@@ -15,6 +15,7 @@ import { HttpStatusCode } from "../../configs/httpStatusCode.config";
 import { cartService } from "../carts/cart.service";
 import { mailerService } from "../mailers/mailer.service";
 import { generatePasswordRandom } from "../../utils/generatePasswordRandom.util";
+import { geneateOtp } from "../../utils/generateOtp.util";
 
 const configService = new ConfigService();
 
@@ -573,7 +574,7 @@ class UserService {
         }
 
         // create new otp
-        const newOtp = randomBytes(32).toString("hex");
+        const newOtp = geneateOtp();
         const hash = await bcrypt.hash(newOtp, 10);
 
         const result = await query(
@@ -671,7 +672,7 @@ class UserService {
                 text: "Hello world?", // plain text body
                 html: "reset_password",
             },
-            { newPassword: hashNewPassword }
+            { newPassword }
         );
 
         return {

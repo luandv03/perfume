@@ -222,17 +222,6 @@ export function LoginAuth() {
                         </Group>
 
                         <Group>
-                            {/* <form
-                                action="http://localhost:4000/api/v1/auth/google/login"
-                                method="get"
-                            >
-                                <Button color="red" type="submit">
-                                    <IconBrandGoogle />
-                                    &nbsp;
-                                    <Text>GOOGLE</Text>
-                                </Button>
-                            </form> */}
-
                             <Button
                                 color="red"
                                 onClick={() => handleLoginWithGoogle()}
