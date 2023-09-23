@@ -17,6 +17,7 @@ export interface Profile {
     address: string;
     phone_number: string;
     dob: string;
+    auth_method?: string;
 }
 
 interface ContextValue {
@@ -32,6 +33,7 @@ export const AuthContext = createContext<ContextValue>({
         address: "",
         phone_number: "",
         dob: "",
+        auth_method: "",
     },
     setProfile: () => {
         console.log();
@@ -46,6 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         address: "",
         phone_number: "",
         dob: "",
+        auth_method: "",
     });
 
     const location = useLocation();

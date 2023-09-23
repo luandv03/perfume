@@ -84,8 +84,19 @@ export function LoginAuth() {
     const handleValidate = async (values: typeof form.values) => {
         try {
             setLoading(true);
-            await authService.login(values);
+            const resAuth = await authService.login(values);
             setLoading(false);
+
+            if (resAuth.statusCode !== 200) {
+                return showNotification({
+                    title: "Login failed",
+                    message: resAuth.message,
+                    color: "red",
+                    icon: <IconX />,
+                    autoClose: 3000,
+                });
+            }
+
             showNotification({
                 message: "You login successfully!",
                 color: "yellow",

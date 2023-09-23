@@ -1,8 +1,13 @@
 import { Flex, Stack, Text } from "@mantine/core";
 import { Outlet, Link, useLocation } from "react-router-dom";
+import { useContext } from "react";
+
+import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 
 export default function Customer() {
     const location = useLocation();
+
+    const { profile } = useContext(AuthContext);
 
     return (
         <div style={{ width: "100%" }}>
@@ -33,17 +38,20 @@ export default function Customer() {
                         </Text>
                     </Link>
 
-                    <Link to="/customer/reset_password">
-                        <Text
-                            color={
-                                location.pathname === "/customer/reset_password"
-                                    ? "red"
-                                    : "black"
-                            }
-                        >
-                            Đổi mật khẩu
-                        </Text>
-                    </Link>
+                    {profile.auth_method === "system" && (
+                        <Link to="/customer/reset_password">
+                            <Text
+                                color={
+                                    location.pathname ===
+                                    "/customer/reset_password"
+                                        ? "red"
+                                        : "black"
+                                }
+                            >
+                                Đổi mật khẩu
+                            </Text>
+                        </Link>
+                    )}
                 </Stack>
                 <div style={{ paddingLeft: "20px" }}>
                     <Outlet />

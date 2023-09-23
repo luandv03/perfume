@@ -361,7 +361,7 @@ class UserService {
         customer_id: number
     ): Promise<ResponseType<UserProfileType>> {
         const results = await query(
-            `SELECT customer_id, email, fullname, address, phone_number, dob FROM customers WHERE customer_id = $1`,
+            `SELECT customer_id, email, fullname, address, phone_number, dob, auth_method FROM customers WHERE customer_id = $1`,
             [customer_id]
         );
 

@@ -70,9 +70,9 @@ export const ForgotPassword = () => {
         setLoading(false);
         setCounter(60);
 
-        if (res.response.statusCode !== 200)
+        if (res.statusCode !== 200)
             showNotification({
-                message: res.response.data.message,
+                message: res.message,
             });
     };
 
