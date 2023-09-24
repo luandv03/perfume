@@ -5,8 +5,8 @@ export type ProductType = {
     discount: number;
     brand: string;
     volume: number;
-    product_avatar?: string;
-    year_published?: number;
+    description: string;
+    year_publish: number;
 };
 
 export type ProductPhoto = {
@@ -21,6 +21,6 @@ export const ProductConstant: ProductType = {
     discount: 0,
     brand: "",
     volume: 0,
-    product_avatar: "",
-    year_published: 0,
+    year_publish: 0,
+    description: "",
 };

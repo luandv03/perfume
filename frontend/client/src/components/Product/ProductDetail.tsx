@@ -16,7 +16,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconStar, IconStarFilled } from "@tabler/icons-react";
-import { useLocation, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -42,8 +42,18 @@ interface FeedbackType {
 export function ProductDetail() {
     const [numberAddItem, setNumberAddItem] = useState<number>(1);
     const [opened, { toggle }] = useDisclosure(false);
-    const { state } = useLocation();
     const { product_id } = useParams();
+    const [product, setProduct] = useState<ProductType>({
+        product_id: 0,
+        title: "",
+        price: 0,
+        volume: 0,
+        brand: "",
+        discount: 0,
+        description: "",
+        year_publish: 0,
+    });
+
     const [photos, setPhotos] = useState<ProductPhoto[]>([
         { product_photo_id: 0, product_photo_url: "" },
     ]);
@@ -75,9 +85,16 @@ export function ProductDetail() {
         });
     };
 
+    const handleGetProductById = async () => {
+        const res = await productService.getProductById(Number(product_id));
+
+        console.log(res);
+        setProduct(res.data);
+    };
+
     const handleGetProductPhotos = async () => {
         const resPhoto = await productService.getPhotoProductById(
-            state.product.product_id,
+            Number(product_id),
             0,
             10
         );
@@ -129,6 +146,7 @@ export function ProductDetail() {
     };
 
     useEffect(() => {
+        handleGetProductById();
         handleGetProductPhotos();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -136,17 +154,18 @@ export function ProductDetail() {
     useEffect(() => {
         handleGetFeedback();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, handleCreateFeedback, handleRemoveFeedback]);
+    }, [page]);
+    // [page, handleCreateFeedback, handleRemoveFeedback]
 
     return (
-        <TitlePageWrapper title={`${state.product.title} | Perfume LDA`}>
+        <TitlePageWrapper title={`${product?.title} | Perfume LDA`}>
             <Stack>
                 <Grid
                     p={10}
                     sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
                     gutter={2}
                 >
-                    <Grid.Col span={4}>
+                    <Grid.Col md={4}>
                         <Stack sx={{ position: "relative" }}>
                             <Image
                                 src={
@@ -202,7 +221,7 @@ export function ProductDetail() {
                                 />
                             </Carousel>
 
-                            {state.product.discount > 0 && (
+                            {product?.discount > 0 && (
                                 <Badge
                                     color="red"
                                     variant="light"
@@ -212,31 +231,31 @@ export function ProductDetail() {
                                         left: "8px",
                                     }}
                                 >
-                                    -{state.product.discount}%
+                                    -{product?.discount}%
                                 </Badge>
                             )}
                         </Stack>
                     </Grid.Col>
 
-                    <Grid.Col span={8} pl={20}>
+                    <Grid.Col md={8} pl={12}>
                         <Stack spacing={10}>
                             <Text size="20px" fw={500}>
-                                {state.product.title}
+                                {product?.title}
                             </Text>
                             <Text size="20px" fw={500}>
                                 {new Intl.NumberFormat("vi-VN", {
                                     style: "currency",
                                     currency: "VND",
                                     maximumFractionDigits: 9,
-                                }).format(state.product.price)}
+                                }).format(product?.price)}
                             </Text>
-                            <Text>{state.product.description}</Text>
+                            <Text>{product?.description}</Text>
                             <Text size="16px" fw={500}>
                                 Thương hiệu
                             </Text>
                             <div>
                                 <Button radius={0} compact variant="default">
-                                    {state.product.brand}
+                                    {product?.brand}
                                 </Button>
                             </div>
                             <Text size="16px" fw={500}>
@@ -244,7 +263,7 @@ export function ProductDetail() {
                             </Text>
                             <div>
                                 <Button radius={0} compact variant="default">
-                                    {state.product.volume}ml
+                                    {product?.volume}ml
                                 </Button>
                             </div>
                             <Text>
@@ -256,7 +275,7 @@ export function ProductDetail() {
                                 >
                                     Năm phát hành
                                 </span>
-                                : {state.product.year_publish}
+                                : {product?.year_publish}
                             </Text>
                             <NumberInput
                                 defaultValue={1}
@@ -276,7 +295,7 @@ export function ProductDetail() {
                                 <Button
                                     size="md"
                                     onClick={() => {
-                                        handleAddToCart(state.product);
+                                        handleAddToCart(product);
                                     }}
                                 >
                                     Thêm vào giỏ hàng

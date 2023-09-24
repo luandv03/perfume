@@ -6,6 +6,7 @@ import {
     createStyles,
     Button,
     Badge,
+    Stack,
 } from "@mantine/core";
 import { IconShoppingCartPlus, IconEye } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
@@ -25,10 +26,10 @@ const useStyles = createStyles(() => ({
     },
 }));
 export function Product({ data }: { data: ProductType }) {
-    const { addToCart } = useContext(CartContext);
+    const { addCartItem } = useContext(CartContext);
 
-    const handleAddToCart = (product: ProductType) => {
-        const { product_id, title, price, discount, brand, volume } = product;
+    const handleAddToCart = () => {
+        const { product_id, title, price, discount, brand, volume } = data;
         const cartItem = {
             product_id,
             title,
@@ -36,9 +37,9 @@ export function Product({ data }: { data: ProductType }) {
             discount,
             brand,
             volume,
-            number_add_item: 1,
+            quantity: 1,
         };
-        addToCart(cartItem);
+        addCartItem(cartItem);
         notifications.show({
             title: "Thành công",
             message: "Bạn đã thêm thành công sản phẩm :>",
@@ -61,7 +62,7 @@ export function Product({ data }: { data: ProductType }) {
                 )}
             </Card.Section>
 
-            <Group position="apart" mt="md" mb="xs">
+            <Stack spacing={0}>
                 <Link
                     to={`/product/${data.product_id}/detail`}
                     state={{ product: data }}
@@ -115,7 +116,7 @@ export function Product({ data }: { data: ProductType }) {
                 >
                     -{data.discount}%
                 </Badge>
-            </Group>
+            </Stack>
         </Card>
     );
 }

@@ -9,6 +9,7 @@ import {
     Center,
     createStyles,
     Divider,
+    Flex,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 
@@ -104,7 +105,7 @@ export function CharmCate({ category }: { category: CategoryType }) {
                                 )}
                             </Card.Section>
 
-                            <Group position="apart" mt="md" mb="xs">
+                            <Group position="apart">
                                 <Link
                                     to={`/product/${product.product_id}/detail`}
                                     state={{ product: product }}
@@ -123,7 +124,15 @@ export function CharmCate({ category }: { category: CategoryType }) {
                                 {product.brand} / {product.volume}ml
                             </Text>
 
-                            <Group>
+                            <Flex
+                                wrap="wrap"
+                                gap={10}
+                                sx={{
+                                    "@media (max-width: 48em)": {
+                                        gap: "0",
+                                    },
+                                }}
+                            >
                                 <Text fw={500}>
                                     {new Intl.NumberFormat("vi-VN", {
                                         style: "currency",
@@ -141,7 +150,7 @@ export function CharmCate({ category }: { category: CategoryType }) {
                                         maximumFractionDigits: 9,
                                     }).format(product.price)}
                                 </Text>
-                            </Group>
+                            </Flex>
 
                             <Group spacing={4}>
                                 <Button
