@@ -282,7 +282,7 @@ export const OrderDetail = () => {
             <Text fw={700} size="xl" fz="xl">
                 Items
             </Text>
-            <Table>
+            <Table w="100%">
                 <thead>
                     <tr>
                         <th>Mã sản phẩm</th>

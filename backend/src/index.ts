@@ -21,7 +21,11 @@ app.set("view engine", "jade");
 app.use(
     cors({
         credentials: true,
-        origin: ["http://localhost:5173", "http://localhost:3000"],
+        origin: [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "http://192.168.0.101:5173",
+        ],
     })
 );
 
@@ -64,6 +68,14 @@ app.get("/token", (req, res) => {
         data: {
             newPassword: 123456,
         },
+    });
+});
+
+app.get("/photo", (req, res) => {
+    query(
+        `SELECT product_id FROM product_photos GROUP BY product_id HAVING count(*) > 1`
+    ).then((resulst) => {
+        res.json(resulst.rows);
     });
 });
 

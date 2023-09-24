@@ -358,7 +358,7 @@ export function HeaderApp() {
                         </HoverCard.Target>
                         <HoverCard.Dropdown>
                             <Stack>
-                                {categories.length > 0 &&
+                                {categories?.length > 0 &&
                                     categories.map((category: CategoryType) => (
                                         <Link
                                             to={`/product/${category.category_id}/filter`}

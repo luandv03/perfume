@@ -82,6 +82,10 @@ export function SearchResult() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, searchParams]);
 
+    useEffect(() => {
+        setPage(1);
+    }, [searchParams]);
+
     return (
         <Stack spacing={10}>
             <Center>

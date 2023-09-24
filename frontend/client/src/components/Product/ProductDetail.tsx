@@ -18,8 +18,9 @@ import { notifications } from "@mantine/notifications";
 import { IconStar, IconStarFilled } from "@tabler/icons-react";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "@mantine/carousel";
+// import { Carousel } from "react-responsive-carousel";
+// import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import { ProductType } from "../../types/products.type";
 import { ProductPhoto } from "../../types/products.type";
@@ -63,6 +64,7 @@ export function ProductDetail() {
     const [feedbacks, setFeedbacks] = useState<FeedbackType[]>([]);
     const [myFeedback, setMyFeedback] = useState("");
     const [rating, setRating] = useState(0);
+    const [indexPhotoSelected, setIndexPhotoSelected] = useState(0);
 
     const { addCartItem } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
@@ -126,6 +128,10 @@ export function ProductDetail() {
             myFeedback
         );
 
+        if (res.statusCode == 200) {
+            handleGetFeedback();
+        }
+
         notifications.show({
             message: res.message,
         });
@@ -140,9 +146,22 @@ export function ProductDetail() {
 
         const res = await feedbackService.removeFeedback(Number(product_id));
 
+        if (res.statusCode == 200) {
+            handleGetFeedback();
+        }
+
         notifications.show({
             message: res.message,
         });
+    };
+
+    const handleSelectImage = (product_photo_id: number) => {
+        for (let i = 0; i < photos.length; i++) {
+            if (photos[i].product_photo_id === product_photo_id) {
+                console.log(i);
+                return setIndexPhotoSelected(i);
+            }
+        }
     };
 
     useEffect(() => {
@@ -155,7 +174,6 @@ export function ProductDetail() {
         handleGetFeedback();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
-    // [page, handleCreateFeedback, handleRemoveFeedback]
 
     return (
         <TitlePageWrapper title={`${product?.title} | Perfume LDA`}>
@@ -170,7 +188,8 @@ export function ProductDetail() {
                             <Image
                                 src={
                                     photos.length > 0
-                                        ? photos[0].product_photo_url
+                                        ? photos[indexPhotoSelected]
+                                              .product_photo_url
                                         : ""
                                 }
                                 height={300}
@@ -178,47 +197,28 @@ export function ProductDetail() {
                                 fit="contain"
                             />
 
-                            <Carousel
-                                showArrows={true}
-                                autoPlay={true}
-                                className="carousel-container"
-                                // onChange={onChange}
-                                // onClickItem={onClickItem}
-                                // onClickThumb={onClickThumb}
-                            >
-                                <Image
-                                    src={
-                                        photos.length > 0
-                                            ? photos[0].product_photo_url
-                                            : ""
-                                    }
-                                    height={100}
-                                    alt="Norway"
-                                    fit="contain"
-                                    sx={{ border: "1px solid #f0e7e7" }}
-                                />
-                                <Image
-                                    src={
-                                        photos.length > 0
-                                            ? photos[0].product_photo_url
-                                            : ""
-                                    }
-                                    height={100}
-                                    alt="Norway"
-                                    fit="contain"
-                                    sx={{ border: "1px solid #f0e7e7" }}
-                                />
-                                <Image
-                                    src={
-                                        photos.length > 0
-                                            ? photos[0].product_photo_url
-                                            : ""
-                                    }
-                                    height={100}
-                                    alt="Norway"
-                                    fit="contain"
-                                    sx={{ border: "1px solid #f0e7e7" }}
-                                />
+                            <Carousel withIndicators>
+                                {photos.length > 0 &&
+                                    photos.map((photo: ProductPhoto) => (
+                                        <Carousel.Slide
+                                            key={photo.product_photo_id}
+                                        >
+                                            <Image
+                                                src={photo.product_photo_url}
+                                                height={100}
+                                                alt="Norway"
+                                                fit="contain"
+                                                sx={{
+                                                    border: "1px solid #f0e7e7",
+                                                }}
+                                                onClick={() =>
+                                                    handleSelectImage(
+                                                        photo.product_photo_id
+                                                    )
+                                                }
+                                            />
+                                        </Carousel.Slide>
+                                    ))}
                             </Carousel>
 
                             {product?.discount > 0 && (

@@ -51,13 +51,11 @@ export const Contact = () => {
                             mt="md"
                             label="Họ và tên"
                             style={{ width: "50%" }}
-                            // error="Không được để trống"
                         />
                         <TextInput
                             mt="md"
                             label="Email"
                             style={{ width: "50%" }}
-                            // error="Không được để trống"
                         />
                     </Flex>
                     <Textarea

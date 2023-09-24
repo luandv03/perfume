@@ -115,7 +115,7 @@ export const ForgotPassword = () => {
                 </Group>
             </Link>
             <Center>
-                <Container w={400} my={40}>
+                <Container w={400} my={40} px={10}>
                     <Title
                         align="center"
                         sx={(theme) => ({
