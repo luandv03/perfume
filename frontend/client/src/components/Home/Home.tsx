@@ -50,7 +50,7 @@ export function Home() {
 
     return (
         <Stack sx={{ width: "100%" }}>
-            {categories.length > 0 &&
+            {categories?.length > 0 &&
                 categories[0].category_id !== 0 &&
                 categories.map((category: CategoryType) => (
                     <CharmCate category={category} />

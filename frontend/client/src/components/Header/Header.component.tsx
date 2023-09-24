@@ -532,7 +532,7 @@ export function HeaderApp() {
 
                             <Collapse in={dropdown}>
                                 <Stack>
-                                    {categories.length > 0 &&
+                                    {categories?.length > 0 &&
                                         categories.map(
                                             (category: CategoryType) => (
                                                 <Link
