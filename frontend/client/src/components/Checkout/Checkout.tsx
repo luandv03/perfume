@@ -33,6 +33,7 @@ type OrderCreate = {
     customer_id: number;
     delivery_cost: number;
     tax: number;
+    payment_type: string;
     orderList: OrderItem[];
 };
 
@@ -86,6 +87,7 @@ export function Checkout() {
             customer_id: profile.customer_id,
             tax: 0,
             delivery_cost: 0,
+            payment_type: methodPayment,
             orderList,
         };
 
