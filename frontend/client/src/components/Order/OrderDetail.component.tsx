@@ -150,7 +150,7 @@ export const OrderDetail = () => {
         ));
 
     return (
-        <Stack w="100%">
+        <Stack w="100%" sx={{ overflowX: "scroll" }}>
             <Text fw={700} size="xl" fz="xl">
                 Order
             </Text>
@@ -282,7 +282,7 @@ export const OrderDetail = () => {
             <Text fw={700} size="xl" fz="xl">
                 Items
             </Text>
-            <Table w="100%">
+            <Table>
                 <thead>
                     <tr>
                         <th>Mã sản phẩm</th>
@@ -297,7 +297,7 @@ export const OrderDetail = () => {
             <Text fw={700} size="xl" fz="xl">
                 Totals
             </Text>
-            <Table>
+            <Table w="100%">
                 <thead>
                     <tr>
                         <th>Tổng đơn hàng</th>
@@ -366,6 +366,7 @@ export const OrderDetail = () => {
                             opacity: "0.9",
                         },
                     })}
+                    disabled
                 >
                     <IconTrash style={{ marginRight: "5px" }} />
                     Xóa
