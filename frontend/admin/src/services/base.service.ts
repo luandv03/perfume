@@ -7,6 +7,15 @@ export const http = axios.create({
     withCredentials: true,
 });
 
+http.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    async (error) => {
+        return error.response;
+    }
+);
+
 export class BaseService {
     protected httpClientPublic: AxiosInstance;
     protected httpClientPrivate: AxiosInstance;
