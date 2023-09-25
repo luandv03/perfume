@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import {
     // IconSearch,
+    IconChevronDown,
     IconX,
 } from "@tabler/icons-react";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -102,9 +103,17 @@ export function FilterOption({
             spacing={0}
         >
             <div style={{ padding: "10px" }} onClick={toggle}>
-                <Text size="16px" fw={500}>
-                    Bộ lọc
-                </Text>
+                <Flex justify="space-between">
+                    <Text size="16px" fw={500}>
+                        Bộ lọc
+                    </Text>
+
+                    {!largeScreen && (
+                        <Text>
+                            <IconChevronDown />
+                        </Text>
+                    )}
+                </Flex>
 
                 <Text>Giúp lọc nhanh sản phẩm tìm kiếm</Text>
             </div>
