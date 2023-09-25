@@ -5,7 +5,7 @@ import { userAuthMiddleware } from "../../../middlewares/user-auth.middleware";
 const feedbackRoutes = Router();
 const feedbackController = new FeedbackController();
 
-// create feedback
+// create feedback or update
 feedbackRoutes.post(
     "/feedback/create",
     userAuthMiddleware,
@@ -26,7 +26,7 @@ feedbackRoutes.delete(
     feedbackController.removeFeedback
 );
 
-// get feedback with paging
+// get feedback by product id
 feedbackRoutes.get("/feedback/view", feedbackController.getFeedbackByProductId);
 
 export default feedbackRoutes;

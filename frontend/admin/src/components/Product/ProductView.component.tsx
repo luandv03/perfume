@@ -126,7 +126,7 @@ export function ProductView() {
             </Tabs.List>
 
             {/* body */}
-            <Flex style={{ minWidth: "800px" }}>
+            <Flex style={{ minWidth: "800px" }} py={10}>
                 <Outlet context={[product, setProduct]} />
             </Flex>
 

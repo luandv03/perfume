@@ -145,7 +145,7 @@ export function Checkout() {
         setLoadingCoupon(false);
 
         if (res.statusCode !== 200) {
-            return setCouponError(res.response.data.message);
+            return setCouponError(res.message);
         }
     };
 
@@ -367,7 +367,10 @@ export function Checkout() {
                         placeholder="Nhập mã giảm giá"
                         size="md"
                         value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
+                        onChange={(e) => {
+                            !!couponError && setCouponError("");
+                            setCouponCode(e.target.value);
+                        }}
                     ></TextInput>
                     <Button
                         h={42}
