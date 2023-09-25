@@ -92,7 +92,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/customer/orders"
+                            path="/customer/order"
                             element={
                                 <TitlePageWrapper title="Trang đơn hàng | Perfume LDA">
                                     <OrderCustomer />

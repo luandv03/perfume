@@ -33,10 +33,10 @@ export default function Customer() {
                         </Text>
                     </Link>
 
-                    <Link to="/customer/orders">
+                    <Link to="/customer/order">
                         <Text
                             color={
-                                location.pathname === "/customer/orders"
+                                location.pathname.includes("order")
                                     ? "red"
                                     : "black"
                             }

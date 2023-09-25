@@ -24,6 +24,7 @@ interface OrderType {
     tong_hoa_don: number;
     n_item: number;
     status: string;
+    payment_type: string;
 }
 
 export function OrderCustomer() {
@@ -37,6 +38,7 @@ export function OrderCustomer() {
             tong_hoa_don: 0,
             n_item: 0,
             status: "",
+            payment_type: "",
         },
     ]);
     const [totalPage, setTotalPage] = useState(0);
@@ -57,6 +59,10 @@ export function OrderCustomer() {
         handleGetOrderByCustomerId();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, total]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [total]);
 
     // "order_id": 1,
     // "n_item": 3,
@@ -92,6 +98,7 @@ export function OrderCustomer() {
                         }).format(item.tong_hoa_don)}
                     </td>
                     <td>{handleOrderDate(item.order_date)}</td>
+                    <td>{item.payment_type}</td>
                     <td>
                         <Link
                             to={`/customer/order/detail/${item.order_id}`}
@@ -127,6 +134,7 @@ export function OrderCustomer() {
                                 <th>Vận chuyển</th>
                                 <th>Tổng giá trị đơn hàng</th>
                                 <th>Ngày đặt hàng</th>
+                                <th>Thanh toán</th>
                                 <th>Xem</th>
                             </tr>
                         </thead>
