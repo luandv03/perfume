@@ -178,6 +178,7 @@ export function ProductView() {
                                     backgroundColor: them.colors.black,
                                 },
                             })}
+                            disabled
                         >
                             <IconTrash
                                 style={{
