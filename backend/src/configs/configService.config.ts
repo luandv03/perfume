@@ -14,6 +14,10 @@ export class ConfigService {
         password: this.env.DB_PASSWORD as string,
     };
 
+    private CLIENT_DOAMIN: string = this.env.CLIENT_DOMAIN as string;
+
+    private ADMIN_DOMAIN: string = this.env.ADMIN_DOMAIN as string;
+
     private SECRET_KEY_ACCESS_TOKEN: string = this.env
         .SECRET_KEY_ACCESS_TOKEN as string;
 
@@ -88,6 +92,15 @@ export class ConfigService {
 
     public getMailHost(): string {
         return this.env.MAIL_HOST as string;
+    }
+
+    // frontend domain
+    public getClientDomain(): string {
+        return this.CLIENT_DOAMIN;
+    }
+
+    public getAdminDomain(): string {
+        return this.ADMIN_DOMAIN;
     }
 }
 

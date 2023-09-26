@@ -216,11 +216,11 @@ export function HeaderApp() {
                         <Stack sx={{ height: "100%" }} spacing={0}>
                             <Text color="white">
                                 Xin chào,{" "}
-                                {profile.customer_id
+                                {profile?.customer_id
                                     ? profile.fullname
                                     : "Quý khách"}
                             </Text>
-                            {profile.customer_id ? (
+                            {profile?.customer_id ? (
                                 <Group>
                                     <Link
                                         to="/customer"
@@ -413,11 +413,11 @@ export function HeaderApp() {
                     >
                         <Text color="white">
                             Xin chào,{" "}
-                            {profile.customer_id
+                            {profile?.customer_id
                                 ? profile.fullname
                                 : "Quý khách"}
                         </Text>
-                        {profile.customer_id ? (
+                        {profile?.customer_id ? (
                             <Group>
                                 <Link
                                     to="/customer"

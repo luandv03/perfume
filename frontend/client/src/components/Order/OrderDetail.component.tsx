@@ -149,7 +149,7 @@ export const OrderDetail = () => {
         order_id: number
     ) => {
         createWindow(
-            `http://192.168.0.101:8888/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
+            `https://perfume-lgj8.onrender.com/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
             800,
             600
