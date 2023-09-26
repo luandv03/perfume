@@ -1,15 +1,10 @@
 import express, { Application } from "express";
-import { Request, Response } from "express";
-import { QueryResult } from "pg";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import cors from "cors";
 import path from "path";
 
-import { query } from "./db/index.db";
-
 import router from "./routes/index.routes";
-import paymentRoutes from "./routes/v1/payments/payment.routes";
 
 const app: Application = express();
 const PORT: number = 8888;
@@ -21,11 +16,7 @@ app.set("view engine", "jade");
 app.use(
     cors({
         credentials: true,
-        origin: [
-            "http://localhost:5173",
-            "http://localhost:3000",
-            "http://192.168.0.101:5173",
-        ],
+        origin: ["http://localhost:5173", "http://localhost:3000"],
     })
 );
 
