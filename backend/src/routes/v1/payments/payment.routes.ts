@@ -1,7 +1,6 @@
 import { Router } from "express";
 import moment from "moment";
 
-import { vnpayConfig } from "../../../configs/vnpay.config";
 import { PaymentController } from "../../../controllers/payments/payment.controller";
 
 const paymentRoutes: Router = Router();
@@ -21,6 +20,12 @@ paymentRoutes.post(
 paymentRoutes.get("/order/vnpay_return", paymentController.vnpayReturn);
 
 paymentRoutes.get("/vnpay_ipn", paymentController.vnpayIpn);
+
+//get payments
+paymentRoutes.get(
+    "/payment/:order_id/vnpay/view",
+    paymentController.getVnpayTrans
+);
 
 // momo wallet
 paymentRoutes.get(

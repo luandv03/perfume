@@ -12,6 +12,18 @@ class PaymentService extends BaseService {
             return error;
         }
     }
+
+    async getVnpayTrans(order_id: number) {
+        try {
+            const res = await this.httpClientPublic.get(
+                `/payment/${order_id}/vnpay/view`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const paymentService = new PaymentService();
