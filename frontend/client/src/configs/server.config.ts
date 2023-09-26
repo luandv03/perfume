@@ -1,1 +1,1 @@
-export const BASE_URL_API = "https://perfume-lgj8.onrender.com/api/v1";
+export const BASE_URL_API = `${process.env.SERVER_DOMAIN}/api/v1`;

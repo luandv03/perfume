@@ -5,6 +5,7 @@ import cors from "cors";
 import path from "path";
 
 import router from "./routes/index.routes";
+import { configService } from "./configs/configService.config";
 
 const app: Application = express();
 const PORT: number = 8888;
@@ -16,7 +17,10 @@ app.set("view engine", "jade");
 app.use(
     cors({
         credentials: true,
-        origin: ["http://localhost:5173", "http://localhost:3000"],
+        origin: [
+            configService.getClientDomain(),
+            configService.getAdminDomain(),
+        ],
     })
 );
 
