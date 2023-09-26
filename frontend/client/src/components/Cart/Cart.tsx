@@ -29,7 +29,8 @@ interface CartItem {
 }
 
 export function Cart() {
-    const { cartUser, addCartItem, removeCartItem } = useContext(CartContext);
+    const { cartUser, addCartItem, removeCartItem, updateCartItem } =
+        useContext(CartContext);
 
     const handleRemoveCartItem = (item: CartItem) => {
         removeCartItem(item);
@@ -54,6 +55,12 @@ export function Cart() {
         if (qty < 100) {
             addCartItem(cartUp);
         }
+    };
+
+    const handleUpdateCartItem = (product_id: number, quantity: number) => {
+        if (quantity < 1 || quantity > 10) return;
+
+        updateCartItem(product_id, quantity);
     };
 
     return (
@@ -242,7 +249,6 @@ export function Cart() {
                                                             value={
                                                                 item.quantity
                                                             }
-                                                            disabled
                                                             max={10}
                                                             min={1}
                                                             styles={{
@@ -252,6 +258,15 @@ export function Cart() {
                                                                         "center",
                                                                 },
                                                             }}
+                                                            onBlur={(e) =>
+                                                                handleUpdateCartItem(
+                                                                    item.product_id,
+                                                                    Number(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                )
+                                                            }
                                                         />
 
                                                         <ActionIcon
