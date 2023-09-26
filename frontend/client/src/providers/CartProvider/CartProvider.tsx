@@ -25,6 +25,7 @@ interface CartContextType {
     setCartUser: React.Dispatch<React.SetStateAction<CartItem[]> | []>;
     addCartItem: (product: CartItem) => void;
     removeCartItem: (product: CartItem) => void;
+    updateCartItem: (product_id: number, quantity: number) => void;
 }
 
 export const CartContext = createContext<CartContextType>({
@@ -35,6 +36,8 @@ export const CartContext = createContext<CartContextType>({
     addCartItem: () => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     removeCartItem: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    updateCartItem: () => {},
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -130,6 +133,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const updateCartItem = async (product_id: number, quantity: number) => {
+        if (getItemLocalStorage("isAuthenticated")) {
+            const res = await cartService.updateCartItem(product_id, quantity);
+
+            if (res.statusCode === 200) {
+                setCartUser((prev: CartItem[]) => {
+                    return prev.map((item: CartItem) =>
+                        item.product_id !== res.data.product_id
+                            ? item
+                            : {
+                                  ...item,
+                                  quantity: res.data.quantity,
+                              }
+                    );
+                });
+            }
+        } else {
+            setCartUser((prev: CartItem[]) => {
+                const cart = prev.map((item: CartItem) =>
+                    item.product_id !== product_id
+                        ? item
+                        : {
+                              ...item,
+                              quantity,
+                          }
+                );
+
+                localStorage.setItem("cart", JSON.stringify(cart));
+
+                return cart;
+            });
+        }
+    };
+
     const handleGetCartByUser = async () => {
         const res = await cartService.getCartList();
 
@@ -149,6 +186,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 setCartUser,
                 addCartItem,
                 removeCartItem,
+                updateCartItem,
             }}
         >
             {children}
