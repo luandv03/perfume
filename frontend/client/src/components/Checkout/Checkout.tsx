@@ -33,6 +33,7 @@ type OrderCreate = {
     customer_id: number;
     delivery_cost: number;
     tax: number;
+    payment_type: string;
     orderList: OrderItem[];
 };
 
@@ -60,7 +61,7 @@ export function Checkout() {
         order_id: number
     ) => {
         createWindow(
-            `http://localhost:8888/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
+            `http://192.168.0.101:8888/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
             800,
             600
@@ -86,6 +87,7 @@ export function Checkout() {
             customer_id: profile.customer_id,
             tax: 0,
             delivery_cost: 0,
+            payment_type: methodPayment,
             orderList,
         };
 
@@ -145,7 +147,7 @@ export function Checkout() {
         setLoadingCoupon(false);
 
         if (res.statusCode !== 200) {
-            return setCouponError(res.response.data.message);
+            return setCouponError(res.message);
         }
     };
 
@@ -367,7 +369,10 @@ export function Checkout() {
                         placeholder="Nhập mã giảm giá"
                         size="md"
                         value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
+                        onChange={(e) => {
+                            !!couponError && setCouponError("");
+                            setCouponCode(e.target.value);
+                        }}
                     ></TextInput>
                     <Button
                         h={42}

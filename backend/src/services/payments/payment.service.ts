@@ -47,19 +47,19 @@ class PaymentService {
             vnp_SecureHash,
         } = vnpayData;
 
-        //check trans of this order_id existed ?
-        const checkExist = await query(
-            `SELECT * FROM vnpay_wallet WHERE vnp_TxnRef = $1`,
-            [vnp_TxnRef]
-        );
+        // //check trans of this order_id existed ?
+        // const checkExist = await query(
+        //     `SELECT * FROM vnpay_wallet WHERE vnp_TxnRef = $1`,
+        //     [vnp_TxnRef]
+        // );
 
-        if (!checkExist.rowCount) {
-            return {
-                statusCode: HttpStatusCode.OK,
-                message: "Thông tin giao dịch của đơn hàng:::" + vnp_TxnRef,
-                data: checkExist.rows[0],
-            };
-        }
+        // if (!checkExist.rowCount) {
+        //     return {
+        //         statusCode: HttpStatusCode.OK,
+        //         message: "Thông tin giao dịch của đơn hàng:::" + vnp_TxnRef,
+        //         data: checkExist.rows[0],
+        //     };
+        // }
 
         const result = await query(
             `INSERT INTO vnpay_wallet VALUES(DEFAULT, $1, $2, $3, 
@@ -84,6 +84,19 @@ class PaymentService {
             statusCode: HttpStatusCode.OK,
             message: "Giao dịch hoàn tất",
             data: result.rows[0],
+        };
+    }
+
+    async getVnpayTrans(order_id: number): Promise<ResponseType<any>> {
+        const res = await query(
+            `SELECT vnpay_wallet_id, vnp_BankCode, vnp_CardType, vnp_PayDate, vnp_TransactionStatus FROM vnpay_wallet WHERE vnp_TxnRef = $1`,
+            [order_id]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get transaction payment success",
+            data: res.rows,
         };
     }
 

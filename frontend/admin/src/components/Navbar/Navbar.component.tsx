@@ -5,8 +5,8 @@ import {
     IconSettings,
     Icon2fa,
     IconReceipt2,
-    IconSwitchHorizontal,
-    IconLogout,
+    // IconSwitchHorizontal,
+    // IconLogout,
     IconLayoutDashboard,
     IconUsers,
 } from "@tabler/icons-react";
@@ -123,7 +123,7 @@ export function NavbarApp() {
         <Navbar height={700} width={{ sm: 300 }} p="md">
             <Navbar.Section grow>{links}</Navbar.Section>
 
-            <Navbar.Section className={classes.footer}>
+            {/* <Navbar.Section className={classes.footer}>
                 <a
                     href="#"
                     className={classes.link}
@@ -144,7 +144,7 @@ export function NavbarApp() {
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
                 </a>
-            </Navbar.Section>
+            </Navbar.Section> */}
         </Navbar>
     );
 }

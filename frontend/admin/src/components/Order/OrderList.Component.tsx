@@ -13,10 +13,8 @@ import {
     Select,
 } from "@mantine/core";
 import { Link, useParams, useNavigate } from "react-router-dom";
-// import { useDebouncedValue } from "@mantine/hooks";
-import { IconDownload, IconEye } from "@tabler/icons-react";
+import { IconEye } from "@tabler/icons-react";
 
-import { SearchBar } from "../SearchBar/SearchBar.component";
 import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helpter";
 import { ExportCSV } from "../ExportCsv/ExportCsv";
@@ -39,6 +37,7 @@ interface OrderType {
     tong_giam_gia: number;
     order_date: string;
     tong_hoa_don: number;
+    payment_type: string;
 }
 
 export function OrderList() {
@@ -48,7 +47,6 @@ export function OrderList() {
     const [total, setTotal] = useState<string>("10");
     const { classes, cx } = useStyles();
     const [selection, setSelection] = useState<number[]>([0]);
-    const [value, setValue] = useState<string>("");
     const { status } = useParams();
     const navigate = useNavigate();
     // const [debounced] = useDebouncedValue(value, 200);
@@ -78,13 +76,17 @@ export function OrderList() {
     };
 
     useEffect(() => {
-        !value && handleListOrders();
+        handleListOrders();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, total, value, status]);
+    }, [page, total, status]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [total]);
 
     const rows =
         orders.length &&
-        orders.map((item) => {
+        orders.map((item: OrderType) => {
             const selected = selection.includes(item.order_id);
             return (
                 <tr
@@ -114,6 +116,7 @@ export function OrderList() {
                         )}
                     </td>
                     <td>{handleOrderDate(item.order_date)}</td>
+                    <td>{item.payment_type}</td>
                     <td>
                         <Link to={`/order/detail/${item.order_id}`}>
                             <ActionIcon>
@@ -128,9 +131,7 @@ export function OrderList() {
     return (
         <Stack>
             <Group>
-                <Flex sx={{ width: "100%" }} justify="space-between">
-                    <SearchBar value={value} setValue={setValue} />
-
+                <Flex sx={{ width: "100%" }} justify="flex-end">
                     <Group>
                         <Select
                             data={[
@@ -156,7 +157,7 @@ export function OrderList() {
                                 },
                             ]}
                             value={status}
-                            onChange={(value) => {
+                            onChange={(value: string) => {
                                 setPage(1);
                                 navigate(`/order/${value}`);
                             }}
@@ -164,14 +165,6 @@ export function OrderList() {
                         />
 
                         <Box>
-                            {/* <NavLink
-                                label="EXPORT"
-                                icon={<IconDownload size="1.4rem" />}
-                                sx={{
-                                    color: "blue",
-                                    fontWeight: "500",
-                                }}
-                            /> */}
                             <ExportCSV
                                 csvData={orders}
                                 fileName={`Thông-tin-đơn-hàng ${new Date()}`}
@@ -204,6 +197,7 @@ export function OrderList() {
                         <th>Giảm giá (%)</th>
                         <th>Tổng tiền (vnd)</th>
                         <th>Ngày đặt hàng</th>
+                        <th>Thanh toán</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

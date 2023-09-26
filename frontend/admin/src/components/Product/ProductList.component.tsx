@@ -203,7 +203,7 @@ export function ProductList() {
                         { value: "100", label: "100 products" },
                     ]}
                     value={total}
-                    onChange={(value) => {
+                    onChange={(value: string) => {
                         setPage(1); // page default = 1 when change total product / page
                         setTotal(value);
                     }}

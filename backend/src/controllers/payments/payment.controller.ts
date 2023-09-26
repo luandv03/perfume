@@ -6,6 +6,7 @@ import moment from "moment";
 import { sortObject } from "../../utils/sortObject.util";
 import { vnpayConfig } from "../../configs/vnpay.config";
 import { paymentService } from "../../services/payments/payment.service";
+import { orderService } from "../../services/orders/order.service";
 
 export class PaymentController {
     // ################## VNPAY #####################
@@ -25,6 +26,18 @@ export class PaymentController {
         let createDate = moment(date).format("YYYYMMDDHHmmss");
 
         let ipAddr = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+
+        // vnp_TxnRef, // order_id
+        // vnp_Amount,
+        // vnp_BankCode,
+        // vnp_CardType,
+        // vnp_OrderInfo,
+        // vnp_PayDate,
+        // vnp_ResponseCode,
+        // vnp_TmnCode,
+        // vnp_TransactionNo,
+        // vnp_TransactionStatus,
+        // vnp_SecureHash,
 
         let tmnCode = vnpayConfig["vnp_TmnCode"];
         let secretKey = vnpayConfig["vnp_HashSecret"];
@@ -70,34 +83,6 @@ export class PaymentController {
     }
 
     async vnpayReturn(req: Request, res: Response): Promise<any> {
-        const {
-            vnp_TxnRef, // order_id
-            vnp_Amount,
-            vnp_BankCode,
-            vnp_CardType,
-            vnp_OrderInfo,
-            vnp_PayDate,
-            vnp_ResponseCode,
-            vnp_TmnCode,
-            vnp_TransactionNo,
-            vnp_TransactionStatus,
-            vnp_SecureHash,
-        } = req.query;
-
-        const data = await paymentService.createPaymentVnpayTrans({
-            vnp_TxnRef: Number(vnp_TxnRef), // order_id
-            vnp_Amount: vnp_Amount as string,
-            vnp_BankCode: vnp_BankCode as string,
-            vnp_CardType: vnp_CardType as string,
-            vnp_OrderInfo: vnp_OrderInfo as string,
-            vnp_PayDate: vnp_PayDate as string,
-            vnp_ResponseCode: vnp_ResponseCode as string,
-            vnp_TmnCode: vnp_TmnCode as string,
-            vnp_TransactionNo: vnp_TransactionNo as string,
-            vnp_TransactionStatus: vnp_TransactionStatus as string,
-            vnp_SecureHash: vnp_SecureHash as string,
-        });
-
         let vnp_Params = req.query;
 
         let secureHash = vnp_Params["vnp_SecureHash"];
@@ -118,14 +103,49 @@ export class PaymentController {
 
         if (secureHash === signed) {
             //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
+            await orderService.updatePaymentStatus(
+                Number(vnp_Params.vnp_TxnRef),
+                "1"
+            );
             res.render("success", { code: vnp_Params["vnp_ResponseCode"] });
         } else {
+            await orderService.updatePaymentStatus(
+                Number(vnp_Params.vnp_TxnRef),
+                "2"
+            );
             res.render("success", { code: "97" });
         }
     }
 
     async vnpayIpn(req: Request, res: Response): Promise<any> {
+        // const {
+        //     vnp_TxnRef, // order_id
+        //     vnp_Amount,
+        //     vnp_BankCode,
+        //     vnp_CardType,
+        //     vnp_OrderInfo,
+        //     vnp_PayDate,
+        //     vnp_ResponseCode,
+        //     vnp_TmnCode,
+        //     vnp_TransactionNo,
+        //     vnp_TransactionStatus,
+        //     vnp_SecureHash,
+        // } = req.query;
+
+        // const data = await paymentService.createPaymentVnpayTrans({
+        //     vnp_TxnRef: Number(vnp_TxnRef), // order_id
+        //     vnp_Amount: vnp_Amount as string,
+        //     vnp_BankCode: vnp_BankCode as string,
+        //     vnp_CardType: vnp_CardType as string,
+        //     vnp_OrderInfo: vnp_OrderInfo as string,
+        //     vnp_PayDate: vnp_PayDate as string,
+        //     vnp_ResponseCode: vnp_ResponseCode as string,
+        //     vnp_TmnCode: vnp_TmnCode as string,
+        //     vnp_TransactionNo: vnp_TransactionNo as string,
+        //     vnp_TransactionStatus: vnp_TransactionStatus as string,
+        //     vnp_SecureHash: vnp_SecureHash as string,
+        // });
+
         let vnp_Params = req.query;
         let secureHash = vnp_Params["vnp_SecureHash"];
 
@@ -160,6 +180,12 @@ export class PaymentController {
                             //thanh cong
                             //paymentStatus = '1'
                             // Ở đây cập nhật trạng thái giao dịch thanh toán thành công vào CSDL của bạn
+
+                            // await orderService.updatePaymentStatus(
+                            //     Number(orderId),
+                            //     "1"
+                            // );
+
                             res.status(200).json({
                                 RspCode: "00",
                                 Message: "Success",
@@ -168,6 +194,11 @@ export class PaymentController {
                             //that bai
                             //paymentStatus = '2'
                             // Ở đây cập nhật trạng thái giao dịch thanh toán thất bại vào CSDL của bạn
+                            // await orderService.updatePaymentStatus(
+                            //     Number(orderId),
+                            //     "2"
+                            // );
+
                             res.status(200).json({
                                 RspCode: "00",
                                 Message: "Success",
@@ -194,6 +225,21 @@ export class PaymentController {
             }
         } else {
             res.status(200).json({ RspCode: "97", Message: "Checksum failed" });
+        }
+    }
+
+    async getVnpayTrans(req: Request, res: Response): Promise<any> {
+        try {
+            const order_id = req.params.order_id;
+            const data = await paymentService.getVnpayTrans(Number(order_id));
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
         }
     }
 

@@ -34,7 +34,7 @@ class OrderService {
             await query("BEGIN");
 
             const results_1 = await query(
-                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date, payment_type) VALUES($1, $2, 'ordered', $3, NOW()::DATE, $4) RETURNING *`,
+                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date, payment_type, payment_status) VALUES($1, $2, 'ordered', $3, NOW()::DATE, $4, '0') RETURNING *`,
                 [customer_id, tax, delivery_cost, payment_type]
             );
 
@@ -439,6 +439,21 @@ class OrderService {
         );
 
         return Number(results.rows[0].n_orders);
+    }
+
+    async updatePaymentStatus(
+        order_id: number,
+        payment_status: string
+    ): Promise<ResponseType<any>> {
+        await query(
+            `UPDATE orders SET payment_status = $1 WHERE order_id = $2`,
+            [payment_status, order_id]
+        );
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "OK do nha hihihi",
+        };
     }
 }
 

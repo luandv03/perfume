@@ -16,35 +16,6 @@ import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helpter";
 import { mailerService } from "../../services/mailer.service";
 
-// "orders": {
-//     "order_id": 108,
-//     "customer_id": 1,
-//     "tax": 0,
-//     "status": "accepted",
-//     "delivery_cost": 0,
-//     "order_date": "2023-08-16T17:00:00.000Z",
-//     "email": "luanyhoa@gmail.com",
-//     "address": "Ha Nam"
-// },
-// "orderlines": [
-//     {
-//         "orderline_id": 280,
-//         "order_id": 108,
-//         "product_id": 37,
-//         "quantity": 1,
-//         "net_price": "3600000",
-//         "title": "Sole Di Positano"
-//     },
-
-// ],
-// "coupons": [
-//     {
-//         "coupon_id": 3,
-//         "coupon_code": "Y67ceB",
-//         "coupon_discount": "12"
-//     }
-// ]
-
 interface CouponType {
     coupon_id: number;
     coupon_code: string;
@@ -373,6 +344,7 @@ export const OrderDetail = () => {
                             opacity: "0.9",
                         },
                     })}
+                    disabled
                 >
                     <IconTrash style={{ marginRight: "5px" }} />
                     Xóa

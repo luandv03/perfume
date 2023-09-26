@@ -75,8 +75,18 @@ export function Login() {
     const handleValidate = async (values: typeof form.values) => {
         try {
             setLoading(true);
-            await authService.login(values);
+            const res = await authService.login(values);
             setLoading(false);
+
+            if (res.statusCode !== 200) {
+                return showNotification({
+                    title: "You login failed!",
+                    message: res.message,
+                    color: "red",
+                    icon: <IconX />,
+                    autoClose: 3000,
+                });
+            }
             showNotification({
                 message: "You login successfully!",
                 color: "yellow",
@@ -87,6 +97,7 @@ export function Login() {
             setProfile(response.data);
             navigate("/");
             form.reset();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             showNotification({
                 title: "Login failure!",

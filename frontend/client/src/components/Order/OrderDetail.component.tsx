@@ -6,6 +6,7 @@ import {
     Table,
     Button,
     Flex,
+    Alert,
 } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { Link, useParams } from "react-router-dom";
@@ -14,6 +15,8 @@ import { notifications } from "@mantine/notifications";
 
 import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helper";
+// import { paymentService } from "../../services/payment.service";
+import { createWindow } from "../../helpers/createWindow.helper";
 
 interface CouponType {
     coupon_id: number;
@@ -30,6 +33,14 @@ interface OrderlineType {
     title: string;
 }
 
+// interface TransactionType {
+//     vnpay_wallet_id: number;
+//     vnp_bankcode: string;
+//     vnp_cardtype: string;
+//     vnp_paydate: string;
+//     vnp_transactionstatus: string;
+// }
+
 export const OrderDetail = () => {
     const [orderDetail, setOrderDetail] = useState({
         order: {
@@ -42,6 +53,8 @@ export const OrderDetail = () => {
             email: "",
             fullname: "",
             address: "",
+            payment_status: "",
+            payment_type: "",
         },
         orderlines: [
             {
@@ -61,6 +74,7 @@ export const OrderDetail = () => {
             },
         ],
     });
+    // const [trans, setTrans] = useState<TransactionType[] | []>([]);
 
     const { order_id } = useParams();
 
@@ -69,6 +83,14 @@ export const OrderDetail = () => {
 
         setOrderDetail(res.data);
     };
+
+    // const handleGetTrans = async () => {
+    //     const res = await paymentService.getVnpayTrans(Number(order_id));
+
+    //     console.log(res);
+
+    //     setTrans(res.data);
+    // };
 
     const handleSumAmount = (orderlines: OrderlineType[]) => {
         let sum = 0;
@@ -121,8 +143,22 @@ export const OrderDetail = () => {
         });
     };
 
+    const handlePayment = async (
+        methodPayment: string,
+        amount: number,
+        order_id: number
+    ) => {
+        createWindow(
+            `http://192.168.0.101:8888/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
+            "_blank",
+            800,
+            600
+        );
+    };
+
     useEffect(() => {
         handleGetOrderById();
+        // handleGetTrans();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -148,6 +184,18 @@ export const OrderDetail = () => {
                 </td>
             </tr>
         ));
+
+    // const rowTrans =
+    //     trans.length > 0 &&
+    //     trans.map((item: TransactionType) => (
+    //         <tr key={item.vnpay_wallet_id}>
+    //             <td>{item.vnpay_wallet_id}</td>
+    //             <td>{item.vnp_bankcode}</td>
+    //             <td>{item.vnp_cardtype}</td>
+    //             <td>{item.vnp_paydate}</td>
+    //             <td>{item.vnp_transactionstatus}</td>
+    //         </tr>
+    //     ));
 
     return (
         <Stack w="100%" sx={{ overflowX: "scroll" }}>
@@ -282,6 +330,7 @@ export const OrderDetail = () => {
             <Text fw={700} size="xl" fz="xl">
                 Items
             </Text>
+
             <Table>
                 <thead>
                     <tr>
@@ -294,6 +343,7 @@ export const OrderDetail = () => {
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
+
             <Text fw={700} size="xl" fz="xl">
                 Totals
             </Text>
@@ -348,6 +398,48 @@ export const OrderDetail = () => {
                     </tr>
                 </thead>
             </Table>
+            <Text fw={700} size="xl" fz="xl">
+                Giao dịch
+            </Text>
+            {orderDetail.order.payment_status === "1" ? (
+                // <Table>
+                //     <thead>
+                //         <tr>
+                //             <th>Mã giao dịch</th>
+                //             <th>Ngân hàng</th>
+                //             <th>Loại thẻ</th>
+                //             <th>Ngày thanh toán</th>
+                //             <th>Trạng thái</th>
+                //         </tr>
+                //     </thead>
+                //     <tbody>{rowTrans}</tbody>
+                // </Table>
+                <div>
+                    <Alert title="Chú ý!" color="red">
+                        <Text fw={700}> Bạn đã thanh toán đơn hàng</Text>
+                    </Alert>
+                </div>
+            ) : (
+                <div>
+                    <Alert title="Chú ý!" color="red">
+                        <Text fw={700}> Bạn chưa thanh toán đơn hàng</Text>
+                    </Alert>
+                    {orderDetail.order.status !== "canceled" && (
+                        <Button
+                            mt={10}
+                            onClick={() =>
+                                handlePayment(
+                                    "vnpay",
+                                    handleTotalMoney(),
+                                    Number(order_id)
+                                )
+                            }
+                        >
+                            Thanh toán lại đơn hàng
+                        </Button>
+                    )}
+                </div>
+            )}
             <Flex
                 style={{
                     width: "100%",
