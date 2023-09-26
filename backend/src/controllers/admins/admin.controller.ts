@@ -7,6 +7,7 @@ import { LoginAccountDto } from "../../dtos/admin/admin.dto";
 import { RegisterAccountDto } from "../../dtos/admin/admin.dto";
 import { handleErrorDto } from "../../utils/handle_error_dto.util";
 import { ResponseType } from "../../types/response.type";
+import { configService } from "../../configs/configService.config";
 
 export class AdminController {
     async getAdmins(req: Request, res: Response): Promise<IAdmin[] | any> {
@@ -82,10 +83,16 @@ export class AdminController {
                 res.cookie("access_token", data.data.access_token, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getAdminDomain(),
                 });
                 res.cookie("refresh_token", data.data.refresh_token, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getAdminDomain(),
                 });
             }
 

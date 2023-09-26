@@ -6,6 +6,7 @@ import { handleErrorDto } from "../../utils/handle_error_dto.util";
 import { ResponseType } from "../../types/response.type";
 import { LoginUserAccountDto } from "../../dtos/users/user.dto";
 import { HttpStatusCode } from "../../configs/httpStatusCode.config";
+import { configService } from "../../configs/configService.config";
 
 export class UserController {
     async register(req: Request, res: Response): Promise<any> {
@@ -76,11 +77,17 @@ export class UserController {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
 
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
             }
 
@@ -108,6 +115,9 @@ export class UserController {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 3hrs
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
 
             res.status(data.statusCode).json(data);
@@ -136,10 +146,16 @@ export class UserController {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 }) &&
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
 
             res.redirect("http://localhost:5173/login/success");
@@ -171,13 +187,19 @@ export class UserController {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 }) &&
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
 
-            res.redirect("http://localhost:5173/login/success");
+            res.redirect(`${configService.getClientDomain()}/login/success`);
 
             // res.status(data.statusCode).json(data);
         } catch (err) {
