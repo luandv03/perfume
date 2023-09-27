@@ -14,6 +14,8 @@ export class ConfigService {
         password: this.env.DB_PASSWORD as string,
     };
 
+    private DOMAIN: string = this.env.DOMAIN as string;
+
     private CLIENT_DOAMIN: string = this.env.CLIENT_DOMAIN as string;
 
     private ADMIN_DOMAIN: string = this.env.ADMIN_DOMAIN as string;
@@ -101,6 +103,10 @@ export class ConfigService {
 
     public getAdminDomain(): string {
         return this.ADMIN_DOMAIN;
+    }
+
+    public getDomain(): string {
+        return this.DOMAIN;
     }
 }
 
