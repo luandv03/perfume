@@ -18,7 +18,7 @@ import { useContext } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { ProductAvatar } from "../Product/ProductAvatar";
 
-interface CartItem {
+export interface CartItem {
     product_id: number;
     title: string;
     price: number;
@@ -78,7 +78,11 @@ export function Cart() {
                     </Text>
                     <span style={{ fontSize: "18px", fontWeight: 500 }}>
                         (
-                        {cartUser.reduce((acc, curr) => acc + curr.quantity, 0)}{" "}
+                        {cartUser.reduce(
+                            (acc: number, curr: CartItem) =>
+                                acc + curr.quantity,
+                            0
+                        )}{" "}
                         sản phẩm)
                     </span>
                 </Group>
@@ -305,7 +309,7 @@ export function Cart() {
                                         maximumFractionDigits: 9,
                                     }).format(
                                         cartUser.reduce(
-                                            (acc, curr) =>
+                                            (acc: number, curr: CartItem) =>
                                                 acc +
                                                 curr.quantity * curr.price,
                                             0
@@ -326,7 +330,7 @@ export function Cart() {
                                         maximumFractionDigits: 9,
                                     }).format(
                                         cartUser.reduce(
-                                            (acc, curr) =>
+                                            (acc: number, curr: CartItem) =>
                                                 acc +
                                                 curr.price *
                                                     (curr.discount / 100),
@@ -349,7 +353,7 @@ export function Cart() {
                                         maximumFractionDigits: 9,
                                     }).format(
                                         cartUser.reduce(
-                                            (acc, curr) =>
+                                            (acc: number, curr: CartItem) =>
                                                 acc +
                                                 curr.quantity *
                                                     curr.price *

@@ -34,6 +34,7 @@ import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { categoryService } from "../../services/category.service";
 import { authService } from "../../services/auth.service";
 import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
+import { CartItem } from "../Cart/Cart";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -276,7 +277,8 @@ export function HeaderApp() {
                             >
                                 {cartUser.length > 0
                                     ? cartUser.reduce(
-                                          (acc, curr) => acc + curr.quantity,
+                                          (acc: number, curr: CartItem) =>
+                                              acc + curr.quantity,
                                           0
                                       )
                                     : 0}
@@ -303,7 +305,8 @@ export function HeaderApp() {
                             >
                                 {cartUser.length > 0
                                     ? cartUser.reduce(
-                                          (acc, curr) => acc + curr.quantity,
+                                          (acc: number, curr: CartItem) =>
+                                              acc + curr.quantity,
                                           0
                                       )
                                     : 0}

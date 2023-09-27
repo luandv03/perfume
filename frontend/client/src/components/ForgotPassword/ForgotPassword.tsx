@@ -99,7 +99,7 @@ export const ForgotPassword = () => {
     };
 
     useEffect(() => {
-        let timer: number;
+        let timer: ReturnType<typeof setInterval>;
         if (counter > 0)
             timer = setInterval(() => setCounter(counter - 1), 1000);
 

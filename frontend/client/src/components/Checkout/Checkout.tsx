@@ -22,6 +22,7 @@ import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { orderService } from "../../services/order.service";
 import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
 import { createWindow } from "../../helpers/createWindow.helper";
+import { CartItem } from "../Cart/Cart";
 
 type OrderItem = {
     product_id: number;
@@ -104,7 +105,7 @@ export function Checkout() {
                 /// vn pay
                 const amount = Math.ceil(
                     cartUser.reduce(
-                        (acc, curr) =>
+                        (acc: number, curr: CartItem) =>
                             acc +
                             curr.quantity *
                                 curr.price *
@@ -336,7 +337,7 @@ export function Checkout() {
                             maximumFractionDigits: 9,
                         }).format(
                             cartUser.reduce(
-                                (acc, curr) =>
+                                (acc: number, curr: CartItem) =>
                                     acc +
                                     curr.quantity *
                                         curr.price *
@@ -395,7 +396,7 @@ export function Checkout() {
                             maximumFractionDigits: 9,
                         }).format(
                             cartUser.reduce(
-                                (acc, curr) =>
+                                (acc: number, curr: CartItem) =>
                                     acc +
                                     curr.quantity *
                                         curr.price *
