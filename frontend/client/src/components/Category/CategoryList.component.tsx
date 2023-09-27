@@ -113,10 +113,6 @@ export function CategoryList() {
                             icon={<IconPlus size="1.4rem" />}
                             component="a"
                             href="/category/create"
-                            sx={{
-                                color: "blue",
-                                fontWeight: "500",
-                            }}
                         />
                     </Box>
                 </Flex>
