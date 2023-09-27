@@ -78,13 +78,17 @@ export class UserController {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
-                    domain: configService.getDomain(),
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
 
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
-                    domain: configService.getDomain(),
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
             }
 
@@ -112,7 +116,9 @@ export class UserController {
                 res.cookie("access_token_user", data.data.access_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 3hrs
-                    domain: configService.getDomain(),
+                    sameSite: "none",
+                    secure: true,
+                    domain: configService.getClientDomain(),
                 });
 
             res.status(data.statusCode).json(data);
@@ -143,17 +149,17 @@ export class UserController {
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
                     sameSite: "none",
                     secure: true,
-                    domain: configService.getDomain(),
+                    domain: configService.getClientDomain(),
                 }) &&
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
                     sameSite: "none",
                     secure: true,
-                    domain: configService.getDomain(),
+                    domain: configService.getClientDomain(),
                 });
 
-            res.redirect("http://localhost:5173/login/success");
+            res.redirect(`${configService.getClientDomain()}/login/success`);
 
             // res.status(data.statusCode).json(data);
         } catch (err) {
@@ -184,14 +190,14 @@ export class UserController {
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
                     sameSite: "none",
                     secure: true,
-                    domain: configService.getDomain(),
+                    domain: configService.getClientDomain(),
                 }) &&
                 res.cookie("refresh_token_user", data.data.refresh_token_user, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
                     sameSite: "none",
                     secure: true,
-                    domain: configService.getDomain(),
+                    domain: configService.getClientDomain(),
                 });
 
             res.redirect(`${configService.getClientDomain()}/login/success`);

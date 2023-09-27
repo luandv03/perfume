@@ -14,8 +14,6 @@ const PORT: number = 8888;
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-console.log(configService.getClientDomain());
-
 app.use(
     cors({
         credentials: true,
