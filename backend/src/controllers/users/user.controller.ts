@@ -117,7 +117,7 @@ export class UserController {
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 3hrs
                     sameSite: "none",
                     secure: true,
-                    domain: configService.getClientDomain(),
+                    domain: configService.getDomain(),
                 });
 
             res.status(data.statusCode).json(data);
