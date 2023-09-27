@@ -42,8 +42,7 @@ passport.use(
         {
             clientID: configService.getGoogleClientId(),
             clientSecret: configService.getGoogleClientSecret(),
-            callbackURL:
-                "https://perfume-lgj8.onrender.com/api/v1/auth/google/callback",
+            callbackURL: `${configService.getClientDomain()}/api/v1/auth/google/callback`,
         },
         function (accessToken, refreshToken, profile, done) {
             // profile trong done chính là thông tin sẽ được lưu lại trong hàm serializeUser
@@ -62,8 +61,7 @@ passport.use(
         {
             clientID: configService.getFacebookClientId(),
             clientSecret: configService.getFacebookClientSecret(),
-            callbackURL:
-                "https://perfume-lgj8.onrender.com/api/v1/auth/facebook/callback",
+            callbackURL: `${configService.getClientDomain()}/api/v1/auth/facebook/callback`,
             profileFields: ["id", "emails", "displayName"],
         },
         function (accessToken, refreshToken, profile, done) {

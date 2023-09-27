@@ -16,7 +16,7 @@ export class ConfigService {
 
     private DOMAIN: string = this.env.DOMAIN as string;
 
-    private CLIENT_DOAMIN: string = this.env.CLIENT_DOMAIN as string;
+    private CLIENT_DOMAIN: string = this.env.CLIENT_DOMAIN as string;
 
     private ADMIN_DOMAIN: string = this.env.ADMIN_DOMAIN as string;
 
@@ -98,7 +98,7 @@ export class ConfigService {
 
     // frontend domain
     public getClientDomain(): string {
-        return this.CLIENT_DOAMIN;
+        return this.CLIENT_DOMAIN;
     }
 
     public getAdminDomain(): string {

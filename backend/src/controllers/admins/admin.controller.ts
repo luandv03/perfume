@@ -85,14 +85,14 @@ export class AdminController {
                     maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
                     sameSite: "none",
                     secure: true,
-                    domain: configService.getAdminDomain(),
+                    domain: configService.getDomain(),
                 });
                 res.cookie("refresh_token", data.data.refresh_token, {
                     httpOnly: true,
                     maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
                     sameSite: "none",
                     secure: true,
-                    domain: configService.getAdminDomain(),
+                    domain: configService.getDomain(),
                 });
             }
 
