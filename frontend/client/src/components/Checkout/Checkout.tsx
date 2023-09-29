@@ -49,7 +49,7 @@ export function Checkout() {
     const [loading, setLoading] = useState(false);
     const { cartUser } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
-    const [methodPayment, setMethodPayment] = useState("offline");
+    const [methodPayment, setMethodPayment] = useState("cod");
     const [couponError, setCouponError] = useState<string>("");
     const [couponCode, setCouponCode] = useState("");
     const [loadingCoupon, setLoadingCoupon] = useState(false);
@@ -114,7 +114,7 @@ export function Checkout() {
                     )
                 );
 
-                if (methodPayment !== "offline")
+                if (methodPayment !== "cod")
                     await handlePayment(
                         methodPayment,
                         amount,
