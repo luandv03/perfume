@@ -34,7 +34,8 @@ class OrderService {
             await query("BEGIN");
 
             const results_1 = await query(
-                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date, payment_type, payment_status) VALUES($1, $2, 'ordered', $3, NOW()::DATE, $4, '0') RETURNING *`,
+                `INSERT INTO orders(customer_id, tax, status, delivery_cost, order_date, payment_type, payment_status) 
+                VALUES($1, $2, 'ordered', $3, NOW()::DATE, $4, '0') RETURNING *`,
                 [customer_id, tax, delivery_cost, payment_type]
             );
 

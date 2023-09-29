@@ -11,7 +11,6 @@ const jwtInterceptor = axios.create({
 jwtInterceptor.interceptors.request.use(
     function (config) {
         const access_token_user = localStorage.getItem("access_token_user");
-        console.log(access_token_user);
 
         config.headers["Authorization"] = "Bearer " + access_token_user;
 

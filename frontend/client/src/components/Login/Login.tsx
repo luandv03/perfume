@@ -142,7 +142,7 @@ export function LoginAuth() {
         let timer: ReturnType<typeof setTimeout> | null = null;
 
         const newWindow = createWindow(
-            "http://localhost:8888/api/v1/auth/google/login",
+            "https://perfume-lgj8.onrender.com/api/v1/auth/google/login",
             "_blank",
             800,
             600
@@ -174,7 +174,7 @@ export function LoginAuth() {
 
         let timer: ReturnType<typeof setTimeout> | null = null;
         const newWindow = createWindow(
-            "localhost:8888/api/v1/auth/facebook/login",
+            "https://perfume-lgj8.onrender.com/api/v1/auth/facebook/login",
             "_blank",
             800,
             600
