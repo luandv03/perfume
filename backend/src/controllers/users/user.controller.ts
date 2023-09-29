@@ -74,20 +74,6 @@ export class UserController {
                 password,
             });
 
-            // if (data.statusCode === 200) {
-            //     res.cookie("access_token_user", data.data.access_token_user, {
-            //         httpOnly: true,
-            //         maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
-            //         domain: configService.getDomain(),
-            //     });
-
-            //     res.cookie("refresh_token_user", data.data.refresh_token_user, {
-            //         httpOnly: true,
-            //         maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
-            //         domain: configService.getDomain(),
-            //     });
-            // }
-
             return res.status(data.statusCode).json(data);
         } catch (err) {
             console.log(err);
@@ -144,6 +130,7 @@ export class UserController {
                     data.data.access_token_user
                 }&refresh_token_user=${data.data.refresh_token_user}`
             );
+
         } catch (err) {
             return res.status(500).json({
                 statusCode: 500,
@@ -171,6 +158,7 @@ export class UserController {
                     data.data.access_token_user
                 }&refresh_token_user=${data.data.refresh_token_user}`
             );
+
         } catch (err) {
             return res.status(500).json({
                 statusCode: 500,
