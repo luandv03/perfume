@@ -79,22 +79,6 @@ export class AdminController {
                 username,
                 password,
             });
-            if (data.statusCode === 200) {
-                res.cookie("access_token", data.data.access_token, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getDomain(),
-                });
-                res.cookie("refresh_token", data.data.refresh_token, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getDomain(),
-                });
-            }
 
             return res.status(data.statusCode).json(data);
         } catch (err) {
@@ -104,7 +88,11 @@ export class AdminController {
     }
 
     refreshToken(req: Request, res: Response) {
-        const refresh_token = req.cookies.refresh_token;
+        let refresh_token: string = req.headers["authorization"] as string;
+
+        if (refresh_token.startsWith("Bearer ")) {
+            refresh_token = refresh_token.slice(7, refresh_token.length);
+        }
 
         if (!refresh_token) {
             return res.status(403).json({
@@ -115,12 +103,6 @@ export class AdminController {
 
         try {
             const data = adminService.refreshTokenService(refresh_token);
-
-            data.statusCode === 201 &&
-                res.cookie("access_token", data.data.access_token, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 3hrs
-                });
 
             res.status(data.statusCode).json(data);
         } catch (err) {

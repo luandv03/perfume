@@ -20,6 +20,7 @@ app.use(
         origin: [
             configService.getClientDomain(),
             configService.getAdminDomain(),
+            "http://192.168.0.102:5173",
         ],
     })
 );

@@ -74,24 +74,6 @@ export class UserController {
                 password,
             });
 
-            if (data.statusCode === 200) {
-                res.cookie("access_token_user", data.data.access_token_user, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getClientDomain(),
-                });
-
-                res.cookie("refresh_token_user", data.data.refresh_token_user, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getClientDomain(),
-                });
-            }
-
             return res.status(data.statusCode).json(data);
         } catch (err) {
             console.log(err);
@@ -101,25 +83,25 @@ export class UserController {
 
     refreshToken(req: Request, res: Response) {
         try {
-            const refresh_token = req.cookies.refresh_token_user;
+            let refresh_token_user: string = req.headers[
+                "authorization"
+            ] as string;
 
-            if (!refresh_token) {
+            if (refresh_token_user.startsWith("Bearer ")) {
+                refresh_token_user = refresh_token_user.slice(
+                    7,
+                    refresh_token_user.length
+                );
+            }
+
+            if (!refresh_token_user) {
                 return res.status(403).json({
                     statusCode: 403,
                     message: "Refresh token not valid",
                 });
             }
 
-            const data = userService.refreshTokenService(refresh_token);
-
-            data.statusCode === 201 &&
-                res.cookie("access_token_user", data.data.access_token_user, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 3hrs
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getClientDomain(),
-                });
+            const data = userService.refreshTokenService(refresh_token_user);
 
             res.status(data.statusCode).json(data);
         } catch (err) {
@@ -131,7 +113,7 @@ export class UserController {
 
     async loginWithGoolge(req: Request, res: Response): Promise<any> {
         try {
-            const { id, email, displayName } = req.user as {
+            const { id, email, displayName } = req?.user as {
                 id: string;
                 email: string;
                 displayName: string;
@@ -143,25 +125,12 @@ export class UserController {
                 fullname: displayName,
             });
 
-            data.statusCode === 200 &&
-                res.cookie("access_token_user", data.data.access_token_user, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getClientDomain(),
-                }) &&
-                res.cookie("refresh_token_user", data.data.refresh_token_user, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getClientDomain(),
-                });
+            res.redirect(
+                `${configService.getClientDomain()}/login/success?access_token_user=${
+                    data.data.access_token_user
+                }&refresh_token_user=${data.data.refresh_token_user}`
+            );
 
-            res.redirect(`${configService.getClientDomain()}/login/success`);
-
-            // res.status(data.statusCode).json(data);
         } catch (err) {
             return res.status(500).json({
                 statusCode: 500,
@@ -184,25 +153,12 @@ export class UserController {
                 fullname: displayName,
             });
 
-            data.statusCode === 200 &&
-                res.cookie("access_token_user", data.data.access_token_user, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_ACCESS_TOKEN * 1000, // 1000 la 1 giay
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getClientDomain(),
-                }) &&
-                res.cookie("refresh_token_user", data.data.refresh_token_user, {
-                    httpOnly: true,
-                    maxAge: data.data.EXPIRES_REFRESH_TOKEN * 1000, // 3hrs
-                    sameSite: "none",
-                    secure: true,
-                    domain: configService.getClientDomain(),
-                });
+            res.redirect(
+                `${configService.getClientDomain()}/login/success?access_token_user=${
+                    data.data.access_token_user
+                }&refresh_token_user=${data.data.refresh_token_user}`
+            );
 
-            res.redirect(`${configService.getClientDomain()}/login/success`);
-
-            // res.status(data.statusCode).json(data);
         } catch (err) {
             return res.status(500).json({
                 statusCode: 500,
@@ -213,8 +169,8 @@ export class UserController {
 
     logout(req: Request, res: Response) {
         try {
-            res.clearCookie("access_token_user");
-            res.clearCookie("refresh_token_user");
+            // res.clearCookie("access_token_user");
+            // res.clearCookie("refresh_token_user");
 
             return res.status(200).json({
                 statusCode: 200,

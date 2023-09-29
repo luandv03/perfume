@@ -20,6 +20,8 @@ export class ConfigService {
 
     private ADMIN_DOMAIN: string = this.env.ADMIN_DOMAIN as string;
 
+    private SERVER_DOMAIN: string = this.env.SERVER_DOMAIN as string;
+
     private SECRET_KEY_ACCESS_TOKEN: string = this.env
         .SECRET_KEY_ACCESS_TOKEN as string;
 
@@ -107,6 +109,10 @@ export class ConfigService {
 
     public getDomain(): string {
         return this.DOMAIN;
+    }
+
+    public getServerDomain(): string {
+        return this.SERVER_DOMAIN;
     }
 }
 

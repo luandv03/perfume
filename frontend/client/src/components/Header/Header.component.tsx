@@ -144,6 +144,9 @@ export function HeaderApp() {
         const res = await authService.logout();
         setLoading(false);
         if (res.statusCode === 200) {
+            localStorage.removeItem("access_token_user");
+            localStorage.removeItem("refresh_token_user");
+
             setProfile({
                 customer_id: 0,
                 email: "",
