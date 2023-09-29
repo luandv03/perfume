@@ -10,7 +10,11 @@ export const authMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const access_token: string = req.cookies.access_token;
+    let access_token: string = req.headers["authorization"] as string;
+
+    if (access_token?.startsWith("Bearer ")) {
+        access_token = access_token.slice(7, access_token.length);
+    }
 
     if (!access_token) {
         return res

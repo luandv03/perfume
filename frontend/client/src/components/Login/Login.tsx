@@ -97,12 +97,24 @@ export function LoginAuth() {
                 });
             }
 
+            // set token on localStorage
+            localStorage.setItem(
+                "access_token_user",
+                resAuth.data.access_token_user
+            );
+
+            localStorage.setItem(
+                "refresh_token_user",
+                resAuth.data.refresh_token_user
+            );
+
             showNotification({
                 message: "You login successfully!",
                 color: "yellow",
                 icon: <IconCheck />,
                 autoClose: 3000,
             });
+
             const response = await authService.getProfile();
             setProfile(response.data);
             localStorage.setItem("isAuthenticated", "true");
@@ -130,14 +142,14 @@ export function LoginAuth() {
         let timer: ReturnType<typeof setTimeout> | null = null;
 
         const newWindow = createWindow(
-            "https://perfume-lgj8.onrender.com/api/v1/auth/google/login",
+            "http://localhost:8888/api/v1/auth/google/login",
             "_blank",
             800,
             600
         );
 
         if (newWindow) {
-            timer = setInterval(() => {
+            timer = setInterval(async () => {
                 if (newWindow.closed) {
                     JSON.parse(
                         localStorage.getItem("isAuthenticated") as string
@@ -162,7 +174,7 @@ export function LoginAuth() {
 
         let timer: ReturnType<typeof setTimeout> | null = null;
         const newWindow = createWindow(
-            "https://perfume-lgj8.onrender.com/api/v1/auth/facebook/login",
+            "localhost:8888/api/v1/auth/facebook/login",
             "_blank",
             800,
             600

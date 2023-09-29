@@ -42,7 +42,7 @@ passport.use(
         {
             clientID: configService.getGoogleClientId(),
             clientSecret: configService.getGoogleClientSecret(),
-            callbackURL: `${configService.getClientDomain()}/api/v1/auth/google/callback`,
+            callbackURL: `http://localhost:8888/api/v1/auth/google/callback`,
         },
         function (accessToken, refreshToken, profile, done) {
             // profile trong done chính là thông tin sẽ được lưu lại trong hàm serializeUser
@@ -61,7 +61,7 @@ passport.use(
         {
             clientID: configService.getFacebookClientId(),
             clientSecret: configService.getFacebookClientSecret(),
-            callbackURL: `${configService.getClientDomain()}/api/v1/auth/facebook/callback`,
+            callbackURL: `${configService.getServerDomain()}/api/v1/auth/facebook/callback`,
             profileFields: ["id", "emails", "displayName"],
         },
         function (accessToken, refreshToken, profile, done) {

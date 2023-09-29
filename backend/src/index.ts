@@ -14,14 +14,13 @@ const PORT: number = 8888;
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-console.log(configService.getClientDomain());
-
 app.use(
     cors({
         credentials: true,
         origin: [
             configService.getClientDomain(),
             configService.getAdminDomain(),
+            "http://192.168.0.102:5173",
         ],
     })
 );

@@ -55,7 +55,17 @@ class AuthService extends BaseService {
 
     async loginWithGoogle() {
         try {
-            const res = await this.httpClientPublic.get("auth/google/login");
+            const res = await this.httpClientPublic.get("/auth/google/login");
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async getDataWithGoogleSuccess() {
+        try {
+            const res = await this.httpClientPublic.get("/auth/google/success");
 
             return res.data;
         } catch (error) {
