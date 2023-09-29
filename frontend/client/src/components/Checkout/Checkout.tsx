@@ -242,7 +242,7 @@ export function Checkout() {
                                 <Accordion.Item value="focus-ring">
                                     <Accordion.Control>
                                         <Radio
-                                            value="offline"
+                                            value="cod"
                                             label="Thanh toán khi giao hàng (COD)"
                                         />
                                     </Accordion.Control>
