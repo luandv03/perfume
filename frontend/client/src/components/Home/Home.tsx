@@ -32,7 +32,7 @@ const prPhotos = [
 ];
 
 export function Home() {
-    const autoplay = useRef(Autoplay({ delay: 2000 }));
+    const autoplay = useRef(Autoplay({ delay: 4000 }));
 
     const [categories, setCategories] = useState<CategoryType[]>([
         {
