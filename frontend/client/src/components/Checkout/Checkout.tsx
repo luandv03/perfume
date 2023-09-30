@@ -13,7 +13,7 @@ import {
     Radio,
 } from "@mantine/core";
 import { Link, useNavigate } from "react-router-dom";
-import { IconChevronLeft } from "@tabler/icons-react";
+import { IconChevronLeft, IconLoader } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import { useContext, useState } from "react";
 
@@ -35,6 +35,7 @@ type OrderCreate = {
     delivery_cost: number;
     tax: number;
     payment_type: string;
+    coupon_id?: number;
     orderList: OrderItem[];
 };
 
@@ -45,11 +46,26 @@ type Product = {
     discount: number;
 };
 
+// "coupon_id": 7,
+// "coupon_name": "Vui trung thu cùng LDA",
+// "coupon_code": "XdfRtk",
+// "coupon_discount": "10",
+// "condition": "Áp dụng cho mọi đơn hàng",
+// "quantity": 15,
+// "start_time": "2023-09-29T17:00:00.000Z",
+// "end_time": "2023-12-29T17:00:00.000Z"
+type CouponType = {
+    coupon_id: number;
+    coupon_name: string;
+    coupon_discount: number;
+};
+
 export function Checkout() {
     const [loading, setLoading] = useState(false);
     const { cartUser } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
     const [methodPayment, setMethodPayment] = useState("cod");
+    const [coupon, setCoupon] = useState<CouponType | null>(null);
     const [couponError, setCouponError] = useState<string>("");
     const [couponCode, setCouponCode] = useState("");
     const [loadingCoupon, setLoadingCoupon] = useState(false);
@@ -90,6 +106,7 @@ export function Checkout() {
             delivery_cost: 0,
             payment_type: methodPayment,
             orderList,
+            coupon_id: coupon?.coupon_id,
         };
 
         try {
@@ -104,14 +121,24 @@ export function Checkout() {
 
                 /// vn pay
                 const amount = Math.ceil(
-                    cartUser.reduce(
-                        (acc: number, curr: CartItem) =>
-                            acc +
-                            curr.quantity *
-                                curr.price *
-                                (1 - curr.discount * 0.01),
-                        0
-                    )
+                    coupon
+                        ? (1 - coupon.coupon_discount * 0.01) *
+                              cartUser.reduce(
+                                  (acc: number, curr: CartItem) =>
+                                      acc +
+                                      curr.quantity *
+                                          curr.price *
+                                          (1 - curr.discount * 0.01),
+                                  0
+                              )
+                        : cartUser.reduce(
+                              (acc: number, curr: CartItem) =>
+                                  acc +
+                                  curr.quantity *
+                                      curr.price *
+                                      (1 - curr.discount * 0.01),
+                              0
+                          )
                 );
 
                 if (methodPayment !== "cod")
@@ -150,6 +177,13 @@ export function Checkout() {
         if (res.statusCode !== 200) {
             return setCouponError(res.message);
         }
+
+        setCoupon(res.data);
+
+        setCouponError(
+            res.data.coupon_name +
+                `: Giảm -${res.data.coupon_discount}% giá trị đơn hàng`
+        );
     };
 
     return (
@@ -366,11 +400,7 @@ export function Checkout() {
                         Giảm giá
                     </Text>
                     <Text size={20}>
-                        {new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                            maximumFractionDigits: 9,
-                        }).format(0)}
+                        {coupon ? "-" + coupon?.coupon_discount + "%" : 0}
                     </Text>
                 </Group>
                 <Group spacing={4}>
@@ -379,7 +409,10 @@ export function Checkout() {
                         size="md"
                         value={couponCode}
                         onChange={(e) => {
-                            !!couponError && setCouponError("");
+                            if (couponError.length) {
+                                setCouponError("");
+                                setCoupon(null);
+                            }
                             setCouponCode(e.target.value);
                         }}
                     ></TextInput>
@@ -388,7 +421,13 @@ export function Checkout() {
                         onClick={() => handleGetCoupon()}
                         disabled={loadingCoupon}
                     >
-                        Áp dụng
+                        {loadingCoupon ? (
+                            <IconLoader
+                                className={loadingCoupon ? "spinner" : ""}
+                            />
+                        ) : (
+                            "Áp dụng"
+                        )}
                     </Button>
                 </Group>
                 {!!couponError && <Text color="red">{couponError}</Text>}
@@ -404,14 +443,25 @@ export function Checkout() {
                             maximumFractionDigits: 9,
                         }).format(
                             Math.ceil(
-                                cartUser.reduce(
-                                    (acc: number, curr: CartItem) =>
-                                        acc +
-                                        curr.quantity *
-                                            curr.price *
-                                            (1 - curr.discount * 0.01),
-                                    0
-                                )
+                                coupon
+                                    ? (1 - coupon.coupon_discount * 0.01) *
+                                          cartUser.reduce(
+                                              (acc: number, curr: CartItem) =>
+                                                  acc +
+                                                  curr.quantity *
+                                                      curr.price *
+                                                      (1 -
+                                                          curr.discount * 0.01),
+                                              0
+                                          )
+                                    : cartUser.reduce(
+                                          (acc: number, curr: CartItem) =>
+                                              acc +
+                                              curr.quantity *
+                                                  curr.price *
+                                                  (1 - curr.discount * 0.01),
+                                          0
+                                      )
                             )
                         )}
                     </Text>
