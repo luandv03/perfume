@@ -94,7 +94,8 @@ export const ForgotPassword = () => {
 
         showNotification({
             title: res.message,
-            message: "Chúng tôi đã gửi mật khẩu mới đến email của bạn",
+            message:
+                "Chúng tôi đã gửi mật khẩu mới đến email của bạn. Hãy kiểm tra cả hòm thư rác!",
         });
     };
 
