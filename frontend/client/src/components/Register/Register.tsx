@@ -25,7 +25,7 @@ import {
     IconPhoneCall,
     IconHome2,
 } from "@tabler/icons-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { authService } from "../../services/auth.service";
@@ -34,8 +34,7 @@ export function Register() {
     const [value, setValue] = useState<Date | null>(null);
     const [loading, setLoading] = useState(false);
     const [opened, setOpened] = useState(false);
-
-    console.log(value);
+    const navigate = useNavigate();
 
     const form = useForm({
         initialValues: {
@@ -93,12 +92,16 @@ export function Register() {
             const res = await authService.register(values);
             setLoading(false);
             if (res.statusCode === 200) {
-                return showNotification({
+                form.reset();
+
+                showNotification({
                     message: "You register successfully!",
                     color: "yellow",
                     icon: <IconCheck />,
                     autoClose: 3000,
                 });
+
+                return navigate("/login");
             }
 
             return showNotification({
@@ -109,7 +112,6 @@ export function Register() {
                 autoClose: 3000,
             });
 
-            form.reset();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             showNotification({

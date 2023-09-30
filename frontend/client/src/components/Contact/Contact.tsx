@@ -50,7 +50,7 @@ export const Contact = () => {
         console.log(payload);
         setLoading(false);
         setNotification(
-            "Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ liên hệ với bạn sớm nhất có thể"
+            "Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ liên hệ với bạn sớm nhất có thể."
         );
         form.reset();
     };
@@ -101,7 +101,7 @@ export const Contact = () => {
                     </Text>
                     {!!notification.length && (
                         <Alert color="red">
-                            <Text color="red">{notification}</Text>
+                            <Text color="rgb(214 28 28)">{notification}</Text>
                         </Alert>
                     )}
                     <Flex justify="space-between" gap={20}>
