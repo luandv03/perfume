@@ -336,13 +336,15 @@ export function Checkout() {
                             currency: "VND",
                             maximumFractionDigits: 9,
                         }).format(
-                            cartUser.reduce(
-                                (acc: number, curr: CartItem) =>
-                                    acc +
-                                    curr.quantity *
-                                        curr.price *
-                                        (1 - curr.discount * 0.01),
-                                0
+                            Math.ceil(
+                                cartUser.reduce(
+                                    (acc: number, curr: CartItem) =>
+                                        acc +
+                                        curr.quantity *
+                                            curr.price *
+                                            (1 - curr.discount * 0.01),
+                                    0
+                                )
                             )
                         )}
                     </Text>
@@ -363,7 +365,13 @@ export function Checkout() {
                     <Text size={20} fw={500}>
                         Giảm giá
                     </Text>
-                    <Text size={20}>0vnđ</Text>
+                    <Text size={20}>
+                        {new Intl.NumberFormat("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                            maximumFractionDigits: 9,
+                        }).format(0)}
+                    </Text>
                 </Group>
                 <Group spacing={4}>
                     <TextInput
@@ -395,13 +403,15 @@ export function Checkout() {
                             currency: "VND",
                             maximumFractionDigits: 9,
                         }).format(
-                            cartUser.reduce(
-                                (acc: number, curr: CartItem) =>
-                                    acc +
-                                    curr.quantity *
-                                        curr.price *
-                                        (1 - curr.discount * 0.01),
-                                0
+                            Math.ceil(
+                                cartUser.reduce(
+                                    (acc: number, curr: CartItem) =>
+                                        acc +
+                                        curr.quantity *
+                                            curr.price *
+                                            (1 - curr.discount * 0.01),
+                                    0
+                                )
                             )
                         )}
                     </Text>
