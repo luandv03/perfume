@@ -343,7 +343,7 @@ export function HeaderApp() {
                             size="20px"
                             fw={500}
                             color="black"
-                            sx={{ "&:hover": { color: "red" } }}
+                            sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
                             Trang chủ
                         </Text>
@@ -353,7 +353,7 @@ export function HeaderApp() {
                             size="20px"
                             fw={500}
                             color="black"
-                            sx={{ "&:hover": { color: "red" } }}
+                            sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
                             Giới thiệu
                         </Text>
@@ -365,7 +365,9 @@ export function HeaderApp() {
                                     size="20px"
                                     fw={500}
                                     color="black"
-                                    sx={{ "&:hover": { color: "red" } }}
+                                    sx={{
+                                        "&:hover": { color: "rgb(125 45 45)" },
+                                    }}
                                 >
                                     Danh mục
                                 </Text>
@@ -409,7 +411,7 @@ export function HeaderApp() {
                             size="20px"
                             fw={500}
                             color="black"
-                            sx={{ "&:hover": { color: "red" } }}
+                            sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
                             Liên hệ
                         </Text>
