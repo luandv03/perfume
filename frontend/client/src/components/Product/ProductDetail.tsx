@@ -16,11 +16,9 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconStar, IconStarFilled } from "@tabler/icons-react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { Carousel } from "@mantine/carousel";
-// import { Carousel } from "react-responsive-carousel";
-// import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 import { ProductType } from "../../types/products.type";
 import { ProductPhoto } from "../../types/products.type";
@@ -68,6 +66,7 @@ export function ProductDetail() {
 
     const { addCartItem } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleAddToCart = (product: ProductType) => {
         const { product_id, title, price, discount, brand, volume } = product;
@@ -162,6 +161,22 @@ export function ProductDetail() {
                 return setIndexPhotoSelected(i);
             }
         }
+    };
+
+    const handleBuyNow = (product: ProductType) => {
+        const { product_id, title, price, discount, brand, volume } = product;
+        const cartItem = {
+            product_id,
+            title,
+            price,
+            discount,
+            brand,
+            volume,
+            quantity: numberAddItem,
+        };
+        addCartItem(cartItem);
+
+        navigate("/cart");
     };
 
     useEffect(() => {
@@ -289,9 +304,12 @@ export function ProductDetail() {
                                 w={100}
                             />
                             <Group>
-                                <Link to="/checkout">
-                                    <Button size="md">Mua ngay</Button>
-                                </Link>
+                                <Button
+                                    size="md"
+                                    onClick={() => handleBuyNow(product)}
+                                >
+                                    Mua ngay
+                                </Button>
                                 <Button
                                     size="md"
                                     onClick={() => {
