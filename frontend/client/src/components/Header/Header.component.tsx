@@ -334,22 +334,39 @@ export function HeaderApp() {
                 >
                     <Link
                         to="/"
-                        style={{ textDecoration: "none" }}
+                        style={{
+                            textDecoration: "none",
+                        }}
                         className={classes.hover}
                     >
-                        <Text size="20px" fw={500} color="black">
+                        <Text
+                            size="20px"
+                            fw={500}
+                            color="black"
+                            sx={{ "&:hover": { color: "red" } }}
+                        >
                             Trang chủ
                         </Text>
                     </Link>
                     <Link to="/about" style={{ textDecoration: "none" }}>
-                        <Text size="20px" fw={500} color="black">
+                        <Text
+                            size="20px"
+                            fw={500}
+                            color="black"
+                            sx={{ "&:hover": { color: "red" } }}
+                        >
                             Giới thiệu
                         </Text>
                     </Link>
                     <HoverCard width={200} shadow="md">
                         <HoverCard.Target>
                             <Flex gap={0} align="center">
-                                <Text size="20px" fw={500} color="black">
+                                <Text
+                                    size="20px"
+                                    fw={500}
+                                    color="black"
+                                    sx={{ "&:hover": { color: "red" } }}
+                                >
                                     Danh mục
                                 </Text>
                                 <Flex
@@ -388,7 +405,12 @@ export function HeaderApp() {
                     </HoverCard>
 
                     <Link to="/contact" style={{ textDecoration: "none" }}>
-                        <Text size="20px" fw={500} color="black">
+                        <Text
+                            size="20px"
+                            fw={500}
+                            color="black"
+                            sx={{ "&:hover": { color: "red" } }}
+                        >
                             Liên hệ
                         </Text>
                     </Link>
