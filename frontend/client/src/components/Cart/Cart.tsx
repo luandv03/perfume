@@ -63,44 +63,6 @@ export function Cart() {
         updateCartItem(product_id, quantity);
     };
 
-    const handleCalculateNItem = () => {
-        const n_item = cartUser.reduce(
-            (acc: number, curr: CartItem) => acc + curr.quantity,
-            0
-        );
-
-        return n_item;
-    };
-
-    const handleCalculatePrice = () => {
-        const price = cartUser.reduce(
-            (acc: number, curr: CartItem) => acc + curr.quantity * curr.price,
-            0
-        );
-
-        return price;
-    };
-
-    const handleCalculateDiscount = () => {
-        const discount = cartUser.reduce(
-            (acc: number, curr: CartItem) =>
-                acc + curr.price * (curr.discount / 100),
-            0
-        );
-
-        return discount;
-    };
-
-    const handleCalculateTmpAmount = () => {
-        const tmpAmount = cartUser.reduce(
-            (acc: number, curr: CartItem) =>
-                acc + curr.quantity * curr.price * (1 - curr.discount / 100),
-            0
-        );
-
-        return tmpAmount;
-    };
-
     return (
         <Stack sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }} p={10}>
             <div
@@ -115,7 +77,13 @@ export function Cart() {
                         Giỏ Hàng
                     </Text>
                     <span style={{ fontSize: "18px", fontWeight: 500 }}>
-                        ({handleCalculateNItem()} sản phẩm)
+                        (
+                        {cartUser.reduce(
+                            (acc: number, curr: CartItem) =>
+                                acc + curr.quantity,
+                            0
+                        )}{" "}
+                        sản phẩm)
                     </span>
                 </Group>
             </div>
@@ -339,7 +307,14 @@ export function Cart() {
                                         style: "currency",
                                         currency: "VND",
                                         maximumFractionDigits: 9,
-                                    }).format(handleCalculatePrice())}
+                                    }).format(
+                                        cartUser.reduce(
+                                            (acc: number, curr: CartItem) =>
+                                                acc +
+                                                curr.quantity * curr.price,
+                                            0
+                                        )
+                                    )}
                                 </Text>
                             </Group>
 
@@ -353,7 +328,16 @@ export function Cart() {
                                         style: "currency",
                                         currency: "VND",
                                         maximumFractionDigits: 9,
-                                    }).format(handleCalculateDiscount())}
+                                    }).format(
+                                        cartUser.reduce(
+                                            (acc: number, curr: CartItem) =>
+                                                acc +
+                                                curr.quantity *
+                                                    curr.price *
+                                                    (curr.discount / 100),
+                                            0
+                                        )
+                                    )}
                                 </Text>
                             </Group>
 
@@ -368,7 +352,20 @@ export function Cart() {
                                         style: "currency",
                                         currency: "VND",
                                         maximumFractionDigits: 9,
-                                    }).format(handleCalculateTmpAmount())}
+                                    }).format(
+                                        Math.ceil(
+                                            cartUser.reduce(
+                                                (acc: number, curr: CartItem) =>
+                                                    acc +
+                                                    curr.quantity *
+                                                        curr.price *
+                                                        (1 -
+                                                            curr.discount /
+                                                                100),
+                                                0
+                                            )
+                                        )
+                                    )}
                                 </Text>
                             </Group>
 
