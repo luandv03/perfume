@@ -42,7 +42,7 @@ passport.use(
         {
             clientID: configService.getGoogleClientId(),
             clientSecret: configService.getGoogleClientSecret(),
-            callbackURL: `http://localhost:8888/api/v1/auth/google/callback`,
+            callbackURL: `${configService.getServerDomain()}/api/v1/auth/google/callback`,
         },
         function (accessToken, refreshToken, profile, done) {
             // profile trong done chính là thông tin sẽ được lưu lại trong hàm serializeUser
