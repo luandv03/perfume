@@ -116,7 +116,7 @@ export function ProductDetail() {
 
     const handleCreateFeedback = async () => {
         if (!getItemLocalStorage("isAuthenticated")) {
-            notifications.show({
+            return notifications.show({
                 message: "Bạn hãy đăng nhập để đánh giá nhé!",
             });
         }
@@ -127,7 +127,7 @@ export function ProductDetail() {
             myFeedback
         );
 
-        if (res.statusCode == 200) {
+        if (res.statusCode === 200) {
             handleGetFeedback();
         }
 
@@ -372,6 +372,7 @@ export function ProductDetail() {
                                 maxRows={4}
                             />
                             <Button
+                                maw={180}
                                 disabled={!myFeedback}
                                 onClick={() => handleCreateFeedback()}
                             >
