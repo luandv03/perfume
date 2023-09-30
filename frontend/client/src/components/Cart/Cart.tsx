@@ -12,6 +12,7 @@ import {
     NumberInput,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
+import { notifications } from "@mantine/notifications";
 import { IconTrash } from "@tabler/icons-react";
 import { useContext } from "react";
 
@@ -58,7 +59,10 @@ export function Cart() {
     };
 
     const handleUpdateCartItem = (product_id: number, quantity: number) => {
-        if (quantity < 1 || quantity > 10) return;
+        if (quantity < 1 || quantity > 10)
+            return notifications.show({
+                message: "Số lượng tối thiểu là 1 và tối đa là 10",
+            });
 
         updateCartItem(product_id, quantity);
     };
