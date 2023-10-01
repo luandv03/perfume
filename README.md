@@ -1,4 +1,10 @@
 Link demo: [https://perfume-umber.vercel.app/](https://perfume-umber.vercel.app/) 
+## VNPAY account test:
+Ngân hàng: NCB
+Số thẻ: 9704198526191432198
+Tên chủ thẻ:NGUYEN VAN A
+Ngày phát hành:07/15
+Mật khẩu OTP:123456 
 # Đây là dự án quản lý website bán hàng (nước hoa)
 
 ## I. Mô tả bài toán.
