@@ -1,4 +1,5 @@
 import { Text, Group, Stack, TextInput, Button } from "@mantine/core";
+import { IconLoader } from "@tabler/icons-react";
 import { useState } from "react";
 import { useContext } from "react";
 
@@ -9,17 +10,27 @@ import { handleOrderDate } from "../../helpers/handleOrderDate.helper";
 export function Profile() {
     const { profile, setProfile } = useContext(AuthContext);
     const [updateProfile, setUpdateProfile] = useState(profile);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleUpdateProfile = async () => {
+        setLoading(true);
         const res = await authService.updateProfile({
             fullname: updateProfile.fullname,
             phone_number: updateProfile.phone_number,
             dob: updateProfile.dob,
             address: updateProfile.address,
         });
+        setLoading(false);
 
         if (res.statusCode === 200) {
-            setUpdateProfile(res.data);
+            setUpdateProfile((prev) => ({
+                ...prev,
+                fullname: res.data.fullname,
+                phone_number: res.data.phone_number,
+                address: res.data.address,
+                dob: res.data.dob,
+            }));
+
             setProfile((prev) => ({
                 ...prev,
                 fullname: res.data.fullname,
@@ -105,7 +116,11 @@ export function Profile() {
                     JSON.stringify(profile) === JSON.stringify(updateProfile)
                 }
             >
-                Sửa
+                {loading ? (
+                    <IconLoader className={loading ? "spinner" : ""} />
+                ) : (
+                    "Sửa"
+                )}
             </Button>
         </Stack>
     );
