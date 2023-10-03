@@ -168,7 +168,7 @@ export const OrderDetail = () => {
             <tr key={item.orderline_id}>
                 <td>
                     <Link
-                        to={`/product/${item.product_id}`}
+                        to={`/product/${item.product_id}/detail`}
                         style={{ textDecoration: "none" }}
                     >
                         {item.product_id}
