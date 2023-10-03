@@ -264,19 +264,13 @@ export const OrderDetail = () => {
                             Khách hàng
                         </Text>
                         <Stack spacing={0}>
-                            <Link
-                                to="/customer/123"
-                                style={{ textDecoration: "none" }}
-                            >
-                                <Text fw={500}>
-                                    {orderDetail.order &&
-                                        orderDetail.order.fullname}
-                                </Text>
-                                <Text fw={400}>
-                                    {orderDetail.order &&
-                                        orderDetail.order.email}
-                                </Text>
-                            </Link>
+                            <Text fw={500}>
+                                {orderDetail.order &&
+                                    orderDetail.order.fullname}
+                            </Text>
+                            <Text fw={400}>
+                                {orderDetail.order && orderDetail.order.email}
+                            </Text>
                         </Stack>
                     </Stack>
                     <Stack spacing={0}>
@@ -302,19 +296,13 @@ export const OrderDetail = () => {
                             Khách hàng
                         </Text>
                         <Stack spacing={0}>
-                            <Link
-                                to="/customer/123"
-                                style={{ textDecoration: "none" }}
-                            >
-                                <Text fw={500}>
-                                    {orderDetail.order &&
-                                        orderDetail.order.fullname}
-                                </Text>
-                                <Text fw={400}>
-                                    {orderDetail.order &&
-                                        orderDetail.order.email}
-                                </Text>
-                            </Link>
+                            <Text fw={500}>
+                                {orderDetail.order &&
+                                    orderDetail.order.fullname}
+                            </Text>
+                            <Text fw={400}>
+                                {orderDetail.order && orderDetail.order.email}
+                            </Text>
                         </Stack>
                     </Stack>
                     <Stack spacing={0}>
@@ -402,18 +390,6 @@ export const OrderDetail = () => {
                 Giao dịch
             </Text>
             {orderDetail.order.payment_status === "1" ? (
-                // <Table>
-                //     <thead>
-                //         <tr>
-                //             <th>Mã giao dịch</th>
-                //             <th>Ngân hàng</th>
-                //             <th>Loại thẻ</th>
-                //             <th>Ngày thanh toán</th>
-                //             <th>Trạng thái</th>
-                //         </tr>
-                //     </thead>
-                //     <tbody>{rowTrans}</tbody>
-                // </Table>
                 <div>
                     <Alert title="Chú ý!" color="red">
                         <Text fw={700}> Bạn đã thanh toán đơn hàng</Text>

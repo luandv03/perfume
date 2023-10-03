@@ -511,29 +511,6 @@ export function ProductDetail() {
                         </Stack>
                     </Stack>
                 </Collapse>
-
-                {/* <Stack
-                    sx={{ border: "1px solid #f0e7e7", borderRadius: "4px" }}
-                    p={10}
-                >
-                    <Text size="24px" fw={500}>
-                        Sản phẩm liên quan
-                    </Text>
-                    <Grid gutter={0}>
-                        <Grid.Col span={3}>
-                            <Product />
-                        </Grid.Col>
-                        <Grid.Col span={3}>
-                            <Product />
-                        </Grid.Col>
-                        <Grid.Col span={3}>
-                            <Product />
-                        </Grid.Col>
-                        <Grid.Col span={3}>
-                            <Product />
-                        </Grid.Col>
-                    </Grid>
-                </Stack> */}
             </Stack>
         </TitlePageWrapper>
     );
