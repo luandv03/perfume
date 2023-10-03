@@ -12,6 +12,7 @@ import {
     Textarea,
     Paper,
     Pagination,
+    Skeleton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -39,6 +40,7 @@ interface FeedbackType {
 }
 
 export function ProductDetail() {
+    const [loading, setLoading] = useState<boolean>(false);
     const [numberAddItem, setNumberAddItem] = useState<number>(1);
     const [opened, { toggle }] = useDisclosure(false);
     const { product_id } = useParams();
@@ -87,9 +89,10 @@ export function ProductDetail() {
     };
 
     const handleGetProductById = async () => {
+        setLoading(true);
         const res = await productService.getProductById(Number(product_id));
+        setLoading(false);
 
-        console.log(res);
         setProduct(res.data);
     };
 
@@ -200,41 +203,60 @@ export function ProductDetail() {
                 >
                     <Grid.Col md={4}>
                         <Stack sx={{ position: "relative" }}>
-                            <Image
-                                src={
-                                    photos.length > 0
-                                        ? photos[indexPhotoSelected]
-                                              .product_photo_url
-                                        : ""
-                                }
-                                height={300}
-                                alt="Norway"
-                                fit="contain"
-                            />
-
-                            <Carousel withIndicators>
-                                {photos.length > 0 &&
-                                    photos.map((photo: ProductPhoto) => (
-                                        <Carousel.Slide
-                                            key={photo.product_photo_id}
-                                        >
-                                            <Image
-                                                src={photo.product_photo_url}
-                                                height={100}
-                                                alt="Norway"
-                                                fit="contain"
-                                                sx={{
-                                                    border: "1px solid #f0e7e7",
-                                                }}
-                                                onClick={() =>
-                                                    handleSelectImage(
-                                                        photo.product_photo_id
-                                                    )
-                                                }
-                                            />
+                            {loading ? (
+                                <>
+                                    <Skeleton height={300} />
+                                    <Carousel>
+                                        <Carousel.Slide>
+                                            <Skeleton height={100} />
                                         </Carousel.Slide>
-                                    ))}
-                            </Carousel>
+                                    </Carousel>
+                                </>
+                            ) : (
+                                <>
+                                    <Image
+                                        src={
+                                            photos.length > 0
+                                                ? photos[indexPhotoSelected]
+                                                      .product_photo_url
+                                                : ""
+                                        }
+                                        height={300}
+                                        alt="Norway"
+                                        fit="contain"
+                                    />
+
+                                    <Carousel withIndicators>
+                                        {photos.length > 0 &&
+                                            photos.map(
+                                                (photo: ProductPhoto) => (
+                                                    <Carousel.Slide
+                                                        key={
+                                                            photo.product_photo_id
+                                                        }
+                                                    >
+                                                        <Image
+                                                            src={
+                                                                photo.product_photo_url
+                                                            }
+                                                            height={100}
+                                                            alt="Norway"
+                                                            fit="contain"
+                                                            sx={{
+                                                                border: "1px solid #f0e7e7",
+                                                            }}
+                                                            onClick={() =>
+                                                                handleSelectImage(
+                                                                    photo.product_photo_id
+                                                                )
+                                                            }
+                                                        />
+                                                    </Carousel.Slide>
+                                                )
+                                            )}
+                                    </Carousel>
+                                </>
+                            )}
 
                             {product?.discount > 0 && (
                                 <Badge
@@ -246,83 +268,145 @@ export function ProductDetail() {
                                         left: "8px",
                                     }}
                                 >
-                                    -{product?.discount}%
+                                    {loading ? (
+                                        <Skeleton w={10} />
+                                    ) : (
+                                        `-${product?.discount}%`
+                                    )}
                                 </Badge>
                             )}
                         </Stack>
                     </Grid.Col>
 
                     <Grid.Col md={8} pl={12}>
-                        <Stack spacing={10}>
-                            <Text size="20px" fw={500}>
-                                {product?.title}
-                            </Text>
-                            <Text size="20px" fw={500}>
-                                {new Intl.NumberFormat("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                    maximumFractionDigits: 9,
-                                }).format(product?.price)}
-                            </Text>
-                            <Text>{product?.description}</Text>
-                            <Text size="16px" fw={500}>
-                                Thương hiệu
-                            </Text>
-                            <div>
-                                <Button radius={0} compact variant="default">
-                                    {product?.brand}
-                                </Button>
-                            </div>
-                            <Text size="16px" fw={500}>
-                                Dung tích
-                            </Text>
-                            <div>
-                                <Button radius={0} compact variant="default">
-                                    {product?.volume}ml
-                                </Button>
-                            </div>
-                            <Text>
-                                <span
-                                    style={{
-                                        fontSize: "16px",
-                                        fontWeight: "500",
-                                    }}
-                                >
-                                    Năm phát hành
-                                </span>
-                                : {product?.year_publish}
-                            </Text>
-                            <NumberInput
-                                defaultValue={1}
-                                min={1}
-                                max={100}
-                                value={numberAddItem}
-                                onChange={(value) =>
-                                    setNumberAddItem(value as number)
-                                }
-                                label="Số lượng"
-                                w={100}
-                            />
-                            <Group>
-                                <Button
-                                    size="md"
-                                    onClick={() => handleBuyNow(product)}
-                                >
-                                    Mua ngay
-                                </Button>
-                                <Button
-                                    size="md"
-                                    onClick={() => {
-                                        handleAddToCart(product);
-                                    }}
-                                >
-                                    Thêm vào giỏ hàng
-                                </Button>
-                                <Button size="md" onClick={toggle}>
-                                    Đánh giá
-                                </Button>
-                            </Group>
-                        </Stack>
+                        {loading ? (
+                            <Stack spacing={10}>
+                                <Skeleton w={150} h={25}></Skeleton>
+                                <Skeleton h={25} w={110} />
+                                <Skeleton>
+                                    <Text>
+                                        Đúng như tên gọi của nó, Original
+                                        Vetiver tái tạo mạnh mẽ mùi hương cỏ
+                                        vetiver truyền thống. Trước Original
+                                        Vetiver, chỉ một phần của cây cỏ vetiver
+                                        được sử dụng trong một mùi hương. House
+                                        of Creed truyền vào cả ba phần của cây:
+                                        rễ cây, lá cây xanh tươi và trái tim
+                                        phong phú để làm tươi mát sự pha trộn.
+                                        Kết quả là một mùi hương gợi nhớ đến mùa
+                                        hè kéo dài, tiếp thêm sinh lực và hoạt
+                                        bát, nó để lại một không khí tươi mát
+                                        quyến rũ xung quanh bất kỳ ai đủ may mắn
+                                        để mặc nó.
+                                    </Text>
+                                </Skeleton>
+                                <Text size="16px" fw={500}>
+                                    Thương hiệu
+                                </Text>
+                                <Skeleton h={30} w={60} />
+                                <Text size="16px" fw={500}>
+                                    Dung tích
+                                </Text>
+                                <Skeleton h={25} w={60} />
+                                <Text>
+                                    <span
+                                        style={{
+                                            fontSize: "16px",
+                                            fontWeight: "500",
+                                        }}
+                                    >
+                                        Năm phát hành
+                                    </span>
+                                    : <Skeleton h={25} w={80} />
+                                </Text>
+                                <Skeleton h={40} w={100} />
+                            </Stack>
+                        ) : (
+                            <Stack spacing={10}>
+                                <Text size="20px" fw={500}>
+                                    {product?.title}
+                                </Text>
+
+                                <Text size="20px" fw={500}>
+                                    {new Intl.NumberFormat("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                        maximumFractionDigits: 9,
+                                    }).format(product?.price)}
+                                </Text>
+
+                                <Text>{product?.description}</Text>
+                                <Text size="16px" fw={500}>
+                                    Thương hiệu
+                                </Text>
+
+                                <div>
+                                    <Button
+                                        radius={0}
+                                        compact
+                                        variant="default"
+                                    >
+                                        {product?.brand}
+                                    </Button>
+                                </div>
+                                <Text size="16px" fw={500}>
+                                    Dung tích
+                                </Text>
+
+                                <div>
+                                    <Button
+                                        radius={0}
+                                        compact
+                                        variant="default"
+                                    >
+                                        {product?.volume}ml
+                                    </Button>
+                                </div>
+                                <Text>
+                                    <span
+                                        style={{
+                                            fontSize: "16px",
+                                            fontWeight: "500",
+                                        }}
+                                    >
+                                        Năm phát hành
+                                    </span>
+                                    : {product?.year_publish}
+                                </Text>
+
+                                <NumberInput
+                                    defaultValue={1}
+                                    min={1}
+                                    max={100}
+                                    value={numberAddItem}
+                                    onChange={(value) =>
+                                        setNumberAddItem(value as number)
+                                    }
+                                    label="Số lượng"
+                                    w={100}
+                                />
+
+                                <Group>
+                                    <Button
+                                        size="md"
+                                        onClick={() => handleBuyNow(product)}
+                                    >
+                                        Mua ngay
+                                    </Button>
+                                    <Button
+                                        size="md"
+                                        onClick={() => {
+                                            handleAddToCart(product);
+                                        }}
+                                    >
+                                        Thêm vào giỏ hàng
+                                    </Button>
+                                    <Button size="md" onClick={toggle}>
+                                        Đánh giá
+                                    </Button>
+                                </Group>
+                            </Stack>
+                        )}
                     </Grid.Col>
                 </Grid>
                 <Collapse in={opened}>
