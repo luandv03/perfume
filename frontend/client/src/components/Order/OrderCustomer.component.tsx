@@ -7,8 +7,9 @@ import {
     ActionIcon,
     Select,
     Alert,
+    Center,
 } from "@mantine/core";
-import { IconEye } from "@tabler/icons-react";
+import { IconEye, IconLoader } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -28,6 +29,7 @@ interface OrderType {
 }
 
 export function OrderCustomer() {
+    const [loading, setLoading] = useState<boolean>(false);
     const [orders, setOrders] = useState<OrderType[]>([
         {
             order_id: 0,
@@ -46,10 +48,12 @@ export function OrderCustomer() {
     const [total, setTotal] = useState<string>("10");
 
     const handleGetOrderByCustomerId = async () => {
+        setLoading(true);
         const resOrder = await orderService.getOrderByCustomerId(
             page,
             Number(total)
         );
+        setLoading(false);
 
         setTotalPage(resOrder.data.totalPage);
         setOrders(resOrder.data.orders);
@@ -63,15 +67,6 @@ export function OrderCustomer() {
     useEffect(() => {
         setPage(1);
     }, [total]);
-
-    // "order_id": 1,
-    // "n_item": 3,
-    // "status": "done",
-    // "tax": 0,
-    // "delivery_cost": 30000,
-    // "tong_giam_gia": "10",
-    // "order_date": "2023-05-31T17:00:00.000Z",
-    // "tong_hoa_don": 25482000
 
     const rows =
         orders.length > 0 &&
@@ -123,43 +118,55 @@ export function OrderCustomer() {
                 </Alert>
             ) : (
                 <>
-                    <Table miw={800} verticalSpacing="sm" striped>
-                        <thead>
-                            <tr>
-                                <th>Mã đơn hàng</th>
-                                <th>Số sản phẩm</th>
-                                <th>Trạng thái</th>
-                                <th>Thuế(%)</th>
-                                <th>Giảm giá(%)</th>
-                                <th>Vận chuyển</th>
-                                <th>Tổng giá trị đơn hàng</th>
-                                <th>Ngày đặt hàng</th>
-                                <th>Thanh toán</th>
-                                <th>Xem</th>
-                            </tr>
-                        </thead>
-                        <tbody>{rows}</tbody>
-                    </Table>
-
-                    <Flex sx={{ width: "100%" }} justify="flex-end" gap="xs">
-                        <Select
-                            placeholder="Pick one"
-                            data={[
-                                { value: "10", label: "10 products" },
-                                { value: "20", label: "20 products" },
-                                { value: "50", label: "50 products" },
-                                { value: "100", label: "100 products" },
-                            ]}
-                            value={total}
-                            onChange={setTotal}
-                        />
-                        <Pagination
-                            value={page}
-                            onChange={setPage}
-                            total={totalPage}
-                            w="100%"
-                        />
-                    </Flex>
+                    {loading ? (
+                        <Center>
+                            <IconLoader className={loading ? "spinner" : ""} />
+                        </Center>
+                    ) : (
+                        <>
+                            {" "}
+                            <Table miw={800} verticalSpacing="sm" striped>
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Số sản phẩm</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thuế(%)</th>
+                                        <th>Giảm giá(%)</th>
+                                        <th>Vận chuyển</th>
+                                        <th>Tổng giá trị đơn hàng</th>
+                                        <th>Ngày đặt hàng</th>
+                                        <th>Thanh toán</th>
+                                        <th>Xem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>{rows}</tbody>
+                            </Table>
+                            <Flex
+                                sx={{ width: "100%" }}
+                                justify="flex-end"
+                                gap="xs"
+                            >
+                                <Select
+                                    placeholder="Pick one"
+                                    data={[
+                                        { value: "10", label: "10 products" },
+                                        { value: "20", label: "20 products" },
+                                        { value: "50", label: "50 products" },
+                                        { value: "100", label: "100 products" },
+                                    ]}
+                                    value={total}
+                                    onChange={setTotal}
+                                />
+                                <Pagination
+                                    value={page}
+                                    onChange={setPage}
+                                    total={totalPage}
+                                    w="100%"
+                                />
+                            </Flex>
+                        </>
+                    )}
                 </>
             )}
         </Stack>
