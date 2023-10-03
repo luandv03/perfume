@@ -16,6 +16,8 @@ export const LoginGoogleSuccess = () => {
                 "refresh_token_user",
                 searchParams.get("refresh_token_user") as string
             );
+
+            localStorage.setItem("isAuthenticated", "true");
         }
 
         const timer = setTimeout(() => {
