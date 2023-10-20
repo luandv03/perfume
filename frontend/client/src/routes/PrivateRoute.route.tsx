@@ -12,7 +12,10 @@ export const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
                 color="red"
             >
                 Bạn đã đăng ký tải khoản chưa? Nếu có rồi thì hãy{" "}
-                <Link to="/login">đăng nhập</Link> trước nhé
+                <Link to="/login" style={{ fontWeight: 500 }}>
+                    đăng nhập
+                </Link>{" "}
+                trước nhé
             </Alert>
         );
 

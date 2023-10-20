@@ -100,9 +100,15 @@ export function CharmCate({ category }: { category: CategoryType }) {
                             key={product.product_id}
                         >
                             <Card.Section>
-                                {product.product_id !== 0 && (
-                                    <ProductAvatar data={product.product_id} />
-                                )}
+                                <Link
+                                    to={`/product/${product.product_id}/detail`}
+                                >
+                                    {product.product_id !== 0 && (
+                                        <ProductAvatar
+                                            data={product.product_id}
+                                        />
+                                    )}
+                                </Link>
                             </Card.Section>
 
                             <Group position="apart">
