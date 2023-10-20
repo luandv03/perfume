@@ -34,7 +34,7 @@ export function LoginAuth() {
     const [loading, setLoading] = useState(false);
     const [isOAuth, setIsOAuth] = useState({
         status: false,
-        method: "",
+        messageOAuth: "",
     });
 
     const { setProfile } = useContext(AuthContext);
@@ -73,9 +73,12 @@ export function LoginAuth() {
     };
 
     const handleSubmit = (values: typeof form.values): void => {
-        setIsOAuth((prev: { status: boolean; method: string }) => ({
+        localStorage.setItem("messageOAuth", "");
+
+        setIsOAuth((prev: { status: boolean; messageOAuth: string }) => ({
             ...prev,
             status: false,
+            messageOAuth: "",
         }));
 
         handleValidate(values);
@@ -133,16 +136,21 @@ export function LoginAuth() {
         }
     };
 
-    const handleLoginWithGoogle = () => {
-        setIsOAuth((prev: { status: boolean; method: string }) => ({
+    const handleLoginWithOAuth = (method_auth: string) => {
+        localStorage.setItem("messageOAuth", "");
+
+        setIsOAuth((prev: { status: boolean; messageOAuth: string }) => ({
             ...prev,
             status: false,
+            messageOAuth: "",
         }));
 
         let timer: ReturnType<typeof setTimeout> | null = null;
 
         const newWindow = createWindow(
-            "https://perfume-lgj8.onrender.com/api/v1/auth/google/login",
+            `${
+                import.meta.env.VITE_SERVER_DOMAIN
+            }/api/v1/auth/${method_auth}/login`,
             "_blank",
             800,
             600
@@ -156,40 +164,10 @@ export function LoginAuth() {
                     )
                         ? navigate("/")
                         : setIsOAuth({
-                              method: "Google",
                               status: true,
-                          });
-
-                    if (timer) clearInterval(timer);
-                }
-            }, 500);
-        }
-    };
-
-    const handleLoginWithFacebook = () => {
-        setIsOAuth((prev: { status: boolean; method: string }) => ({
-            ...prev,
-            status: false,
-        }));
-
-        let timer: ReturnType<typeof setTimeout> | null = null;
-        const newWindow = createWindow(
-            "https://perfume-lgj8.onrender.com/api/v1/auth/facebook/login",
-            "_blank",
-            800,
-            600
-        );
-
-        if (newWindow) {
-            timer = setInterval(() => {
-                if (newWindow.closed) {
-                    JSON.parse(
-                        localStorage.getItem("isAuthenticated") as string
-                    )
-                        ? navigate("/")
-                        : setIsOAuth({
-                              method: "Facebook",
-                              status: true,
+                              messageOAuth: localStorage.getItem(
+                                  "messageOAuth"
+                              ) as string,
                           });
 
                     if (timer) clearInterval(timer);
@@ -237,7 +215,9 @@ export function LoginAuth() {
                         mt={10}
                     >
                         <Group>
-                            <Button onClick={() => handleLoginWithFacebook()}>
+                            <Button
+                                onClick={() => handleLoginWithOAuth("facebook")}
+                            >
                                 <IconBrandFacebook />
                                 &nbsp;
                                 <Text>FACEBOOK</Text>
@@ -247,7 +227,7 @@ export function LoginAuth() {
                         <Group>
                             <Button
                                 color="red"
-                                onClick={() => handleLoginWithGoogle()}
+                                onClick={() => handleLoginWithOAuth("google")}
                             >
                                 <IconBrandGoogle />
                                 &nbsp;
@@ -258,8 +238,7 @@ export function LoginAuth() {
                     <Flex mt={8}>
                         {isOAuth.status && (
                             <span style={{ color: "red" }}>
-                                Email này đã được sử dụng cho 1 hình thức đăng
-                                nhập khác {isOAuth.method}
+                                {isOAuth.messageOAuth}
                             </span>
                         )}
                     </Flex>

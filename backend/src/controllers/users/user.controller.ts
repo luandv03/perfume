@@ -76,7 +76,6 @@ export class UserController {
 
             return res.status(data.statusCode).json(data);
         } catch (err) {
-            console.log(err);
             res.status(500).json({ err: err });
         }
     }
@@ -127,8 +126,10 @@ export class UserController {
 
             res.redirect(
                 `${configService.getClientDomain()}/login/success?access_token_user=${
-                    data.data.access_token_user
-                }&refresh_token_user=${data.data.refresh_token_user}`
+                    data.data?.access_token_user
+                }&refresh_token_user=${
+                    data.data?.refresh_token_user
+                }&messageOAuth=${data.message}`
             );
 
         } catch (err) {
@@ -155,8 +156,10 @@ export class UserController {
 
             res.redirect(
                 `${configService.getClientDomain()}/login/success?access_token_user=${
-                    data.data.access_token_user
-                }&refresh_token_user=${data.data.refresh_token_user}`
+                    data.data?.access_token_user
+                }&refresh_token_user=${
+                    data.data?.refresh_token_user
+                }&messageOAuth=${data.message}`
             );
 
         } catch (err) {
