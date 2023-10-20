@@ -8,6 +8,14 @@ a {
     text-decoration: none;
 }
 
+.normal {
+    color: black;
+}
+
+.active {
+    color: rgb(156, 110, 110);
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 8px;

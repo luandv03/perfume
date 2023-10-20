@@ -20,7 +20,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
     IconChevronDown,
     IconShoppingCart,
@@ -209,7 +209,14 @@ export function HeaderApp() {
                                 textDecoration: "none",
                             }}
                         >
-                            <Text size={24} fw={700} c="white">
+                            <Text
+                                size={24}
+                                fw={700}
+                                c="white"
+                                sx={{
+                                    fontFamily: "Alumni Sans Collegiate One",
+                                }}
+                            >
                                 PERFUME&LDA
                             </Text>
                         </Link>
@@ -225,14 +232,21 @@ export function HeaderApp() {
                             </Text>
                             {profile?.customer_id ? (
                                 <Group>
-                                    <Link
+                                    <NavLink
                                         to="/customer"
                                         style={{ textDecoration: "none" }}
+                                        className={({ isActive, isPending }) =>
+                                            isPending
+                                                ? "pending"
+                                                : isActive
+                                                ? "active"
+                                                : "normal"
+                                        }
                                     >
                                         <Text color="white" fw={500}>
                                             Tài khoản
                                         </Text>
-                                    </Link>
+                                    </NavLink>
                                     <span style={{ color: "white" }}>|</span>
                                     <Button
                                         onClick={() => {
@@ -331,32 +345,48 @@ export function HeaderApp() {
                         },
                     }}
                 >
-                    <Link
+                    <NavLink
                         to="/"
                         style={{
                             textDecoration: "none",
                         }}
-                        className={classes.hover}
+                        className={({ isActive, isPending }) =>
+                            isPending
+                                ? "pending"
+                                : isActive
+                                ? "active"
+                                : "normal"
+                        }
                     >
                         <Text
                             size="20px"
                             fw={500}
-                            color="black"
+                            color="inherit"
                             sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
                             Trang chủ
                         </Text>
-                    </Link>
-                    <Link to="/about" style={{ textDecoration: "none" }}>
+                    </NavLink>
+                    <NavLink
+                        to="/about"
+                        style={{ textDecoration: "none" }}
+                        className={({ isActive, isPending }) =>
+                            isPending
+                                ? "pending"
+                                : isActive
+                                ? "active"
+                                : "normal"
+                        }
+                    >
                         <Text
                             size="20px"
                             fw={500}
-                            color="black"
+                            color="inherit"
                             sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
                             Giới thiệu
                         </Text>
-                    </Link>
+                    </NavLink>
                     <HoverCard width={200} shadow="md">
                         <HoverCard.Target>
                             <Flex gap={0} align="center">
@@ -405,16 +435,26 @@ export function HeaderApp() {
                         </HoverCard.Dropdown>
                     </HoverCard>
 
-                    <Link to="/contact" style={{ textDecoration: "none" }}>
+                    <NavLink
+                        to="/contact"
+                        style={{ textDecoration: "none" }}
+                        className={({ isActive, isPending }) =>
+                            isPending
+                                ? "pending"
+                                : isActive
+                                ? "active"
+                                : "normal"
+                        }
+                    >
                         <Text
                             size="20px"
                             fw={500}
-                            color="black"
+                            color="inherit"
                             sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
                             Liên hệ
                         </Text>
-                    </Link>
+                    </NavLink>
                 </Group>
             </Header>
 
