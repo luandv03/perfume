@@ -23,6 +23,7 @@ import { orderService } from "../../services/order.service";
 import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
 import { createWindow } from "../../helpers/createWindow.helper";
 import { CartItem } from "../Cart/Cart";
+import { BASE_URL_API } from "../../configs/server.config";
 
 type OrderItem = {
     product_id: number;
@@ -78,7 +79,7 @@ export function Checkout() {
         order_id: number
     ) => {
         createWindow(
-            `https://perfume-lgj8.onrender.com/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
+            `${BASE_URL_API}/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
             800,
             600

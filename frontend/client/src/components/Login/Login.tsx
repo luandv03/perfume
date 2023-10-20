@@ -29,6 +29,7 @@ import { useState, useContext, useEffect } from "react";
 import { authService } from "../../services/auth.service";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { createWindow } from "../../helpers/createWindow.helper";
+import { BASE_URL_API } from "../../configs/server.config";
 
 export function LoginAuth() {
     const [loading, setLoading] = useState(false);
@@ -148,9 +149,7 @@ export function LoginAuth() {
         let timer: ReturnType<typeof setTimeout> | null = null;
 
         const newWindow = createWindow(
-            `${
-                import.meta.env.VITE_SERVER_DOMAIN
-            }/api/v1/auth/${method_auth}/login`,
+            `${BASE_URL_API}/auth/${method_auth}/login`,
             "_blank",
             800,
             600
