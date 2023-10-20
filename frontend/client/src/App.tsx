@@ -1,4 +1,5 @@
-import { Routes, Route, useSearchParams } from "react-router-dom";
+import { Routes, Route, useSearchParams, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import LayoutApp from "./pages/layout.page";
 import { Home } from "./components/Home/Home";
@@ -23,6 +24,11 @@ import { ErrorPage } from "./components/ErrorPage";
 
 function App() {
     const [searchParams] = useSearchParams();
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
 
     return (
         <>
