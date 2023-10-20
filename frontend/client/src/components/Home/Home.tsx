@@ -27,7 +27,7 @@ const prPhotos = [
     },
     {
         photo_id: 6,
-        photo_url: "/women.avif",
+        photo_url: "/women.jpg",
     },
 ];
 
@@ -58,6 +58,7 @@ export function Home() {
         <Stack sx={{ width: "100%" }}>
             <Carousel
                 withIndicators
+                loop
                 plugins={[autoplay.current]}
                 onMouseEnter={autoplay.current.stop}
                 onMouseLeave={autoplay.current.reset}
