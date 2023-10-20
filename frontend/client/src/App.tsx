@@ -19,6 +19,7 @@ import { ResetPassword } from "./components/ResetPassword/ResetPassword";
 import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper";
 import { About } from "./components/About/About";
 import { Contact } from "./components/Contact/Contact";
+import { ErrorPage } from "./components/ErrorPage";
 
 function App() {
     const [searchParams] = useSearchParams();
@@ -160,6 +161,8 @@ function App() {
                         </TitlePageWrapper>
                     }
                 />
+
+                <Route path="/*" element={<ErrorPage />} />
             </Routes>
         </>
     );
