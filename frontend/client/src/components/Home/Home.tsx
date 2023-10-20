@@ -27,7 +27,7 @@ const prPhotos = [
     },
     {
         photo_id: 6,
-        photo_url: "/women.avif",
+        photo_url: "/women.jpg",
     },
 ];
 
