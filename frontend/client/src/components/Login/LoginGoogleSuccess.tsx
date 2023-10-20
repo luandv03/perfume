@@ -17,6 +17,11 @@ export const LoginGoogleSuccess = () => {
                 searchParams.get("refresh_token_user") as string
             );
 
+            localStorage.setItem(
+                "messageOAuth",
+                searchParams.get("messageOAuth") as string
+            );
+
             localStorage.setItem("isAuthenticated", "true");
         }
 
