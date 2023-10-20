@@ -67,7 +67,13 @@ export function Product({ data }: { data: ProductType }) {
                     to={`/product/${data.product_id}/detail`}
                     state={{ product: data }}
                 >
-                    <Text size="16px" weight={500} lineClamp={2} color="black">
+                    <Text
+                        size="16px"
+                        weight={500}
+                        lineClamp={2}
+                        color="black"
+                        sx={{ lineHeight: "16px", height: "32px" }}
+                    >
                         {data.title}
                     </Text>
                 </Link>
@@ -89,22 +95,6 @@ export function Product({ data }: { data: ProductType }) {
                     </Text>
                 </Group>
 
-                <Group spacing={4}>
-                    <Button size="16px" onClick={() => handleAddToCart()}>
-                        <IconShoppingCartPlus />
-                    </Button>
-
-                    <Button size="16px">
-                        <Link
-                            to={`/product/${data.product_id}/detail`}
-                            state={{ product: data }}
-                            style={{ color: "white" }}
-                        >
-                            <IconEye />
-                        </Link>
-                    </Button>
-                </Group>
-
                 <Badge
                     color="pink"
                     variant="light"
@@ -117,6 +107,22 @@ export function Product({ data }: { data: ProductType }) {
                     -{data.discount}%
                 </Badge>
             </Stack>
+
+            <Group spacing={4} sx={{ marginTop: "auto" }}>
+                <Button size="16px" onClick={() => handleAddToCart()}>
+                    <IconShoppingCartPlus />
+                </Button>
+
+                <Button size="16px">
+                    <Link
+                        to={`/product/${data.product_id}/detail`}
+                        state={{ product: data }}
+                        style={{ color: "white" }}
+                    >
+                        <IconEye />
+                    </Link>
+                </Button>
+            </Group>
         </Card>
     );
 }

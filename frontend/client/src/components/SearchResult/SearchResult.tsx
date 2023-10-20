@@ -114,20 +114,29 @@ export function SearchResult() {
                             key={product.product_id}
                         >
                             <Card.Section>
-                                {product.product_id !== 0 && (
-                                    <ProductAvatar data={product.product_id} />
-                                )}
+                                <Link
+                                    to={`/product/${product.product_id}/detail`}
+                                >
+                                    {product.product_id !== 0 && (
+                                        <ProductAvatar
+                                            data={product.product_id}
+                                        />
+                                    )}
+                                </Link>
                             </Card.Section>
 
                             <Group position="apart" mt="md" mb="xs">
                                 <Link
                                     to={`/product/${product.product_id}/detail`}
-                                    state={{ product: product }}
                                 >
                                     <Text
                                         weight={500}
                                         lineClamp={2}
                                         color="black"
+                                        sx={{
+                                            lineHeight: "16px",
+                                            height: "32px",
+                                        }}
                                     >
                                         {product.title}
                                     </Text>

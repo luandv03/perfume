@@ -120,6 +120,10 @@ export function CharmCate({ category }: { category: CategoryType }) {
                                         weight={500}
                                         lineClamp={2}
                                         color="black"
+                                        sx={{
+                                            lineHeight: "16px",
+                                            height: "32px",
+                                        }}
                                     >
                                         {product.title}
                                     </Text>

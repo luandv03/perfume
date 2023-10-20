@@ -167,8 +167,7 @@ export function HeaderApp() {
 
     const handleSearch = async (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key == "Enter") {
-            navigate("/search?title=" + searchValue);
-            setSearchValue("");
+            !!searchValue && navigate("/search?title=" + searchValue);
         }
     };
 

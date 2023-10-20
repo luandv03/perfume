@@ -58,19 +58,16 @@ export function FilterResult({
 
     const handleSortByPrice = () => {
         if (sort === "asc") {
-            setProducts((prev) => {
-                const list = prev.sort((a, b) => b.price - a.price);
-
-                return list;
-            });
+            const list = products.sort((a, b) => a.price - b.price);
+            setProducts([...list]); // vì lần đầu sort thì sau khi setProducts mặc dù thứ tự mảng
+            //bị thay đổi nhưng biến tham chiếu đó vẫn giữ nguyên nên DOM không update
+            // nên lúc này ta phải sử dụng ...rest để sao chép mảng sau khi được sắp xếp
+            // đồng thời tạo ra 1 biến tham chiếu mới chứ mảng vừa được sắp xếp
         }
 
         if (sort === "desc") {
-            setProducts((prev) => {
-                const list = prev.sort((a, b) => a.price - b.price);
-
-                return list;
-            });
+            const list = products.sort((a, b) => b.price - a.price);
+            setProducts([...list]);
         }
     };
 
@@ -80,7 +77,9 @@ export function FilterResult({
     }, [sort, page]);
 
     useEffect(() => {
+        setSort("");
         handleGetProductByFilter();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, window.location.pathname, filterBrand, prices]);
 
