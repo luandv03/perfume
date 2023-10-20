@@ -58,6 +58,7 @@ export function Home() {
         <Stack sx={{ width: "100%" }}>
             <Carousel
                 withIndicators
+                loop
                 plugins={[autoplay.current]}
                 onMouseEnter={autoplay.current.stop}
                 onMouseLeave={autoplay.current.reset}
