@@ -1,7 +1,9 @@
-import { createStyles, getBreakpointValue, em } from "@mantine/core";
+import { createStyles, getBreakpointValue, Button, em } from "@mantine/core";
+import { useWindowScroll } from "@mantine/hooks";
 import { Outlet } from "react-router-dom";
-import { Footer } from "../components/Footer/Footer";
+import { IconArrowBigUp } from "@tabler/icons-react";
 
+import { Footer } from "../components/Footer/Footer";
 import { HeaderApp } from "../components/Header/Header.component";
 
 const useStyles = createStyles((theme) => ({
@@ -24,7 +26,12 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function LayoutApp() {
+    const [scroll, scrollTo] = useWindowScroll();
     const { classes } = useStyles();
+
+    const handleGoToTop = () => {
+        scrollTo({ x: 0, y: 0 });
+    };
 
     return (
         <div>
@@ -39,6 +46,19 @@ export default function LayoutApp() {
             <div>
                 <Footer></Footer>
             </div>
+
+            <Button
+                bg="#0A7CFF"
+                sx={{
+                    position: "fixed",
+                    right: "24px",
+                    bottom: "100px",
+                    display: scroll.y > 600 ? "flex" : "none",
+                }}
+                onClick={() => handleGoToTop()}
+            >
+                <IconArrowBigUp />
+            </Button>
         </div>
     );
 }
