@@ -17,6 +17,7 @@ import { orderService } from "../../services/order.service";
 import { handleOrderDate } from "../../helpers/handleOrderDate.helper";
 // import { paymentService } from "../../services/payment.service";
 import { createWindow } from "../../helpers/createWindow.helper";
+import { BASE_URL_API } from "../../configs/server.config";
 
 interface CouponType {
     coupon_id: number;
@@ -149,7 +150,7 @@ export const OrderDetail = () => {
         order_id: number
     ) => {
         createWindow(
-            `https://perfume-lgj8.onrender.com/api/v1/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
+            `${BASE_URL_API}/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
             800,
             600

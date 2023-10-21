@@ -3,5 +3,5 @@ export const vnpayConfig = {
     vnp_HashSecret: "RCOCQUMRSOFIKJLSJEINOJZKGHTFPZYF",
     vnp_Url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
     vnp_Api: "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction",
-    vnp_ReturnUrl: "http://localhost:8888/api/v1/order/vnpay_return",
+    vnp_ReturnUrl: `${process.env.SERVER_DOMAIN}/api/v1/order/vnpay_return`,
 };
