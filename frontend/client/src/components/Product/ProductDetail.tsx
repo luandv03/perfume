@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconStar, IconStarFilled } from "@tabler/icons-react";
+import { IconStar, IconStarFilled, IconLoader } from "@tabler/icons-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { Carousel } from "@mantine/carousel";
@@ -30,6 +30,7 @@ import { StarRating } from "../StarRating/StarRating";
 import { getItemLocalStorage } from "../../helpers/handleLocalStorage.helper";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { TitlePageWrapper } from "../TitlePageWrapper/TitlePageWrapper";
+import { convertTimeStamp } from "../../helpers/convertTimeStamp.helper";
 
 interface FeedbackType {
     customer_id: number;
@@ -64,7 +65,12 @@ export function ProductDetail() {
     const [feedbacks, setFeedbacks] = useState<FeedbackType[]>([]);
     const [myFeedback, setMyFeedback] = useState("");
     const [rating, setRating] = useState(0);
+    const [loadingCreateFeedback, setLoadingCreateFeedback] = useState(false);
+    const [updatedMyFeedback, setUpdatedMyFeedback] = useState("");
+    const [updatedRating, setUpdatedRating] = useState(0);
+    const [loadingUpdateFeedback, setLoadingUpdateFeedback] = useState(false);
     const [indexPhotoSelected, setIndexPhotoSelected] = useState(0);
+    const [openedUpdateFeedback, setOpenedUpdateFeedback] = useState(false);
 
     const { addCartItem } = useContext(CartContext);
     const { profile } = useContext(AuthContext);
@@ -124,11 +130,13 @@ export function ProductDetail() {
             });
         }
 
+        setLoadingCreateFeedback(true);
         const res = await feedbackService.createFeedback(
             Number(product_id),
             rating,
             myFeedback
         );
+        setLoadingCreateFeedback(false);
 
         if (res.statusCode === 200) {
             handleGetFeedback();
@@ -149,6 +157,34 @@ export function ProductDetail() {
         const res = await feedbackService.removeFeedback(Number(product_id));
 
         if (res.statusCode == 200) {
+            handleGetFeedback();
+        }
+
+        notifications.show({
+            message: res.message,
+        });
+    };
+
+    const handleUpdateFeedback = async (rating: number, content: string) => {
+        if (openedUpdateFeedback) {
+            setOpenedUpdateFeedback(!openedUpdateFeedback);
+        } else {
+            setOpenedUpdateFeedback(!openedUpdateFeedback);
+        }
+        setUpdatedRating(rating);
+        setUpdatedMyFeedback(content);
+    };
+
+    const handleUpdateFeedbackSubmit = async () => {
+        setLoadingUpdateFeedback(true);
+        const res = await feedbackService.createFeedback(
+            Number(product_id),
+            updatedRating,
+            updatedMyFeedback
+        );
+        setLoadingUpdateFeedback(false);
+
+        if (res.statusCode === 200) {
             handleGetFeedback();
         }
 
@@ -457,10 +493,20 @@ export function ProductDetail() {
                             />
                             <Button
                                 maw={180}
-                                disabled={!myFeedback}
+                                disabled={!myFeedback || loadingCreateFeedback}
                                 onClick={() => handleCreateFeedback()}
                             >
-                                Gửi đánh giá
+                                {!loadingCreateFeedback ? (
+                                    "Gửi đánh giá"
+                                ) : (
+                                    <IconLoader
+                                        className={
+                                            loadingCreateFeedback
+                                                ? "spinner"
+                                                : ""
+                                        }
+                                    />
+                                )}
                             </Button>
                         </Stack>
 
@@ -485,19 +531,126 @@ export function ProductDetail() {
                                                     <IconStar />
                                                 ))}
                                         </Text>
-                                        <Text color="gray">
-                                            {feedback.updated_at}
+                                        <Text color="gray" mb={4}>
+                                            {convertTimeStamp(
+                                                feedback.updated_at
+                                            )}
                                         </Text>
-                                        <Text>{feedback.content}</Text>
+
+                                        <Text
+                                            color="gray"
+                                            bg="#e9ecef"
+                                            mt={10}
+                                            mb={4}
+                                            span
+                                            p={4}
+                                            sx={{
+                                                color: "#333",
+                                                borderRadius: "8px",
+                                            }}
+                                        >
+                                            <span>{feedback.content}</span>
+                                        </Text>
                                         {feedback.customer_id ===
                                             profile.customer_id && (
-                                            <Button
-                                                onClick={() =>
-                                                    handleRemoveFeedback()
-                                                }
-                                            >
-                                                Xóa
-                                            </Button>
+                                            <>
+                                                <Group>
+                                                    <Text
+                                                        sx={{
+                                                            "&:hover": {
+                                                                cursor: "pointer",
+                                                                textDecoration:
+                                                                    "underline",
+                                                            },
+                                                        }}
+                                                        fw={500}
+                                                        color="#65676B"
+                                                        onClick={() =>
+                                                            handleUpdateFeedback(
+                                                                feedback.stars,
+                                                                feedback.content
+                                                            )
+                                                        }
+                                                    >
+                                                        Sửa
+                                                    </Text>
+                                                    <Text
+                                                        sx={{
+                                                            "&:hover": {
+                                                                cursor: "pointer",
+                                                                textDecoration:
+                                                                    "underline",
+                                                            },
+                                                        }}
+                                                        fw={500}
+                                                        onClick={() =>
+                                                            handleRemoveFeedback()
+                                                        }
+                                                        color="#65676B"
+                                                    >
+                                                        Xóa
+                                                    </Text>
+                                                </Group>
+
+                                                {/* Update feedback */}
+                                                <Collapse
+                                                    in={openedUpdateFeedback}
+                                                >
+                                                    <Stack mt={5} pl={10}>
+                                                        <Text color="yellow">
+                                                            <StarRating
+                                                                rating={
+                                                                    updatedRating
+                                                                }
+                                                                setRating={
+                                                                    setUpdatedRating
+                                                                }
+                                                            />
+                                                        </Text>
+                                                        <Textarea
+                                                            placeholder="Nhập nội dung đánh giá của bạn về sản phẩm này"
+                                                            value={
+                                                                updatedMyFeedback
+                                                            }
+                                                            onChange={(e) => {
+                                                                setUpdatedMyFeedback(
+                                                                    e.target
+                                                                        .value
+                                                                );
+                                                            }}
+                                                            autosize
+                                                            minRows={2}
+                                                            maxRows={4}
+                                                        />
+                                                        <Button
+                                                            maw={180}
+                                                            disabled={
+                                                                !updatedMyFeedback ||
+                                                                loadingUpdateFeedback ||
+                                                                (feedback.content ==
+                                                                    updatedMyFeedback &&
+                                                                    feedback.stars ==
+                                                                        updatedRating)
+                                                            }
+                                                            onClick={() =>
+                                                                handleUpdateFeedbackSubmit()
+                                                            }
+                                                        >
+                                                            {!loadingUpdateFeedback ? (
+                                                                "Sửa"
+                                                            ) : (
+                                                                <IconLoader
+                                                                    className={
+                                                                        loadingUpdateFeedback
+                                                                            ? "spinner"
+                                                                            : ""
+                                                                    }
+                                                                />
+                                                            )}
+                                                        </Button>
+                                                    </Stack>
+                                                </Collapse>
+                                            </>
                                         )}
                                     </Paper>
                                 ))}
