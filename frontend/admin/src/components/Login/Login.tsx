@@ -75,18 +75,24 @@ export function Login() {
     const handleValidate = async (values: typeof form.values) => {
         try {
             setLoading(true);
-            const res = await authService.login(values);
+            const resAuth = await authService.login(values);
             setLoading(false);
 
-            if (res.statusCode !== 200) {
+            if (resAuth.statusCode !== 200) {
                 return showNotification({
                     title: "You login failed!",
-                    message: res.message,
+                    message: resAuth.message,
                     color: "red",
                     icon: <IconX />,
                     autoClose: 3000,
                 });
             }
+
+            // set token on localStorage
+            localStorage.setItem("access_token", resAuth.data.access_token);
+
+            localStorage.setItem("refresh_token", resAuth.data.refresh_token);
+
             showNotification({
                 message: "You login successfully!",
                 color: "yellow",
@@ -95,6 +101,7 @@ export function Login() {
             });
             const response = await authService.getProfile();
             setProfile(response.data);
+            localStorage.setItem("isAuthenticated", "true");
             navigate("/");
             form.reset();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

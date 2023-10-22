@@ -1,1 +1,1 @@
-export const API_BASE_URL = "http://localhost:8888/api/v1";
+export const API_BASE_URL = `${import.meta.env.VITE_SERVER_DOMAIN}/api/v1`;
