@@ -37,7 +37,7 @@ function App() {
                     <Route
                         path="/"
                         element={
-                            <TitlePageWrapper title="Trang chủ | Perfume LDA">
+                            <TitlePageWrapper title="Home | Perfume LDA">
                                 <Home />
                             </TitlePageWrapper>
                         }
@@ -45,7 +45,7 @@ function App() {
                     <Route
                         path="/about"
                         element={
-                            <TitlePageWrapper title="Giới thiệu | Perfume LDA">
+                            <TitlePageWrapper title="About | Perfume LDA">
                                 <About />
                             </TitlePageWrapper>
                         }
@@ -53,7 +53,7 @@ function App() {
                     <Route
                         path="/contact"
                         element={
-                            <TitlePageWrapper title="Liên hệ | Perfume LDA">
+                            <TitlePageWrapper title="Contact | Perfume LDA">
                                 <Contact />
                             </TitlePageWrapper>
                         }
@@ -69,7 +69,7 @@ function App() {
                     <Route
                         path="/cart"
                         element={
-                            <TitlePageWrapper title="Giỏ hàng | Perfume LDA">
+                            <TitlePageWrapper title="Cart | Perfume LDA">
                                 <Cart />
                             </TitlePageWrapper>
                         }
@@ -85,7 +85,7 @@ function App() {
                         <Route
                             path="/customer"
                             element={
-                                <TitlePageWrapper title="Trang khách hàng | Perfume LDA">
+                                <TitlePageWrapper title="Customer | Perfume LDA">
                                     <Profile />
                                 </TitlePageWrapper>
                             }
@@ -93,7 +93,7 @@ function App() {
                         <Route
                             path="/customer/reset_password"
                             element={
-                                <TitlePageWrapper title="Đổi mật khẩu | Perfume LDA">
+                                <TitlePageWrapper title="Reset password | Perfume LDA">
                                     <ResetPassword />
                                 </TitlePageWrapper>
                             }
@@ -101,7 +101,7 @@ function App() {
                         <Route
                             path="/customer/order"
                             element={
-                                <TitlePageWrapper title="Trang đơn hàng | Perfume LDA">
+                                <TitlePageWrapper title="Order | Perfume LDA">
                                     <OrderCustomer />
                                 </TitlePageWrapper>
                             }
@@ -114,7 +114,7 @@ function App() {
                     <Route
                         path="/checkout"
                         element={
-                            <TitlePageWrapper title="Trang thanh toán | Perfume LDA">
+                            <TitlePageWrapper title="Check out | Perfume LDA">
                                 <Checkout />
                             </TitlePageWrapper>
                         }
@@ -122,7 +122,7 @@ function App() {
                     <Route
                         path="/checkout/thankyou/:order_id"
                         element={
-                            <TitlePageWrapper title="Trang cảm ơn | Perfume LDA">
+                            <TitlePageWrapper title="Thank you | Perfume LDA">
                                 <Thankyou />
                             </TitlePageWrapper>
                         }
@@ -144,7 +144,7 @@ function App() {
                 <Route
                     path="/login"
                     element={
-                        <TitlePageWrapper title="Đăng nhập | Perfume LDA">
+                        <TitlePageWrapper title="SignIn | Perfume LDA">
                             <LoginAuth />
                         </TitlePageWrapper>
                     }
@@ -153,7 +153,7 @@ function App() {
                 <Route
                     path="/register"
                     element={
-                        <TitlePageWrapper title="Đăng ký | Perfume LDA">
+                        <TitlePageWrapper title="SignUp | Perfume LDA">
                             <Register />
                         </TitlePageWrapper>
                     }
@@ -162,7 +162,7 @@ function App() {
                 <Route
                     path="/forgot_password"
                     element={
-                        <TitlePageWrapper title="Quên mật khẩu | Perfume LDA">
+                        <TitlePageWrapper title="Forgot password | Perfume LDA">
                             <ForgotPassword />
                         </TitlePageWrapper>
                     }

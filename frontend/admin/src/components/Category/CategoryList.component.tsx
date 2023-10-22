@@ -205,7 +205,7 @@ export function CategoryList() {
                                 />
                             </th>
                             <th>ID</th>
-                            <th>Tên danh mục</th>
+                            <th>Category Name</th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>

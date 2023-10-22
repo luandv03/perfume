@@ -152,6 +152,31 @@ class FeedbackService {
         };
     }
 
+    async getRecentlyFeedbacks(): Promise<ResponseType<any>> {
+        const feedbacks = await query(
+            `
+            SELECT f.*, c.fullname FROM feedbacks f
+            JOIN customers c USING(customer_id)
+            ORDER BY created_at
+            OFFSET 0 LIMIT 20
+             `
+        );
+
+        const countFeedback =
+            await query(`SELECT COUNT(*) n_feedbacks FROM (SELECT * FROM feedbacks
+            ORDER BY created_at
+            OFFSET 0 LIMIT 20) tmp`);
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get feedback success",
+            data: {
+                feedbacks: feedbacks.rows,
+                number_of_feedbacks: countFeedback.rows[0].n_feedbacks,
+            },
+        };
+    }
+
     async countFeedbackCountByProductId(product_id: number) {
         const results = await query(
             `SELECT count(*) AS feedback_number FROM feedbacks WHERE product_id = $1`,

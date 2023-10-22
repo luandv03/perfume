@@ -27,7 +27,7 @@ class OrderService extends BaseService {
 
     async acceptOrderById(order_id: number) {
         try {
-            const res = await this.httpClientPublic.patch(
+            const res = await this.httpClientPrivate.patch(
                 `/order/accept/${order_id}`
             );
 

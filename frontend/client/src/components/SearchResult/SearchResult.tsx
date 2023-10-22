@@ -90,7 +90,7 @@ export function SearchResult() {
         <Stack spacing={10}>
             <Center>
                 <Text size={20} fw={500}>
-                    Có {totalProduct} sản phẩm phù hợp
+                    Have {totalProduct} products match
                 </Text>
             </Center>
             <SimpleGrid

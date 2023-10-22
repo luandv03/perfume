@@ -170,21 +170,21 @@ export function ProductCreate() {
                     value="gallery"
                     icon={<IconPhoto size="0.8rem" />}
                 >
-                    <Text size="lg">Ảnh</Text>
+                    <Text size="lg">Photo</Text>
                 </Tabs.Tab>
                 <Tabs.Tab
                     fw={400}
                     value="messages"
                     icon={<IconMessageCircle size="0.8rem" />}
                 >
-                    <Text size="lg">Chi tiết</Text>
+                    <Text size="lg">Detail</Text>
                 </Tabs.Tab>
                 <Tabs.Tab
                     fw={400}
                     value="settings"
                     icon={<IconSettings size="0.8rem" />}
                 >
-                    <Text size="lg">Mô tả</Text>
+                    <Text size="lg">Description</Text>
                 </Tabs.Tab>
             </Tabs.List>
 
@@ -265,7 +265,7 @@ export function ProductCreate() {
                     >
                         <TextInput
                             placeholder="Your name"
-                            label="Tên"
+                            label="Product Name"
                             withAsterisk
                             miw={400}
                             value={product.title}
@@ -278,7 +278,7 @@ export function ProductCreate() {
                         />
                         <TextInput
                             placeholder="Your name"
-                            label="Thương hiệu"
+                            label="Brand"
                             withAsterisk
                             miw={300}
                             value={product.brand}
@@ -305,8 +305,8 @@ export function ProductCreate() {
                         />
                         <NumberInput
                             defaultValue={2018}
-                            placeholder="Năm phát hành"
-                            label="Năm phát hành"
+                            placeholder="Yaer Publish"
+                            label="Yaer Publish"
                             withAsterisk
                             value={product.year_publish}
                             onChange={(value) => {
@@ -319,8 +319,8 @@ export function ProductCreate() {
 
                         <NumberInput
                             defaultValue={100}
-                            placeholder="Dung tích"
-                            label="Dung tích(ml)"
+                            placeholder="Volumn"
+                            label="Volumn(ml)"
                             withAsterisk
                             value={product.volume}
                             onChange={(value) => {

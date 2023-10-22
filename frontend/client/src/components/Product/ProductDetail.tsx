@@ -337,11 +337,11 @@ export function ProductDetail() {
                                     </Text>
                                 </Skeleton>
                                 <Text size="16px" fw={500}>
-                                    Thương hiệu
+                                    Brand
                                 </Text>
                                 <Skeleton h={30} w={60} />
                                 <Text size="16px" fw={500}>
-                                    Dung tích
+                                    Volumn
                                 </Text>
                                 <Skeleton h={25} w={60} />
                                 <Text>
@@ -351,7 +351,7 @@ export function ProductDetail() {
                                             fontWeight: "500",
                                         }}
                                     >
-                                        Năm phát hành
+                                        Year Publish
                                     </span>
                                     : <Skeleton h={25} w={80} />
                                 </Text>
@@ -373,7 +373,7 @@ export function ProductDetail() {
 
                                 <Text>{product?.description}</Text>
                                 <Text size="16px" fw={500}>
-                                    Thương hiệu
+                                    Brand
                                 </Text>
 
                                 <div>
@@ -386,7 +386,7 @@ export function ProductDetail() {
                                     </Button>
                                 </div>
                                 <Text size="16px" fw={500}>
-                                    Dung tích
+                                    Volumn
                                 </Text>
 
                                 <div>
@@ -405,7 +405,7 @@ export function ProductDetail() {
                                             fontWeight: "500",
                                         }}
                                     >
-                                        Năm phát hành
+                                        Year Publish
                                     </span>
                                     : {product?.year_publish}
                                 </Text>
@@ -418,7 +418,7 @@ export function ProductDetail() {
                                     onChange={(value) =>
                                         setNumberAddItem(value as number)
                                     }
-                                    label="Số lượng"
+                                    label="Quantity"
                                     w={100}
                                 />
 
@@ -427,7 +427,7 @@ export function ProductDetail() {
                                         size="md"
                                         onClick={() => handleBuyNow(product)}
                                     >
-                                        Mua ngay
+                                        Buy now
                                     </Button>
                                     <Button
                                         size="md"
@@ -435,10 +435,10 @@ export function ProductDetail() {
                                             handleAddToCart(product);
                                         }}
                                     >
-                                        Thêm vào giỏ hàng
+                                        Add to cart
                                     </Button>
                                     <Button size="md" onClick={toggle}>
-                                        Đánh giá
+                                        Review
                                     </Button>
                                 </Group>
                             </Stack>
@@ -457,14 +457,14 @@ export function ProductDetail() {
                             <Center>
                                 <Stack>
                                     <Text>
-                                        Hiện tại sản phẩm này chưa có đánh giá
-                                        nào, Bạn hãy trở thành người đầu tiên
-                                        đánh giá cho sản phẩm này
+                                        There are currently no reviews for this
+                                        product Come on, be the first reviews
+                                        for this product
                                     </Text>
                                     <div>
                                         <Center>
                                             <Button size="sm">
-                                                Gửi đánh giá của bạn
+                                                Send your feedback
                                             </Button>
                                         </Center>
                                     </div>
@@ -473,7 +473,7 @@ export function ProductDetail() {
                         )}
                         <Stack>
                             <Group>
-                                <Text>Đánh giá của bạn về sản phẩm: </Text>
+                                <Text>Your feedback about product: </Text>
                                 <Text color="yellow">
                                     <StarRating
                                         rating={rating}
@@ -482,7 +482,7 @@ export function ProductDetail() {
                                 </Text>
                             </Group>
                             <Textarea
-                                placeholder="Nhập nội dung đánh giá của bạn về sản phẩm này"
+                                placeholder="Enter comment about this product"
                                 value={myFeedback}
                                 onChange={(e) => {
                                     setMyFeedback(e.target.value);
@@ -497,7 +497,7 @@ export function ProductDetail() {
                                 onClick={() => handleCreateFeedback()}
                             >
                                 {!loadingCreateFeedback ? (
-                                    "Gửi đánh giá"
+                                    "Send feedback"
                                 ) : (
                                     <IconLoader
                                         className={
@@ -517,7 +517,7 @@ export function ProductDetail() {
                                         <Text fw={500}>
                                             {feedback.fullname} &nbsp;
                                             {feedback.customer_id ===
-                                                profile.customer_id && "(Bạn)"}
+                                                profile.customer_id && "(You)"}
                                         </Text>
                                         <Text color="yellow">
                                             {Array(feedback.stars)
@@ -572,7 +572,7 @@ export function ProductDetail() {
                                                             )
                                                         }
                                                     >
-                                                        Sửa
+                                                        Edit
                                                     </Text>
                                                     <Text
                                                         sx={{
@@ -588,7 +588,7 @@ export function ProductDetail() {
                                                         }
                                                         color="#65676B"
                                                     >
-                                                        Xóa
+                                                        Delete
                                                     </Text>
                                                 </Group>
 

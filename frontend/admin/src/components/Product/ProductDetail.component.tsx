@@ -62,7 +62,7 @@ export function ProductDetail() {
             >
                 <TextInput
                     placeholder="Your name"
-                    label="Tên"
+                    label="Product Name"
                     withAsterisk
                     miw={400}
                     value={product.title}
@@ -77,7 +77,7 @@ export function ProductDetail() {
                 />
                 <TextInput
                     placeholder="Your name"
-                    label="Thương hiệu"
+                    label="Brand"
                     withAsterisk
                     miw={300}
                     value={product.brand}
@@ -95,7 +95,8 @@ export function ProductDetail() {
                     placeholder="Pick one"
                     data={listCategorySelect}
                     value={String(product.category_id)}
-                    onChange={(value) =>
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    onChange={(value: any) =>
                         setProduct((prev) => {
                             return {
                                 ...prev,
@@ -115,8 +116,8 @@ export function ProductDetail() {
                             };
                         })
                     }
-                    placeholder="Năm phát hành"
-                    label="Năm phát hành"
+                    placeholder="Year Publish"
+                    label="Year Publish"
                     withAsterisk
                 />
 
@@ -130,8 +131,8 @@ export function ProductDetail() {
                             };
                         })
                     }
-                    placeholder="Dung tích"
-                    label="Dung tích(ml)"
+                    placeholder="Volumn"
+                    label="Volumn(ml)"
                     withAsterisk
                 />
 

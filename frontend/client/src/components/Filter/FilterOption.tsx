@@ -105,7 +105,7 @@ export function FilterOption({
             <div style={{ padding: "10px" }} onClick={toggle}>
                 <Flex justify="space-between">
                     <Text size="16px" fw={500}>
-                        Bộ lọc
+                        Filter
                     </Text>
 
                     {!largeScreen && (
@@ -115,7 +115,7 @@ export function FilterOption({
                     )}
                 </Flex>
 
-                <Text>Giúp lọc nhanh sản phẩm tìm kiếm</Text>
+                <Text>Helps quickly filter search products</Text>
             </div>
             <Collapse in={largeScreen || opened}>
                 {filterBrand.length + prices.length > 0 ? (
@@ -124,14 +124,14 @@ export function FilterOption({
                         <Stack p="10px">
                             <Flex justify="space-between">
                                 <Text size="16px" fw={500}>
-                                    Bạn chọn
+                                    Your Option
                                 </Text>
 
                                 <Text
                                     style={{ cursor: "pointer" }}
                                     onClick={() => handleRemoveAllFilter()}
                                 >
-                                    Bỏ hết
+                                    Remove All
                                 </Text>
                             </Flex>
 
@@ -192,7 +192,7 @@ export function FilterOption({
                 <Divider my="xs"></Divider>
                 <Stack p="10px">
                     <Text size="16px" fw={500}>
-                        Thương hiệu
+                        Brand
                     </Text>
                     {/* <TextInput
                     placeholder="Tìm thương hiệu"
@@ -223,14 +223,14 @@ export function FilterOption({
                 <Divider my="xs"></Divider>
                 <Stack p="10px">
                     <Text size="16px" fw={500}>
-                        Giá sản phẩm
+                        Price
                     </Text>
                     <ScrollArea h={150} scrollbarSize="5px">
                         <Checkbox.Group value={prices} onChange={setPrices}>
                             <Stack>
                                 <Checkbox
                                     value={`${[0, 500000]}`}
-                                    label="Giá dưới 500.0000"
+                                    label="Less than 500.0000"
                                 />
                                 <Checkbox
                                     value={`${[500000, 1000000]}`}
@@ -242,7 +242,7 @@ export function FilterOption({
                                 />
                                 <Checkbox
                                     value={`${[5000000, 0]}`}
-                                    label="Giá trên 5.000.000đ"
+                                    label="Greater than 5.000.000đ"
                                 />
                             </Stack>
                         </Checkbox.Group>

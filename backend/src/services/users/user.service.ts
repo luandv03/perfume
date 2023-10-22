@@ -724,6 +724,28 @@ class UserService {
             message: "Reset password success",
         };
     }
+
+    async getRecentlyCustomer(): Promise<ResponseType<any>> {
+        const result =
+            await query(`select customer_id, fullname, email, phone_number from customers
+        order by customer_id desc
+        offset 0 limit 20`);
+
+        const countCustomer =
+            await query(`select count(*) n_customer from (select customer_id from customers
+            order by customer_id desc
+            offset 0 limit 20) tmp
+            `);
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Get customer success",
+            data: {
+                customers: result.rows,
+                number_of_customers: countCustomer.rows[0].n_customer,
+            },
+        };
+    }
 }
 
 export const userService = new UserService();

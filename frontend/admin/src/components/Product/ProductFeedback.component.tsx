@@ -141,10 +141,10 @@ export function ProductFeedback() {
                                         transitionDuration={0}
                                     />
                                 </th>
-                                <th>Ngày</th>
-                                <th>Mã khách hàng</th>
-                                <th>Đánh giá</th>
-                                <th>Nhận xét</th>
+                                <th>Date</th>
+                                <th>CustomerID</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
                             </tr>
                         </thead>
                         <tbody>{rows}</tbody>
@@ -173,8 +173,8 @@ export function ProductFeedback() {
                     </Flex>
                 </>
             ) : (
-                <Alert title="Tiếc quá!" color="red">
-                    <Text fw={700}> Chưa có đánh giá</Text>
+                <Alert title="Oops!" color="red">
+                    <Text fw={700}>Have no feedback</Text>
                 </Alert>
             )}
         </Stack>

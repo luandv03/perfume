@@ -2,8 +2,8 @@ import { createStyles, Navbar, getStylesRef, rem } from "@mantine/core";
 import {
     IconBellRinging,
     IconFingerprint,
-    IconSettings,
-    Icon2fa,
+    // IconSettings,
+    // Icon2fa,
     IconReceipt2,
     // IconSwitchHorizontal,
     // IconLogout,
@@ -96,8 +96,8 @@ const data = [
     { link: "/product", label: "Product", icon: IconReceipt2 },
     { link: "/order/all", label: "Orders", icon: IconFingerprint },
     { link: "/customer/all", label: "Customers", icon: IconUsers },
-    { link: "/account", label: "Admins", icon: Icon2fa },
-    { link: "", label: "Other Settings", icon: IconSettings },
+    // { link: "/account", label: "Admins", icon: Icon2fa },
+    // { link: "", label: "Other Settings", icon: IconSettings },
 ];
 
 export function NavbarApp() {

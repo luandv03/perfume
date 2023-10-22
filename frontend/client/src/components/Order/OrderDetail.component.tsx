@@ -222,13 +222,13 @@ export const OrderDetail = () => {
                         data={[
                             {
                                 value: "done",
-                                label: "Đã hoàn thành",
+                                label: "Done",
                             },
-                            { value: "canceled", label: "Đã hủy" },
-                            { value: "ordered", label: "Đang chờ xác nhận" },
+                            { value: "canceled", label: "Canceled" },
+                            { value: "ordered", label: "Ordered" },
                             {
                                 value: "accepted",
-                                label: "Đang xử lý",
+                                label: "Accept",
                             },
                         ]}
                         value={orderDetail.order.status}
@@ -239,7 +239,7 @@ export const OrderDetail = () => {
                     <Stack spacing={0}>
                         <Stack>
                             <Text fw={700} fz="xl">
-                                Mã đơn
+                                OrderID
                             </Text>
                         </Stack>
                         <Stack>{orderDetail.order.order_id}</Stack>
@@ -248,7 +248,7 @@ export const OrderDetail = () => {
                         disabled={orderDetail.order.status !== "ordered"}
                         onClick={() => handleCancelOrderById()}
                     >
-                        Hủy
+                        Cancel
                     </Button>
                 </Stack>
 
@@ -262,7 +262,7 @@ export const OrderDetail = () => {
                 >
                     <Stack spacing={0}>
                         <Text fw={700} fz="xl">
-                            Khách hàng
+                            Customer
                         </Text>
                         <Stack spacing={0}>
                             <Text fw={500}>
@@ -276,7 +276,7 @@ export const OrderDetail = () => {
                     </Stack>
                     <Stack spacing={0}>
                         <Text fw={700} fz="xl">
-                            Địa chỉ
+                            Address
                         </Text>
                         <Text>
                             {orderDetail.order && orderDetail.order.address}
@@ -294,7 +294,7 @@ export const OrderDetail = () => {
                 >
                     <Stack spacing={0}>
                         <Text fw={700} fz="xl">
-                            Khách hàng
+                            Customer
                         </Text>
                         <Stack spacing={0}>
                             <Text fw={500}>
@@ -323,11 +323,11 @@ export const OrderDetail = () => {
             <Table>
                 <thead>
                     <tr>
-                        <th>Mã sản phẩm</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Giá</th>
-                        <th>Số lượng</th>
-                        <th>Tổng tiền</th>
+                        <th>ProductID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>
@@ -339,7 +339,7 @@ export const OrderDetail = () => {
             <Table w="100%">
                 <thead>
                     <tr>
-                        <th>Tổng đơn hàng</th>
+                        <th>Sum</th>
                         <th>
                             {orderDetail.orderlines.length > 0 &&
                                 new Intl.NumberFormat("vi-VN").format(
@@ -349,7 +349,7 @@ export const OrderDetail = () => {
                         </th>
                     </tr>
                     <tr>
-                        <th>Giảm giá</th>
+                        <th>Discount</th>
                         <th>
                             {orderDetail.coupons.length > 0
                                 ? orderDetail.coupons.map(
@@ -363,11 +363,11 @@ export const OrderDetail = () => {
                         </th>
                     </tr>
                     <tr>
-                        <th>Thuế(%)</th>
+                        <th>Tax(%)</th>
                         <th>{orderDetail.order.tax}</th>
                     </tr>
                     <tr>
-                        <th>Vận chuyển</th>
+                        <th>Delivery</th>
                         <th>
                             {new Intl.NumberFormat("vi-VN").format(
                                 orderDetail.order.delivery_cost
@@ -376,7 +376,7 @@ export const OrderDetail = () => {
                         </th>
                     </tr>
                     <tr>
-                        <th>Tổng tiền</th>
+                        <th>Total</th>
                         <th>
                             {" "}
                             {new Intl.NumberFormat("vi-VN").format(
@@ -388,18 +388,18 @@ export const OrderDetail = () => {
                 </thead>
             </Table>
             <Text fw={700} size="xl" fz="xl">
-                Giao dịch
+                Transaction
             </Text>
             {orderDetail.order.payment_status === "1" ? (
                 <div>
-                    <Alert title="Chú ý!" color="red">
-                        <Text fw={700}> Bạn đã thanh toán đơn hàng</Text>
+                    <Alert title="Note!" color="red">
+                        <Text fw={700}>You have paid for your order</Text>
                     </Alert>
                 </div>
             ) : (
                 <div>
-                    <Alert title="Chú ý!" color="red">
-                        <Text fw={700}> Bạn chưa thanh toán đơn hàng</Text>
+                    <Alert title="Note!" color="red">
+                        <Text fw={700}> You have not paid for your order</Text>
                     </Alert>
                     {orderDetail.order.status !== "canceled" && (
                         <Button
@@ -412,7 +412,7 @@ export const OrderDetail = () => {
                                 )
                             }
                         >
-                            Thanh toán lại đơn hàng
+                            Refund the order
                         </Button>
                     )}
                 </div>
@@ -424,6 +424,7 @@ export const OrderDetail = () => {
                 }}
                 justify="space-between"
                 align="center"
+                mb={10}
             >
                 <Button
                     color="red"
@@ -438,7 +439,7 @@ export const OrderDetail = () => {
                     disabled
                 >
                     <IconTrash style={{ marginRight: "5px" }} />
-                    Xóa
+                    Delete
                 </Button>
             </Flex>
         </Stack>

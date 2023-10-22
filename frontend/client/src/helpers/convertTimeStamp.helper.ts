@@ -11,5 +11,7 @@ export const convertTimeStamp = (orderDate: string) => {
 
     return `${day >= 10 ? day : "0" + `${day}`}/${
         month >= 10 ? month : "0" + `${month}`
-    }/${year} ${hour}:${minute}:${second}`;
+    }/${year} ${hour >= 10 ? hour : "0" + `${hour}`}:${
+        minute >= 10 ? minute : "0" + `${minute}`
+    }:${second >= 10 ? second : "0" + `${second}`}`;
 };

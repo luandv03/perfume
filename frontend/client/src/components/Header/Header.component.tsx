@@ -189,7 +189,7 @@ export function HeaderApp() {
             >
                 <Group position="apart" sx={{ height: "100%" }}>
                     <TextInput
-                        placeholder="Tên sản phẩm...."
+                        placeholder="Product name...."
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                         onKeyDown={handleSearch}
@@ -225,10 +225,10 @@ export function HeaderApp() {
                     <Group className={classes.hiddenMobile} spacing={15}>
                         <Stack sx={{ height: "100%" }} spacing={0}>
                             <Text color="white">
-                                Xin chào,{" "}
+                                Welcome,{" "}
                                 {profile?.customer_id
                                     ? profile.fullname
-                                    : "Quý khách"}
+                                    : "Guest"}
                             </Text>
                             {profile?.customer_id ? (
                                 <Group>
@@ -244,7 +244,7 @@ export function HeaderApp() {
                                         }
                                     >
                                         <Text color="white" fw={500}>
-                                            Tài khoản
+                                            Account
                                         </Text>
                                     </NavLink>
                                     <span style={{ color: "white" }}>|</span>
@@ -254,7 +254,7 @@ export function HeaderApp() {
                                         }}
                                     >
                                         <Text color="white" fw={500}>
-                                            Đăng xuất
+                                            Logout
                                         </Text>
                                     </Button>
                                 </Group>
@@ -265,7 +265,7 @@ export function HeaderApp() {
                                         style={{ textDecoration: "none" }}
                                     >
                                         <Text color="white" fw={500}>
-                                            Đăng nhập
+                                            SignIn
                                         </Text>
                                     </Link>
                                     <span style={{ color: "white" }}>|</span>
@@ -274,7 +274,7 @@ export function HeaderApp() {
                                         style={{ textDecoration: "none" }}
                                     >
                                         <Text color="white" fw={500}>
-                                            Đăng ký
+                                            SignUp
                                         </Text>
                                     </Link>
                                 </Group>
@@ -364,7 +364,7 @@ export function HeaderApp() {
                             color="inherit"
                             sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
-                            Trang chủ
+                            Home
                         </Text>
                     </NavLink>
                     <NavLink
@@ -384,7 +384,7 @@ export function HeaderApp() {
                             color="inherit"
                             sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
-                            Giới thiệu
+                            About
                         </Text>
                     </NavLink>
                     <HoverCard width={200} shadow="md">
@@ -398,7 +398,7 @@ export function HeaderApp() {
                                         "&:hover": { color: "rgb(125 45 45)" },
                                     }}
                                 >
-                                    Danh mục
+                                    Category
                                 </Text>
                                 <Flex
                                     style={{
@@ -452,7 +452,7 @@ export function HeaderApp() {
                             color="inherit"
                             sx={{ "&:hover": { color: "rgb(125 45 45)" } }}
                         >
-                            Liên hệ
+                            Contact
                         </Text>
                     </NavLink>
                 </Group>
@@ -481,10 +481,8 @@ export function HeaderApp() {
                         align="center"
                     >
                         <Text color="white">
-                            Xin chào,{" "}
-                            {profile?.customer_id
-                                ? profile.fullname
-                                : "Quý khách"}
+                            Welcome,{" "}
+                            {profile?.customer_id ? profile.fullname : "Guest"}
                         </Text>
                         {profile?.customer_id ? (
                             <Group>
@@ -494,7 +492,7 @@ export function HeaderApp() {
                                     onClick={() => closeDrawer()}
                                 >
                                     <Text color="white" fw={500}>
-                                        Tài khoản
+                                        Account
                                     </Text>
                                 </Link>
                                 <span style={{ color: "white" }}>|</span>
@@ -505,7 +503,7 @@ export function HeaderApp() {
                                     }}
                                 >
                                     <Text color="white" fw={500}>
-                                        Đăng xuất
+                                        Logout
                                     </Text>
                                 </Button>
                             </Group>
@@ -517,7 +515,7 @@ export function HeaderApp() {
                                     onClick={() => closeDrawer()}
                                 >
                                     <Text color="white" fw={500}>
-                                        Đăng nhập
+                                        SignIn
                                     </Text>
                                 </Link>
                                 <span style={{ color: "white" }}>|</span>
@@ -527,7 +525,7 @@ export function HeaderApp() {
                                     onClick={() => closeDrawer()}
                                 >
                                     <Text color="white" fw={500}>
-                                        Đăng ký
+                                        SignUp
                                     </Text>
                                 </Link>
                             </Group>
@@ -554,7 +552,7 @@ export function HeaderApp() {
                             onClick={() => closeDrawer()}
                         >
                             <Text size="16px" fw={500} color="black">
-                                Trang chủ
+                                Home
                             </Text>
                         </Link>
                         <Divider
@@ -570,7 +568,7 @@ export function HeaderApp() {
                             onClick={() => closeDrawer()}
                         >
                             <Text size="16px" fw={500} color="black">
-                                Giới thiệu
+                                About
                             </Text>
                         </Link>
                         <Divider
@@ -587,7 +585,7 @@ export function HeaderApp() {
                                 onClick={toggleDropdown}
                             >
                                 <Text size="16px" fw={500} color="black">
-                                    Danh mục
+                                    Category
                                 </Text>
                                 <Flex
                                     style={{
@@ -650,7 +648,7 @@ export function HeaderApp() {
                             onClick={() => closeDrawer()}
                         >
                             <Text size="16px" fw={500} color="black">
-                                Liên hệ
+                                Contact
                             </Text>
                         </Link>
                         <Divider

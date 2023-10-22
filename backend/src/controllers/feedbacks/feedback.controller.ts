@@ -87,4 +87,18 @@ export class FeedbackController {
             });
         }
     }
+
+    async getRecentlyFeedbacks(req: Request, res: Response): Promise<any> {
+        try {
+            const data = await feedbackService.getRecentlyFeedbacks();
+
+            res.status(data.statusCode).json(data);
+        } catch (error) {
+            res.status(500).json({
+                statusCode: 500,
+                message: "INTERNAL SERVER ERROR",
+                error: error,
+            });
+        }
+    }
 }

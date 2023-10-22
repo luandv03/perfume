@@ -141,13 +141,13 @@ export function CustomerList() {
             <Table miw={800} verticalSpacing="sm" striped>
                 <thead>
                     <tr>
-                        <th>Mã khách hàng</th>
-                        <th>Họ và tên</th>
+                        <th>CustomerID</th>
+                        <th>Fullname</th>
                         <th>Email</th>
-                        <th>Địa chỉ</th>
-                        <th>Ngày sinh</th>
-                        <th>Số đơn hàng</th>
-                        <th>Tổng chi</th>
+                        <th>Address</th>
+                        <th>Birthday</th>
+                        <th>NItems</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

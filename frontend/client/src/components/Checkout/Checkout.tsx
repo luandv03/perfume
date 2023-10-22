@@ -211,7 +211,7 @@ export function Checkout() {
             >
                 <Stack>
                     <Text size="lg" fw={700}>
-                        Thanh toán
+                        Payment
                     </Text>
                     <Stack>
                         <Accordion>
@@ -224,7 +224,7 @@ export function Checkout() {
                                     <Accordion.Control>
                                         <Radio
                                             value="momo"
-                                            label="Thanh toán qua MOMO"
+                                            label="Pay with MOMO"
                                         />
                                     </Accordion.Control>
                                     <Accordion.Panel>
@@ -251,7 +251,7 @@ export function Checkout() {
                                     <Accordion.Control>
                                         <Radio
                                             value="vnpay"
-                                            label="Thanh toán qua VNPAY-QR"
+                                            label="Pay with VNPAY-QR"
                                         />
                                     </Accordion.Control>
                                     <Accordion.Panel>
@@ -278,7 +278,7 @@ export function Checkout() {
                                     <Accordion.Control>
                                         <Radio
                                             value="cod"
-                                            label="Thanh toán khi giao hàng (COD)"
+                                            label="Payment upon delivery (COD)"
                                         />
                                     </Accordion.Control>
                                     <Accordion.Panel>
@@ -315,7 +315,7 @@ export function Checkout() {
                 }}
             >
                 <Text size={24} fw={500}>
-                    Đơn hàng
+                    Order
                 </Text>
                 <Divider></Divider>
                 {cartUser.length > 0 &&
@@ -363,7 +363,7 @@ export function Checkout() {
                 <Divider my="lg" variant="dashed"></Divider>
                 <Group position="apart">
                     <Text size={20} fw={500}>
-                        Đơn hàng
+                        Sum
                     </Text>
                     <Text size={20}>
                         {new Intl.NumberFormat("vi-VN", {
@@ -386,7 +386,7 @@ export function Checkout() {
                 </Group>
                 <Group position="apart">
                     <Text size={20} fw={500}>
-                        Phí vận chuyển
+                        Delivery
                     </Text>
                     <Text size={20}>
                         {new Intl.NumberFormat("vi-VN", {
@@ -398,7 +398,7 @@ export function Checkout() {
                 </Group>
                 <Group position="apart">
                     <Text size={20} fw={500}>
-                        Giảm giá
+                        Discount
                     </Text>
                     <Text size={20}>
                         {coupon ? "-" + coupon?.coupon_discount + "%" : 0}
@@ -406,7 +406,7 @@ export function Checkout() {
                 </Group>
                 <Group spacing={4}>
                     <TextInput
-                        placeholder="Nhập mã giảm giá"
+                        placeholder="Enter coupon"
                         size="md"
                         value={couponCode}
                         onChange={(e) => {
@@ -427,7 +427,7 @@ export function Checkout() {
                                 className={loadingCoupon ? "spinner" : ""}
                             />
                         ) : (
-                            "Áp dụng"
+                            "Apply"
                         )}
                     </Button>
                 </Group>
@@ -435,7 +435,7 @@ export function Checkout() {
                 <Divider variant="dashed" mt={10}></Divider>
                 <Group position="apart">
                     <Text size={20} fw={500}>
-                        Tổng tiền
+                        Total
                     </Text>
                     <Text size={20}>
                         {new Intl.NumberFormat("vi-VN", {
@@ -471,11 +471,11 @@ export function Checkout() {
                     <Link to="/cart">
                         <Group spacing={0}>
                             <IconChevronLeft />
-                            <Text color="gray">Quay về giỏ hàng</Text>
+                            <Text color="gray">Back cart</Text>
                         </Group>
                     </Link>
                     <Button size="lg" onClick={() => handleCheckout()}>
-                        Hoàn tất đặt hàng
+                        Complete your order
                     </Button>
                 </Group>
                 <LoadingOverlay

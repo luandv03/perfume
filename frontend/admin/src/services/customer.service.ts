@@ -24,6 +24,18 @@ class CustomerService extends BaseService {
             return error;
         }
     }
+
+    async getRecentlyCustomer() {
+        try {
+            const res = await this.httpClientPrivate.get(
+                `/customer/recently/view`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const customerService: CustomerService = new CustomerService();

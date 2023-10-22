@@ -95,7 +95,7 @@ export const ForgotPassword = () => {
         showNotification({
             title: res.message,
             message:
-                "Chúng tôi đã gửi mật khẩu mới đến email của bạn. Hãy kiểm tra cả hòm thư rác!",
+                "We have sent your new password to your email. Please also check your spam folder!",
         });
     };
 
@@ -112,7 +112,7 @@ export const ForgotPassword = () => {
             <Link to="/login">
                 <Group spacing={0}>
                     <IconChevronLeft />
-                    <Text color="gray">Quay về </Text>
+                    <Text color="gray">Go back</Text>
                 </Group>
             </Link>
             <Center>
@@ -127,7 +127,7 @@ export const ForgotPassword = () => {
                         PERFUME & LDA!
                     </Title>
                     <Text color="dimmed" size={30} align="center" mt={5}>
-                        Lấy lại mật khẩu
+                        Password retrieval
                     </Text>
 
                     <Paper withBorder shadow="md" p={30} mt={30} radius="md">
@@ -136,7 +136,7 @@ export const ForgotPassword = () => {
                         >
                             <TextInput
                                 label="Email"
-                                placeholder="Nhập địa chỉ email"
+                                placeholder="Enter email"
                                 icon={<IconMail size={16} />}
                                 required
                                 {...form.getInputProps("email")}
@@ -148,7 +148,7 @@ export const ForgotPassword = () => {
                             >
                                 <TextInput
                                     mt={10}
-                                    placeholder="Nhập mã xác nhận"
+                                    placeholder="Enter otp"
                                     icon={<IconAt size={16} />}
                                     required
                                     {...form.getInputProps("otp")}
@@ -174,8 +174,8 @@ export const ForgotPassword = () => {
                                         />
                                     )}
                                     {counter > 0
-                                        ? "Gửi lại mã " + counter
-                                        : "Gửi mã"}
+                                        ? "Send again" + counter
+                                        : "Send otp"}
                                 </Button>
                             </div>
 
@@ -196,7 +196,7 @@ export const ForgotPassword = () => {
                                         }
                                     />
                                 ) : (
-                                    "Xác nhận"
+                                    "Confirm"
                                 )}
                             </Button>
                         </form>

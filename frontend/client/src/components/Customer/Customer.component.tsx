@@ -20,7 +20,7 @@ export default function Customer() {
                 }}
             >
                 <Stack sx={{ height: "100%" }}>
-                    <Text size={20}>Trang tài khoản</Text>
+                    <Text size={20}>My Account</Text>
                     <Link to="/customer">
                         <Text
                             color={
@@ -29,7 +29,7 @@ export default function Customer() {
                                     : "black"
                             }
                         >
-                            Thông tin tài khoản
+                            Profile
                         </Text>
                     </Link>
 
@@ -41,7 +41,7 @@ export default function Customer() {
                                     : "black"
                             }
                         >
-                            Đơn hàng của bạn
+                            My Order
                         </Text>
                     </Link>
 
@@ -55,7 +55,7 @@ export default function Customer() {
                                         : "black"
                                 }
                             >
-                                Đổi mật khẩu
+                                Reset Password
                             </Text>
                         </Link>
                     )}

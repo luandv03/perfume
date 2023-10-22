@@ -101,11 +101,14 @@ export function FilterResult({
                 {state.category_name}
             </Text>
             <Group align="center" style={{ width: "100%" }}>
-                <Text fw={500}>Xếp theo: </Text>
+                <Text fw={500}>Sort by: </Text>
                 <Radio.Group value={sort} onChange={setSort}>
                     <Group mt="xs">
-                        <Radio value="asc" label="Giá từ thấp đến cao" />
-                        <Radio value="desc" label="Giá từ cao xuống thấp" />
+                        <Radio
+                            value="asc"
+                            label="Prices range from low to high"
+                        />
+                        <Radio value="desc" label="Prices from high to low" />
                     </Group>
                 </Radio.Group>
             </Group>

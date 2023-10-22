@@ -69,16 +69,16 @@ export const ResetPassword = () => {
     return (
         <Stack>
             <Text size={26} fw={600}>
-                Đổi mật khẩu
+                Reset Password
             </Text>
 
-            <Text>Mật khẩu của bạn phải bao gồm ít nhất 8 ký tự</Text>
+            <Text>Your password must contain at least 8 characters</Text>
 
             <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
                 <Stack>
                     <PasswordInput
-                        label={form.values.password && "Mật khẩu mới"}
-                        placeholder="Mật khẩu hiện tại"
+                        label={form.values.password && "New Password"}
+                        placeholder="Current Password"
                         withAsterisk
                         miw={300}
                         {...form.getInputProps("password")}
@@ -86,8 +86,8 @@ export const ResetPassword = () => {
                     />
 
                     <PasswordInput
-                        label={form.values.newPassword && "Mật khẩu mới"}
-                        placeholder="Nhập mật khẩu mới"
+                        label={form.values.newPassword && "New Password"}
+                        placeholder="New Password"
                         withAsterisk
                         miw={300}
                         {...form.getInputProps("newPassword")}
@@ -96,9 +96,9 @@ export const ResetPassword = () => {
                     <PasswordInput
                         label={
                             form.values.confirmNewPassword &&
-                            "Nhập lại mật khẩu mới"
+                            "Confirm New Password"
                         }
-                        placeholder="Nhập lại mật khẩu mới"
+                        placeholder="Confirm New Password"
                         withAsterisk
                         miw={300}
                         {...form.getInputProps("confirmNewPassword")}
@@ -116,7 +116,7 @@ export const ResetPassword = () => {
                         {loading ? (
                             <IconLoader className={loading ? "spinner" : ""} />
                         ) : (
-                            "Đổi mật khẩu"
+                            "Reset"
                         )}
                     </Button>
                 </Stack>

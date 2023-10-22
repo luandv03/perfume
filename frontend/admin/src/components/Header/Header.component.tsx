@@ -102,6 +102,9 @@ export function HeaderApp() {
         const res = await authService.logout();
 
         if (res.statusCode === 200) {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
+
             setProfile({
                 admin_id: 0,
                 role: "",
@@ -109,12 +112,12 @@ export function HeaderApp() {
             });
             localStorage.removeItem("isAuthenticated");
 
+            notifications.show({
+                message: res.message,
+            });
+
             navigate("/login");
         }
-
-        notifications.show({
-            message: res.message,
-        });
     };
 
     return (
