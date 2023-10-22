@@ -28,8 +28,8 @@ export function ProductDes() {
             }}
         >
             <Textarea
-                placeholder="Mô tả..."
-                label="Mô tả"
+                placeholder="Description..."
+                label="Description"
                 withAsterisk
                 autosize
                 minRows={4}

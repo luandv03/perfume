@@ -201,7 +201,7 @@ export function CharmCate({ category }: { category: CategoryType }) {
                     to={`/product/${category.category_id}/filter`}
                     state={{ category_name: category.category_name }}
                 >
-                    <Text color="gray">Xem tất cả</Text>
+                    <Text color="gray">View All</Text>
                 </Link>
             </Center>
 

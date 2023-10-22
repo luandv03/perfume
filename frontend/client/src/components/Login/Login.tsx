@@ -186,7 +186,7 @@ export function LoginAuth() {
             <Link to="/">
                 <Group spacing={0}>
                     <IconChevronLeft />
-                    <Text color="gray">Quay về trang chủ</Text>
+                    <Text color="gray">Go back home</Text>
                 </Group>
             </Link>
             <Center>
@@ -201,9 +201,9 @@ export function LoginAuth() {
                         PERFUME & LDA!
                     </Title>
                     <Text color="dimmed" size="sm" align="center" mt={5}>
-                        Bạn đã có tài khoản chưa?{" "}
+                        Do you have account?{" "}
                         <Link to="/register" style={{ color: "blue" }}>
-                            Đăng ký
+                            SignUp
                         </Link>
                     </Text>
 
@@ -266,7 +266,7 @@ export function LoginAuth() {
                                     to="/forgot_password"
                                     style={{ color: "blue" }}
                                 >
-                                    Quên mật khẩu ?
+                                    Forgot Password ?
                                 </Link>
                             </Group>
                             <Button
@@ -275,7 +275,7 @@ export function LoginAuth() {
                                 type="submit"
                                 disabled={loading}
                             >
-                                Đăng nhập
+                                SignIn
                             </Button>
                             <LoadingOverlay
                                 sx={{ position: "fixed", height: "100%" }}

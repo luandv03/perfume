@@ -189,15 +189,15 @@ export function OrderList() {
                             />
                         </th>
 
-                        <th>Mã đơn hàng</th>
-                        <th>Mã khách hàng</th>
-                        <th>Số sản phẩm</th>
-                        <th>Thuế(%)</th>
-                        <th>Chi phí vận chuyển(vnd)</th>
-                        <th>Giảm giá (%)</th>
-                        <th>Tổng tiền (vnd)</th>
-                        <th>Ngày đặt hàng</th>
-                        <th>Thanh toán</th>
+                        <th>OrderId</th>
+                        <th>CustomerId</th>
+                        <th>NItems</th>
+                        <th>Tax(%)</th>
+                        <th>Delivery Cost(vnd)</th>
+                        <th>Discount(%)</th>
+                        <th>Total(vnd)</th>
+                        <th>Ordered Date</th>
+                        <th>Payment Method</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

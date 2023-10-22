@@ -13,7 +13,7 @@ class CategoryService extends BaseService {
 
     async updateCategoryById(category_id: number, category_name: string) {
         try {
-            const res = await this.httpClientPublic.put(
+            const res = await this.httpClientPrivate.put(
                 `/category/${category_id}/update`,
                 {
                     category_name,
@@ -28,7 +28,7 @@ class CategoryService extends BaseService {
 
     async createCategory(category_name: string) {
         try {
-            const res = await this.httpClientPublic.post(`/category/create`, {
+            const res = await this.httpClientPrivate.post(`/category/create`, {
                 category_name,
             });
 
@@ -40,7 +40,7 @@ class CategoryService extends BaseService {
 
     async deleteCategoryById(category_id: number) {
         try {
-            const res = await this.httpClientPublic.delete(
+            const res = await this.httpClientPrivate.delete(
                 `/category/${category_id}/delete`
             );
 

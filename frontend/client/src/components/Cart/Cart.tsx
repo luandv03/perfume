@@ -78,7 +78,7 @@ export function Cart() {
             >
                 <Group sx={{ height: "100%" }}>
                     <Text size="24px" fw={500}>
-                        Giỏ Hàng
+                        Cart
                     </Text>
                     <span style={{ fontSize: "18px", fontWeight: 500 }}>
                         (
@@ -87,7 +87,7 @@ export function Cart() {
                                 acc + curr.quantity,
                             0
                         )}{" "}
-                        sản phẩm)
+                        item)
                     </span>
                 </Group>
             </div>
@@ -104,7 +104,7 @@ export function Cart() {
                     </div>
                     <Center>
                         <Link to="/">
-                            <Button>Tiếp tục mua hàng</Button>
+                            <Button>Continue Shopping</Button>
                         </Link>
                     </Center>
                 </>
@@ -166,7 +166,7 @@ export function Cart() {
                                                                 size="16px"
                                                                 fw={500}
                                                             >
-                                                                Giá:
+                                                                Price:
                                                             </Text>
                                                             <Text
                                                                 fw={500}
@@ -191,7 +191,7 @@ export function Cart() {
                                                                 size="16px"
                                                                 fw={500}
                                                             >
-                                                                Thương hiệu
+                                                                Brand
                                                             </Text>
                                                             <div>
                                                                 <Button
@@ -209,7 +209,7 @@ export function Cart() {
                                                                 size="16px"
                                                                 fw={500}
                                                             >
-                                                                Dung tích
+                                                                Volumn
                                                             </Text>
                                                             <div>
                                                                 <Button
@@ -304,7 +304,7 @@ export function Cart() {
                         <Stack sx={{ width: "100%" }}>
                             <Group position="apart">
                                 <Text size="16px" fw={500} color="gray">
-                                    Đơn hàng:
+                                    Sum:
                                 </Text>
                                 <Text size="18px" fw={500} color="gray">
                                     {new Intl.NumberFormat("vi-VN", {
@@ -324,7 +324,7 @@ export function Cart() {
 
                             <Group position="apart">
                                 <Text size="16px" fw={500} color="gray">
-                                    Giảm:
+                                    Discount:
                                 </Text>
                                 <Text size="14px" color="gray">
                                     -
@@ -349,7 +349,7 @@ export function Cart() {
 
                             <Group position="apart">
                                 <Text size="18px" fw={500}>
-                                    Tạm Tính:
+                                    Temporary total:
                                 </Text>
                                 <Text size="20px" fw={500}>
                                     {new Intl.NumberFormat("vi-VN", {
@@ -375,7 +375,7 @@ export function Cart() {
 
                             <Button size="md" p={0}>
                                 <Link to="/checkout" style={{ width: "100%" }}>
-                                    <Text color="white">Mua ngay</Text>
+                                    <Text color="white">Check out</Text>
                                 </Link>
                             </Button>
                         </Stack>

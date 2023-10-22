@@ -7,6 +7,7 @@ import { UserController } from "../../../controllers/users/user.controller";
 import { userAuthMiddleware } from "../../../middlewares/user-auth.middleware";
 
 import { ConfigService } from "../../../configs/configService.config";
+import { authMiddleware } from "../../../middlewares/auth.middleware";
 const configService = new ConfigService();
 
 const userRoutes: Router = Router();
@@ -145,6 +146,13 @@ userRoutes.patch(
     "/customer/password/reset",
     userAuthMiddleware,
     userController.resetPassword
+);
+
+// get recently customer
+userRoutes.get(
+    "/customer/recently/view",
+    authMiddleware,
+    userController.getRecentlyCustomer
 );
 
 export default userRoutes;

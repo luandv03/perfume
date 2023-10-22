@@ -124,42 +124,36 @@ export const CustomerDetail = () => {
     return (
         <Stack sx={{ flex: 1 }}>
             <Text fw={700} size="xl" fz="xl">
-                Thông tin cá nhân
+                Identity
             </Text>
-            <Text>Mã khách hàng: {customer.customer_id}</Text>
+            <Text>CustomerID: {customer.customer_id}</Text>
             <SimpleGrid cols={3}>
-                <TextInput label="Họ và tên" value={customer.fullname} />
+                <TextInput label="Fullname" value={customer.fullname} />
+                <TextInput label="Phone Number" value={customer.phone_number} />
+                <TextInput label="Address" value={customer.address} />
                 <TextInput
-                    label="Số điện thoại"
-                    value={customer.phone_number}
-                />
-                <TextInput label="Địa chỉ" value={customer.address} />
-                <TextInput
-                    label="Ngày sinh"
+                    label="BirthDay"
                     value={handleOrderDate(customer.dob)}
                 />
                 <TextInput label="Email" value={customer.email} />
-                <TextInput
-                    label="Loại tài khoản"
-                    value={customer.auth_method}
-                />
+                <TextInput label="Auth Method" value={customer.auth_method} />
             </SimpleGrid>
             <Text fw={700} size="xl" fz="xl">
-                Đơn hàng
+                Order
             </Text>
 
             <Stack>
                 <Table miw={800} verticalSpacing="sm" striped>
                     <thead>
                         <tr>
-                            <th>Mã đơn hàng</th>
-                            <th>Số sản phẩm</th>
-                            <th>Trạng thái</th>
-                            <th>Thuế(%)</th>
-                            <th>Chi phí vận chuyển(vnd)</th>
-                            <th>Giảm giá (%)</th>
-                            <th>Tổng tiền (vnd)</th>
-                            <th>Ngày đặt hàng</th>
+                            <th>OrderID</th>
+                            <th>NItems</th>
+                            <th>Status</th>
+                            <th>Tax(%)</th>
+                            <th>Delivery Cost(vnd)</th>
+                            <th>Discount(%)</th>
+                            <th>Total (vnd)</th>
+                            <th>Order Date</th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>
@@ -184,9 +178,9 @@ export const CustomerDetail = () => {
                     />
                 </Flex>
             </Stack>
-            <Text fw={700} size="xl" fz="xl">
-                Đánh giá sản phẩm
-            </Text>
+            {/* <Text fw={700} size="xl" fz="xl">
+                Feedback
+            </Text> */}
         </Stack>
     );
 };

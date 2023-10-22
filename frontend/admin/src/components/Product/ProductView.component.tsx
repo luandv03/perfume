@@ -84,7 +84,7 @@ export function ProductView() {
                         to={`/product/${product_id}`}
                         style={{ textDecoration: "none", color: "black" }}
                     >
-                        <Text size="lg">Ảnh</Text>
+                        <Text size="lg">Photo</Text>
                     </Link>
                 </Tabs.Tab>
                 <Tabs.Tab
@@ -96,7 +96,7 @@ export function ProductView() {
                         to={`/product/${product_id}/detail`}
                         style={{ textDecoration: "none", color: "black" }}
                     >
-                        <Text size="lg">Chi tiết</Text>
+                        <Text size="lg">Detail</Text>
                     </Link>
                 </Tabs.Tab>
                 <Tabs.Tab
@@ -108,7 +108,7 @@ export function ProductView() {
                         to={`/product/${product_id}/description`}
                         style={{ textDecoration: "none", color: "black" }}
                     >
-                        <Text size="lg">Mô tả</Text>
+                        <Text size="lg">Description</Text>
                     </Link>
                 </Tabs.Tab>
                 <Tabs.Tab
@@ -120,7 +120,7 @@ export function ProductView() {
                         to={`/product/${product_id}/feedback`}
                         style={{ textDecoration: "none", color: "black" }}
                     >
-                        <Text size="lg">Đánh giá</Text>
+                        <Text size="lg">Feedback</Text>
                     </Link>
                 </Tabs.Tab>
             </Tabs.List>

@@ -65,7 +65,7 @@ class ProductService extends BaseService {
 
     async updateProductById(product: ProductType) {
         try {
-            const res = await this.httpClientPublic.patch(
+            const res = await this.httpClientPrivate.patch(
                 `/product/update`,
                 product
             );

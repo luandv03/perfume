@@ -110,11 +110,11 @@ export function OrderCustomer() {
 
     return (
         <Stack sx={{ width: "100%", overflowX: "scroll" }}>
-            <Text size={20}>ĐƠN HÀNG CỦA BẠN</Text>
+            <Text size={20}>My Order</Text>
 
             {orders.length <= 0 ? (
                 <Alert title="Bummer!" color="red">
-                    <Text fw={700}> Bạn chưa có đơn hàng nào</Text>
+                    <Text fw={700}>You don't have any orders yet</Text>
                 </Alert>
             ) : (
                 <>
@@ -128,16 +128,16 @@ export function OrderCustomer() {
                             <Table miw={800} verticalSpacing="sm" striped>
                                 <thead>
                                     <tr>
-                                        <th>Mã đơn hàng</th>
-                                        <th>Số sản phẩm</th>
-                                        <th>Trạng thái</th>
-                                        <th>Thuế(%)</th>
-                                        <th>Giảm giá(%)</th>
-                                        <th>Vận chuyển</th>
-                                        <th>Tổng giá trị đơn hàng</th>
-                                        <th>Ngày đặt hàng</th>
-                                        <th>Thanh toán</th>
-                                        <th>Xem</th>
+                                        <th>OrderID</th>
+                                        <th>NItems</th>
+                                        <th>Status</th>
+                                        <th>Tax(%)</th>
+                                        <th>Discount(%)</th>
+                                        <th>Delivery Cost</th>
+                                        <th>Total</th>
+                                        <th>Order Date</th>
+                                        <th>Payment</th>
+                                        <th>View</th>
                                     </tr>
                                 </thead>
                                 <tbody>{rows}</tbody>

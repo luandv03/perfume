@@ -9,11 +9,11 @@ export const Thankyou = () => {
                 <Group>
                     <IconCircleCheck color="green" size={60}></IconCircleCheck>
                     <Text fw={700} size="lg">
-                        Cảm ơn bạn đã đặt hàng
+                        Thank you ordered
                     </Text>
                 </Group>
                 <Link to="/">
-                    <Button>Tiếp tục mua hàng</Button>
+                    <Button>Continue shopping</Button>
                 </Link>
             </Stack>
         </Center>

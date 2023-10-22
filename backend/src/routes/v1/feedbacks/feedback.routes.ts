@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import { FeedbackController } from "../../../controllers/feedbacks/feedback.controller";
 import { userAuthMiddleware } from "../../../middlewares/user-auth.middleware";
+import { authMiddleware } from "../../../middlewares/auth.middleware";
 const feedbackRoutes = Router();
 const feedbackController = new FeedbackController();
 
@@ -28,5 +29,12 @@ feedbackRoutes.delete(
 
 // get feedback by product id
 feedbackRoutes.get("/feedback/view", feedbackController.getFeedbackByProductId);
+
+// get feedback recently
+feedbackRoutes.get(
+    "/feedback/recently/view",
+    authMiddleware,
+    feedbackController.getRecentlyFeedbacks
+);
 
 export default feedbackRoutes;

@@ -19,21 +19,21 @@ categoryRoutes.get(
 // create all categories
 categoryRoutes.post(
     "/category/create",
-    // authMiddleware,
+    authMiddleware,
     categoryController.createCategory
 );
 
 //update categories by id
 categoryRoutes.put(
     "/category/:category_id/update",
-    // authMiddleware,
+    authMiddleware,
     categoryController.updateCategoryById
 );
 
 //delete categories by id
 categoryRoutes.delete(
     "/category/:category_id/delete",
-    // authMiddleware,
+    authMiddleware,
     categoryController.deleteCategoryById
 );
 

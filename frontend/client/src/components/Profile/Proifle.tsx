@@ -43,7 +43,7 @@ export function Profile() {
 
     return (
         <Stack>
-            <Text size={20}>Thông tin tài khoản</Text>
+            <Text size={20}>Profile</Text>
             <Group>
                 <Text size="16px" fw={500}>
                     Email:
@@ -54,7 +54,7 @@ export function Profile() {
             </Group>
 
             <TextInput
-                label="Họ và tên"
+                label="Fullname"
                 withAsterisk
                 maw={400}
                 value={updateProfile.fullname}
@@ -68,7 +68,7 @@ export function Profile() {
                 }
             />
             <TextInput
-                label="Địa chỉ"
+                label="Addess"
                 withAsterisk
                 maw={400}
                 value={updateProfile.address}
@@ -82,7 +82,7 @@ export function Profile() {
                 }
             />
             <TextInput
-                label="Số điện thoại"
+                label="PhoneNumber"
                 withAsterisk
                 maw={400}
                 value={updateProfile.phone_number}
@@ -96,7 +96,7 @@ export function Profile() {
                 }
             />
             <TextInput
-                label="Ngày sinh"
+                label="Birthday"
                 withAsterisk
                 maw={400}
                 value={handleOrderDate(updateProfile.dob)}
@@ -119,7 +119,7 @@ export function Profile() {
                 {loading ? (
                     <IconLoader className={loading ? "spinner" : ""} />
                 ) : (
-                    "Sửa"
+                    "Update"
                 )}
             </Button>
         </Stack>

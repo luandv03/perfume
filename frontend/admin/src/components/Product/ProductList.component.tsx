@@ -180,14 +180,14 @@ export function ProductList() {
                                 transitionDuration={0}
                             />
                         </th>
-                        <th>Tên</th>
-                        <th>Loại</th>
-                        <th>Thương hiệu</th>
-                        <th>Năm sản xuất</th>
-                        <th>Dung tích(ml)</th>
-                        <th>Giá(vnđ)</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Brand</th>
+                        <th>Year Publish</th>
+                        <th>Volumn(ml)</th>
+                        <th>Price(vnđ)</th>
                         <th>Sales(%)</th>
-                        <th>Số lượng</th>
+                        <th>Quantity</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

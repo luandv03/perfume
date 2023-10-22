@@ -16,6 +16,18 @@ class FeedbackService extends BaseService {
             return error;
         }
     }
+
+    async getRecentlyFeedback() {
+        try {
+            const res = await this.httpClientPrivate.get(
+                `/feedback/recently/view`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export const feedbackService: FeedbackService = new FeedbackService();

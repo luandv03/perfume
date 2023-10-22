@@ -130,7 +130,7 @@ export function Register() {
             <Link to="/">
                 <Group spacing={0}>
                     <IconChevronLeft />
-                    <Text color="gray">Quay về trang chủ</Text>
+                    <Text color="gray">Go back home</Text>
                 </Group>
             </Link>
             <Center>
@@ -145,9 +145,9 @@ export function Register() {
                         PERFUME & LDA!
                     </Title>
                     <Text color="dimmed" size="sm" align="center" mt={5}>
-                        Bạn đã có tài khoản chưa?{" "}
+                        Do you have account?{" "}
                         <Link to="/login" style={{ color: "blue" }}>
-                            Đăng nhập
+                            SignIn
                         </Link>
                     </Text>
 
@@ -156,21 +156,21 @@ export function Register() {
                             onSubmit={form.onSubmit(handleSubmit, handleError)}
                         >
                             <TextInput
-                                label="Họ và tên"
+                                label="Fullname"
                                 placeholder="Nguyễn Văn A"
                                 icon={<IconAt size={16} />}
                                 required
                                 {...form.getInputProps("fullname")}
                             />
                             <TextInput
-                                label="Số điện thoại"
+                                label="Phone Number"
                                 placeholder="012345678"
                                 icon={<IconPhoneCall size={16} />}
                                 required
                                 {...form.getInputProps("phone_number")}
                             />
                             <TextInput
-                                label="Địa chỉ"
+                                label="Address"
                                 placeholder="Số 1 Đại Cồ Việt"
                                 icon={<IconHome2 size={16} />}
                                 required
@@ -180,7 +180,7 @@ export function Register() {
                             <Menu opened={opened} onChange={setOpened}>
                                 <Menu.Target>
                                     <TextInput
-                                        label="Ngày sinh"
+                                        label="Birthday"
                                         placeholder="28/08/2003"
                                         icon={<IconCalendarDue size={16} />}
                                         required
@@ -228,7 +228,7 @@ export function Register() {
                                 type="submit"
                                 disabled={loading}
                             >
-                                Đăng ký
+                                SignUp
                             </Button>
                         </form>
                     </Paper>
