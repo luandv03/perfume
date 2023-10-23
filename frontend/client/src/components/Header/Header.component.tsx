@@ -414,7 +414,7 @@ export function HeaderApp() {
                             <Stack>
                                 {categories?.length > 0 &&
                                     categories.map((category: CategoryType) => (
-                                        <Link
+                                        <NavLink
                                             to={`/product/${category.category_id}/filter`}
                                             state={{
                                                 category_name:
@@ -424,12 +424,22 @@ export function HeaderApp() {
                                                 textDecoration: "none",
                                                 borderBottom: "1px solid gray",
                                             }}
+                                            className={({
+                                                isActive,
+                                                isPending,
+                                            }) =>
+                                                isPending
+                                                    ? "pending"
+                                                    : isActive
+                                                    ? "active"
+                                                    : "normal"
+                                            }
                                             key={category.category_id}
                                         >
                                             <Text color="black">
                                                 {category.category_name}
                                             </Text>
-                                        </Link>
+                                        </NavLink>
                                     ))}
                             </Stack>
                         </HoverCard.Dropdown>
@@ -486,7 +496,7 @@ export function HeaderApp() {
                         </Text>
                         {profile?.customer_id ? (
                             <Group>
-                                <Link
+                                <NavLink
                                     to="/customer"
                                     style={{ textDecoration: "none" }}
                                     onClick={() => closeDrawer()}
@@ -494,7 +504,7 @@ export function HeaderApp() {
                                     <Text color="white" fw={500}>
                                         Account
                                     </Text>
-                                </Link>
+                                </NavLink>
                                 <span style={{ color: "white" }}>|</span>
                                 <Button
                                     onClick={() => {
@@ -509,15 +519,22 @@ export function HeaderApp() {
                             </Group>
                         ) : (
                             <Group>
-                                <Link
+                                <NavLink
                                     to="/login"
                                     style={{ textDecoration: "none" }}
+                                    className={({ isActive, isPending }) =>
+                                        isPending
+                                            ? "pending"
+                                            : isActive
+                                            ? "active"
+                                            : "normal"
+                                    }
                                     onClick={() => closeDrawer()}
                                 >
                                     <Text color="white" fw={500}>
                                         SignIn
                                     </Text>
-                                </Link>
+                                </NavLink>
                                 <span style={{ color: "white" }}>|</span>
                                 <Link
                                     to="/register"

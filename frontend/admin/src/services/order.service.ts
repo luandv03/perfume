@@ -37,6 +37,19 @@ class OrderService extends BaseService {
         }
     }
 
+    async doneOrderById(order_id: number) {
+        try {
+            const res = await this.httpClientPrivate.patch(
+                `/order/done/${order_id}`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+
     async getOrderByCustomerId(
         customer_id: number,
         page: number,

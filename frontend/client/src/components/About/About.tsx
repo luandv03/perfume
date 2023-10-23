@@ -5,7 +5,7 @@ export const About = () => {
         <div>
             <div>
                 <h2>
-                    <Text>Giới thiệu</Text>
+                    <Text>About us</Text>
                 </h2>
             </div>
             <div>

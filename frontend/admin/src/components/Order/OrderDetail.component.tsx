@@ -149,6 +149,22 @@ export const OrderDetail = () => {
         }
     };
 
+    const handleDoneOrderById = async (status: string) => {
+        if (status == "done") {
+            const res = await orderService.doneOrderById(Number(order_id));
+
+            if (res.statusCode === 200) {
+                setOrderDetail((prev) => ({
+                    ...prev,
+                    order: {
+                        ...prev.order,
+                        status: "done",
+                    },
+                }));
+            }
+        }
+    };
+
     useEffect(() => {
         handleGetOrderById();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -206,6 +222,7 @@ export const OrderDetail = () => {
                             },
                         ]}
                         value={orderDetail.order.status}
+                        onChange={(value: string) => handleDoneOrderById(value)}
                     />
                 </Stack>
                 <Stack>
