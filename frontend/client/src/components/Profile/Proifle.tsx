@@ -1,5 +1,6 @@
-import { Text, Group, Stack, TextInput, Button } from "@mantine/core";
-import { IconLoader } from "@tabler/icons-react";
+import { Text, Group, Stack, TextInput, Button, Menu } from "@mantine/core";
+import { DatePicker } from "@mantine/dates";
+import { IconLoader, IconCalendarDue } from "@tabler/icons-react";
 import { useState } from "react";
 import { useContext } from "react";
 
@@ -11,6 +12,8 @@ export function Profile() {
     const { profile, setProfile } = useContext(AuthContext);
     const [updateProfile, setUpdateProfile] = useState(profile);
     const [loading, setLoading] = useState<boolean>(false);
+    const [value, setValue] = useState<Date | null>(null);
+    const [opened, setOpened] = useState(false);
 
     const handleUpdateProfile = async () => {
         setLoading(true);
@@ -40,6 +43,13 @@ export function Profile() {
             }));
         }
     };
+
+    function convertDateToDob(str: string) {
+        const date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
 
     return (
         <Stack>
@@ -95,20 +105,34 @@ export function Profile() {
                     })
                 }
             />
-            <TextInput
-                label="Birthday"
-                withAsterisk
-                maw={400}
-                value={handleOrderDate(updateProfile.dob)}
-                onChange={(e) =>
-                    setUpdateProfile((prev) => {
-                        return {
-                            ...prev,
-                            dob: e.target.value,
-                        };
-                    })
-                }
-            />
+
+            <Menu opened={opened} onChange={setOpened}>
+                <Menu.Target>
+                    <TextInput
+                        label="Birthday"
+                        icon={<IconCalendarDue size={16} />}
+                        value={handleOrderDate(updateProfile.dob)}
+                        required
+                    />
+                </Menu.Target>
+                <Menu.Dropdown>
+                    <Group position="center">
+                        <DatePicker
+                            hideWeekdays
+                            value={value}
+                            onChange={(e) => {
+                                setValue(e);
+                                setUpdateProfile((prev) => {
+                                    return {
+                                        ...prev,
+                                        dob: `${convertDateToDob(e)}`,
+                                    };
+                                });
+                            }}
+                        />
+                    </Group>
+                </Menu.Dropdown>
+            </Menu>
 
             <Button
                 onClick={() => handleUpdateProfile()}
