@@ -163,7 +163,10 @@ export function CustomerList() {
                         { value: "100", label: "100 products" },
                     ]}
                     value={total}
-                    onChange={setTotal}
+                    onChange={(value: string) => {
+                        setPage(1);
+                        setTotal(value);
+                    }}
                 />
                 <Pagination value={page} onChange={setPage} total={totalPage} />
             </Flex>
