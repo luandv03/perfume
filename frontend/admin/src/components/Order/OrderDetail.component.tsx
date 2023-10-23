@@ -6,6 +6,7 @@ import {
     Table,
     Button,
     Flex,
+    Alert,
 } from "@mantine/core";
 import { IconTrash } from "@tabler/icons-react";
 import { Link, useParams } from "react-router-dom";
@@ -43,6 +44,7 @@ export const OrderDetail = () => {
             email: "",
             fullname: "",
             address: "",
+            payment_status: "",
         },
         orderlines: [
             {
@@ -289,6 +291,26 @@ export const OrderDetail = () => {
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
+            <Text fw={700} size="xl" fz="xl">
+                Transaction
+            </Text>
+            {orderDetail.order.payment_status === "1" ? (
+                <div>
+                    <Alert title="Note!" color="red">
+                        <Text fw={700}>
+                            The customer has paid for the order
+                        </Text>
+                    </Alert>
+                </div>
+            ) : (
+                <div>
+                    <Alert title="Note!" color="red">
+                        <Text fw={700}>
+                            The customer has not paid for the order
+                        </Text>
+                    </Alert>
+                </div>
+            )}
             <Text fw={700} size="xl" fz="xl">
                 Totals
             </Text>

@@ -38,6 +38,7 @@ export const CustomerDetail = () => {
             tong_giam_gia: 0,
             order_date: "",
             tong_hoa_don: 0,
+            payment_type: "",
         },
     ]);
     const [totalPage, setTotalPage] = useState(0);
@@ -110,6 +111,7 @@ export const CustomerDetail = () => {
                         )}
                     </td>
                     <td>{handleOrderDate(item.order_date)}</td>
+                    <td>{item.payment_type}</td>
                     <td>
                         <Link to={`/order/detail/${item.order_id}`}>
                             <ActionIcon>
@@ -154,6 +156,7 @@ export const CustomerDetail = () => {
                             <th>Discount(%)</th>
                             <th>Total (vnd)</th>
                             <th>Order Date</th>
+                            <th>Payment</th>
                         </tr>
                     </thead>
                     <tbody>{rows}</tbody>

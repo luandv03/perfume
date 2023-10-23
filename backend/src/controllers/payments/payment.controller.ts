@@ -7,6 +7,7 @@ import { sortObject } from "../../utils/sortObject.util";
 import { vnpayConfig } from "../../configs/vnpay.config";
 import { paymentService } from "../../services/payments/payment.service";
 import { orderService } from "../../services/orders/order.service";
+import { configService } from "../../configs/configService.config";
 
 export class PaymentController {
     // ################## VNPAY #####################
@@ -107,13 +108,23 @@ export class PaymentController {
                 Number(vnp_Params.vnp_TxnRef),
                 "1"
             );
-            res.render("success", { code: vnp_Params["vnp_ResponseCode"] });
+            res.redirect(
+                `${configService.getClientDomain()}/payment_end?code=${
+                    vnp_Params["vnp_ResponseCode"]
+                }`
+            );
+            // res.render("success", { code: vnp_Params["vnp_ResponseCode"] });
         } else {
             await orderService.updatePaymentStatus(
                 Number(vnp_Params.vnp_TxnRef),
                 "2"
             );
-            res.render("success", { code: "97" });
+            res.redirect(
+                `${configService.getClientDomain()}/payment_end?code=97
+                    
+                }`
+            );
+            // res.render("success", { code: "97" });
         }
     }
 

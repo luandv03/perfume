@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import LayoutApp from "./pages/layout.page";
 import Dashboard from "./components/Dashboard/Dashboard.component";
@@ -20,6 +21,12 @@ import { PrivateRoute } from "./routes/PrivateRoute.route.tsx";
 import { Account } from "./components/Account";
 
 function App() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
     return (
         <>
             <Routes>
