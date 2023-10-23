@@ -21,6 +21,7 @@ import { TitlePageWrapper } from "./components/TitlePageWrapper/TitlePageWrapper
 import { About } from "./components/About/About";
 import { Contact } from "./components/Contact/Contact";
 import { ErrorPage } from "./components/ErrorPage";
+import { PaymentEnd } from "./components/Payment";
 
 function App() {
     const [searchParams] = useSearchParams();
@@ -127,6 +128,9 @@ function App() {
                             </TitlePageWrapper>
                         }
                     />
+
+                    <Route path="/payment_end" element={<PaymentEnd />} />
+
                     <Route
                         path="/search"
                         element={

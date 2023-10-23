@@ -150,7 +150,7 @@ export function ProductDetail() {
     const handleRemoveFeedback = async () => {
         if (!getItemLocalStorage("isAuthenticated")) {
             notifications.show({
-                message: "Bạn hãy đăng nhập để đánh giá nhé!",
+                message: "Please log in to feedback!",
             });
         }
 

@@ -73,17 +73,19 @@ export function Checkout() {
 
     const navigate = useNavigate();
 
-    const handlePayment = async (
+    const handlePayment = (
         methodPayment: string,
         amount: number,
         order_id: number
     ) => {
-        createWindow(
+        const newWindow = createWindow(
             `${BASE_URL_API}/payment/${methodPayment}/create_payment_url?amount=${amount}&order_id=${order_id}`,
             "_blank",
             800,
             600
         );
+
+        return newWindow;
     };
 
     const handleCheckout = async () => {
@@ -114,11 +116,17 @@ export function Checkout() {
             const resData = await orderService.createOrder(payload);
 
             if (resData.statusCode == 200) {
-                showNotification({
-                    title: "Đặt hàng thành công",
-                    message: resData.message,
-                });
-                setLoading(false);
+                if (methodPayment == "cod") {
+                    showNotification({
+                        title: "Đặt hàng thành công",
+                        message: resData.message,
+                    });
+                    setLoading(false);
+
+                    return navigate(
+                        `/checkout/thankyou/${resData.data.order_id}`
+                    );
+                }
 
                 /// vn pay
                 const amount = Math.ceil(
@@ -142,20 +150,36 @@ export function Checkout() {
                           )
                 );
 
-                if (methodPayment !== "cod")
-                    await handlePayment(
-                        methodPayment,
-                        amount,
-                        resData.data.order_id
-                    );
+                let timer: ReturnType<typeof setTimeout> | null = null;
+                const windowPayment = handlePayment(
+                    methodPayment,
+                    amount,
+                    resData.data.order_id
+                );
 
-                return navigate(`/checkout/thankyou/${resData.data.order_id}`);
+                if (windowPayment) {
+                    timer = setInterval(async () => {
+                        if (windowPayment.closed) {
+                            setLoading(false);
+                            if (localStorage.getItem("code") == "00") {
+                                showNotification({
+                                    title: "Đặt hàng thành công",
+                                    message: resData.message,
+                                });
+
+                                navigate(
+                                    `/checkout/thankyou/${resData.data.order_id}`
+                                );
+                            }
+
+                            if (timer) clearInterval(timer);
+
+                            return;
+                        }
+                    }, 500);
+                }
             }
-            showNotification({
-                title: "Đặt hàng thất bại",
-                message: resData.message,
-            });
-            setLoading(false);
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             showNotification({
