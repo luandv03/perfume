@@ -39,6 +39,13 @@ orderRoutes.patch(
     orderController.acceptOrderByOrderId
 );
 
+// done order customer: role admin
+orderRoutes.patch(
+    "/order/done/:order_id",
+    authMiddleware,
+    orderController.doneOrderByOrderId
+);
+
 // cancel order : role customer
 orderRoutes.patch(
     "/order/cancel/:order_id",

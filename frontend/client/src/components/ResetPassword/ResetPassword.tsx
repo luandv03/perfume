@@ -77,7 +77,7 @@ export const ResetPassword = () => {
             <form onSubmit={form.onSubmit(handleSubmit, handleError)}>
                 <Stack>
                     <PasswordInput
-                        label={form.values.password && "New Password"}
+                        label={form.values.password && "Current Password"}
                         placeholder="Current Password"
                         withAsterisk
                         miw={300}

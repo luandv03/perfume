@@ -137,23 +137,23 @@ export function OrderList() {
                             data={[
                                 {
                                     value: "all",
-                                    label: "Tất cả",
+                                    label: "All",
                                 },
                                 {
                                     value: "ordered",
-                                    label: "Đang chờ xác nhận",
+                                    label: "Ordered",
                                 },
                                 {
                                     value: "canceled",
-                                    label: "Đã hủy",
+                                    label: "Canceled",
                                 },
                                 {
                                     value: "accepted",
-                                    label: "Đang xử lý",
+                                    label: "Accepted",
                                 },
                                 {
                                     value: "done",
-                                    label: "Đã hoàn thành",
+                                    label: "Done",
                                 },
                             ]}
                             value={status}

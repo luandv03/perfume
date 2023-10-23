@@ -637,7 +637,7 @@ export function ProductDetail() {
                                                             }
                                                         >
                                                             {!loadingUpdateFeedback ? (
-                                                                "Sửa"
+                                                                "Update"
                                                             ) : (
                                                                 <IconLoader
                                                                     className={

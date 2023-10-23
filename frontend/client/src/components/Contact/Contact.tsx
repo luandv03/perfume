@@ -30,10 +30,10 @@ export const Contact = () => {
         validateInputOnBlur: true,
 
         validate: {
-            name: hasLength({ min: 1 }, "Tên không được để trống"),
-            content: hasLength({ min: 1 }, "Nội dung không được để trống"),
+            name: hasLength({ min: 1 }, "Name cannot be blank"),
+            content: hasLength({ min: 1 }, "Content cannot be empty"),
             email: (value) =>
-                /^\S+@\S+$/.test(value) ? null : "Email không hợp lệ",
+                /^\S+@\S+$/.test(value) ? null : "Invalid email",
         },
     });
 
@@ -50,7 +50,7 @@ export const Contact = () => {
         console.log(payload);
         setLoading(false);
         setNotification(
-            "Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ liên hệ với bạn sớm nhất có thể."
+            "Thank you for contacting us. We will contact you as soon as possible."
         );
         form.reset();
     };
@@ -70,7 +70,7 @@ export const Contact = () => {
             >
                 <Stack>
                     <Text fw={700} size="xl">
-                        Liên hệ
+                        Contact
                     </Text>
                     <Flex>
                         <IconMapPin />
@@ -87,17 +87,17 @@ export const Contact = () => {
                     <Flex>
                         <IconMail />
                         &nbsp;
-                        <Text>bkhn@gmail.com</Text>
+                        <Text>perfumeld03@gmail.com</Text>
                     </Flex>
                 </Stack>
 
                 <Stack>
                     <Text fw={700} size="xl">
-                        Gửi thông tin
+                        Send information
                     </Text>
                     <Text>
-                        Bạn hãy điền đầy đủ các thông tin bên dưới và gửi cho
-                        chúng tôi. Chúng tôi sẽ trả lời sau khi nhận được.
+                        Please fill in the information below and send it to us.
+                        We will respond upon receipt.
                     </Text>
                     {!!notification.length && (
                         <Alert color="red">
@@ -107,7 +107,7 @@ export const Contact = () => {
                     <Flex justify="space-between" gap={20}>
                         <TextInput
                             mt="md"
-                            label="Họ và tên"
+                            label="Fullname"
                             style={{ width: "50%" }}
                             {...form.getInputProps("name")}
                         />
@@ -119,7 +119,7 @@ export const Contact = () => {
                         />
                     </Flex>
                     <Textarea
-                        label="Nội dung"
+                        label="Comment"
                         style={{ width: "100%" }}
                         minRows={4}
                         {...form.getInputProps("content")}
@@ -138,7 +138,7 @@ export const Contact = () => {
                         {loading ? (
                             <IconLoader className={loading ? "spinner" : ""} />
                         ) : (
-                            "Gửi tin nhắn"
+                            "Send message"
                         )}
                     </Button>
                 </Stack>

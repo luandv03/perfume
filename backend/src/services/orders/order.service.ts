@@ -320,6 +320,26 @@ class OrderService {
         };
     }
 
+    //done order
+    async doneOrderByOrderId(order_id: string): Promise<ResponseType<any>> {
+        const results = await query(
+            `UPDATE orders SET status = 'done' WHERE order_id = $1`,
+            [Number(order_id)]
+        );
+
+        if (!results.rowCount) {
+            return {
+                statusCode: HttpStatusCode.ACCEPTED,
+                message: "Update status order failure!",
+            };
+        }
+
+        return {
+            statusCode: HttpStatusCode.OK,
+            message: "Done order!",
+        };
+    }
+
     async getValidCouponByCode(coupon_code: string): Promise<any> {
         const results = await query(
             `SELECT * FROM coupons WHERE coupon_code = $1`,
