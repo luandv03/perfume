@@ -11,6 +11,7 @@ import cartRoutes from "./carts/cart.routes";
 import feedbackRoutes from "./feedbacks/feedback.routes";
 import paymentRoutes from "./payments/payment.routes";
 import mailerRoutes from "./mailers/mailer.routes";
+import revenueRoutes from "./revenues/revenue.routes";
 
 routerV1.use("/v1", adminRoutes);
 routerV1.use("/v1", categoryRoutes);
@@ -22,7 +23,6 @@ routerV1.use("/v1", cartRoutes);
 routerV1.use("/v1", feedbackRoutes);
 routerV1.use("/v1", mailerRoutes);
 routerV1.use("/v1", paymentRoutes);
-
-// routerV1.use("/v1", paymentRoutes);
+routerV1.use("/v1", revenueRoutes);
 
 export default routerV1;

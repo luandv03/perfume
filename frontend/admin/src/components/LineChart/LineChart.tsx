@@ -6,7 +6,7 @@ export const LineChart = ({ chartData }: { chartData: any }) => {
     return (
         <div className="chart-container">
             <Text sx={{ textAlign: "center" }} size="xl" fw={500}>
-                30 Day Revenue History
+                2023 Year Revenue History
             </Text>
             <Line
                 data={chartData}

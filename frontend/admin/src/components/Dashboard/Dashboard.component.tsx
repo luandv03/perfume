@@ -23,33 +23,28 @@ Chart.register(CategoryScale);
 export const Data = [
     {
         id: 1,
-        month: "T6",
-        userGain: 80000000,
-        userLost: 823,
+        sales_month: "T6",
+        revenue: 80000000,
     },
     {
         id: 2,
-        month: "T7",
-        userGain: 45677000,
-        userLost: 345,
+        sales_month: "T7",
+        revenue: 45677000,
     },
     {
         id: 3,
-        month: "T8",
-        userGain: 78888000,
-        userLost: 555,
+        sales_month: "T8",
+        revenue: 78888000,
     },
     {
         id: 4,
-        month: "T9",
-        userGain: 90000000,
-        userLost: 4555,
+        sales_month: "T9",
+        revenue: 90000000,
     },
     {
         id: 5,
-        month: "T10",
-        userGain: 43000000,
-        userLost: 234,
+        sales_month: "T10",
+        revenue: 43000000,
     },
 ];
 
@@ -76,12 +71,14 @@ export default function Dashboard() {
         number_of_customers: 0,
     });
 
+    const [revenueRecentlyMonth, setRevenueRecentlyMonth] = useState(43000000);
+
     const [chartData, setChartData] = useState({
-        labels: Data.map((data) => data.month),
+        labels: Data.map((data) => data.sales_month),
         datasets: [
             {
                 label: "Total",
-                data: Data.map((data) => data.userGain),
+                data: Data.map((data) => data.revenue),
                 backgroundColor: [
                     "rgba(75,192,192,1)",
                     "&quot#ecf0f1",
@@ -133,10 +130,44 @@ export default function Dashboard() {
         setOrderPending(res.data);
     };
 
+    const handleGetRevenueByYear = async () => {
+        const date = new Date();
+        const year = date.getFullYear();
+        const res = await orderService.getRevenueByYear(year);
+        if (res.statusCode === 200) {
+            setRevenueRecentlyMonth(res.data[4].revenue);
+            setChartData({
+                labels: res.data.map(
+                    (item: { sales_month: number; revenue: number }) =>
+                        item.sales_month
+                ),
+                datasets: [
+                    {
+                        label: "Total",
+                        data: res.data.map(
+                            (item: { sales_month: number; revenue: number }) =>
+                                item.revenue
+                        ),
+                        backgroundColor: [
+                            "rgba(75,192,192,1)",
+                            "&quot#ecf0f1",
+                            "#50AF95",
+                            "#f3ba2f",
+                            "#2a71d0",
+                        ],
+                        borderColor: "black",
+                        borderWidth: 2,
+                    },
+                ],
+            });
+        }
+    };
+
     useEffect(() => {
         handleGetRecentlyFeedback();
         handleGetRecentlyCustomer();
         hanldeGetOrderPending();
+        handleGetRevenueByYear();
     }, []);
 
     return (
@@ -169,7 +200,7 @@ export default function Dashboard() {
                                             style: "currency",
                                             currency: "VND",
                                             maximumFractionDigits: 9,
-                                        }).format(43000000)}
+                                        }).format(revenueRecentlyMonth)}
                                     </Text>
                                 </Stack>
                             </Flex>
