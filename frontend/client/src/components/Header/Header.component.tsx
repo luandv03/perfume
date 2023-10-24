@@ -217,7 +217,7 @@ export function HeaderApp() {
                                     fontFamily: "Alumni Sans Collegiate One",
                                 }}
                             >
-                                PERFUME&LDA
+                                PERFUME & LDA
                             </Text>
                         </Link>
                     </Text>
@@ -265,7 +265,7 @@ export function HeaderApp() {
                                         style={{ textDecoration: "none" }}
                                     >
                                         <Text color="white" fw={500}>
-                                            SignIn
+                                            Sign In
                                         </Text>
                                     </Link>
                                     <span style={{ color: "white" }}>|</span>
@@ -274,7 +274,7 @@ export function HeaderApp() {
                                         style={{ textDecoration: "none" }}
                                     >
                                         <Text color="white" fw={500}>
-                                            SignUp
+                                            Sign Up
                                         </Text>
                                     </Link>
                                 </Group>
@@ -532,7 +532,7 @@ export function HeaderApp() {
                                     onClick={() => closeDrawer()}
                                 >
                                     <Text color="white" fw={500}>
-                                        SignIn
+                                        Sign In
                                     </Text>
                                 </NavLink>
                                 <span style={{ color: "white" }}>|</span>
@@ -542,7 +542,7 @@ export function HeaderApp() {
                                     onClick={() => closeDrawer()}
                                 >
                                     <Text color="white" fw={500}>
-                                        SignUp
+                                        Sign Up
                                     </Text>
                                 </Link>
                             </Group>
