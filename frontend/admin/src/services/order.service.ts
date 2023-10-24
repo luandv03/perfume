@@ -49,7 +49,6 @@ class OrderService extends BaseService {
         }
     }
 
-
     async getOrderByCustomerId(
         customer_id: number,
         page: number,
@@ -58,6 +57,18 @@ class OrderService extends BaseService {
         try {
             const res = await this.httpClientPublic.get(
                 `/order/view/customer/${customer_id}?page=${page}&limit=${limit}`
+            );
+
+            return res.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async getRevenueByYear(year: number) {
+        try {
+            const res = await this.httpClientPrivate.get(
+                `/revenue/view?year=${year}`
             );
 
             return res.data;
